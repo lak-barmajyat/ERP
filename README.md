@@ -6,7 +6,7 @@ A professional ERP system inspired by Sage logic, developed with Python, SQL, an
 Laktaoui ERP is a comprehensive desktop application designed to streamline business operations. By leveraging the power of Python and PyQt5, the system provides a robust UI/UX in French, catering to international business standards. The architecture is modular, ensuring seamless integration between Sales, Inventory, and Accounting.
 
 ## Project Modules (أقسام المشروع)
-لإظهار احترافية الكود، قم بإدراج الأقسام التسعة في الوصف:
+
 - Ventes (Sales)
 - Achats (Purchases)
 - Stocks (Inventory)
