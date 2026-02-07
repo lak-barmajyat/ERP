@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>999</width>
+    <height>735</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="locale">
+   <locale language="English" country="UnitedKingdom"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>60</y>
+      <width>401</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">/* Apply this ONLY to the Frame sitting on top */
+QFrame {
+    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
+        stop:0 rgba(255,255, 255, 255),  
+        stop:1 rgba(0, 0, 0, 0), 
+        stop:1 rgba(0, 0, 0, 0)
+    );
+    border-radius: 10px;
+}</string>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>60</y>
+      <width>401</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QLabel {
+	/*border-image: url(:/images/C:/Users/Abdelfatah/Pictures/backgrounds/wallpaperflare.com_wallpaper (8).jpg);*/
+    /* Fixed path: Removed the colon and added quotes */
+    border-image: url(&quot;login_img.jpg&quot;);
+    
+    /* Ensures the image fills the widget entirely */
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    /* This is the secret to getting rid of those side-bars */
+    background-origin: content;
+    background-clip: border;
+    
+    border-radius: 10px;
+}</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>100</x>
+      <y>60</y>
+      <width>471</width>
+      <height>531</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(255, 255, 255);
+border-bottom-left-radius: 50px</string>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame_2">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>120</y>
+      <width>421</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QWidget" name="gridLayoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>60</y>
+       <width>331</width>
+       <height>281</height>
+      </rect>
+     </property>
+     <layout class="QGridLayout" name="gridLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMinimumSize</enum>
+      </property>
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <item row="2" column="0">
+       <widget class="QLineEdit" name="lineEdit_2">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+    background-color: #f8fafc;
+    border: 2px solid #E5E7EB; /* Soft gray instead of transparent for better visibility */
+    border-radius: 10px;
+    color: #0d0c22;
+    font-size: 16px;
+    height: 35px;
+    /* Extra left padding to make room for an icon */
+    padding-left: 10px; 
+    padding-right: 0px;
+}
+
+QLineEdit:hover {
+    border-color: #818cf8;
+    background-color: #ffffff;
+}
+
+QLineEdit:focus {
+    border-color: #818cf8;
+    background-color: #ffffff;
+    /* Qt doesn't support spread/blur shadows, so we use a solid highlight */
+    border: 2px solid #818cf8;
+}
+
+/* Placeholder color is handled specially in QSS */
+QLineEdit {
+    qproperty-placeholderText: &quot;Utilisateur&quot;;
+}
+
+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLineEdit" name="lineEdit">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+    background-color: #f8fafc;
+    border: 2px solid #E5E7EB; /* Soft gray instead of transparent for better visibility */
+    border-radius: 10px;
+    color: #0d0c22;
+    font-size: 16px;
+    height: 35px;
+    /* Extra left padding to make room for an icon */
+    padding-left: 10px; 
+    padding-right: 0px;
+}
+
+QLineEdit:hover {
+    border-color: #818cf8;
+    background-color: #ffffff;
+}
+
+QLineEdit:focus {
+    border-color: #818cf8;
+    background-color: #ffffff;
+    /* Qt doesn't support spread/blur shadows, so we use a solid highlight */
+    border: 2px solid #818cf8;
+}
+
+/* Placeholder color is handled specially in QSS */
+QLineEdit {
+    qproperty-placeholderText: &quot;Mot de pass&quot;;
+}
+
+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <spacer name="spacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>25</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Utilisateur</string>
+        </property>
+       </widget>
+      </item>
+      <item row="9" column="0">
+       <layout class="QGridLayout" name="gridLayout_2" columnstretch="1,1">
+        <item row="0" column="1">
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: transparent;
+    border: 0px solid #000000;
+    border-radius: 10px;
+    color: #1D7FD8;
+    font-weight: bold;
+    font-size: 13px;
+    /* letter-spacing is simulated with spaces in the button text */
+    padding: 10px 0px;
+    text-transform: uppercase;
+}
+
+QPushButton:hover {
+    /* We create a hard-stop gradient that looks like a solid fill */
+    background-color: #2c9caf;
+    color: #ffffff;
+    border: 2px solid #70bdca;
+}
+
+QPushButton:pressed {
+    background-color: #268391;
+	color: #ffffff;
+    border-color: #268391;
+}</string>
+          </property>
+          <property name="text">
+           <string>Annuler</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="pushButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: #1D7FD8;
+    border: 0px solid #000000;
+    border-radius: 10px;
+    color: #ffffff;
+    font-weight: bold;
+    font-size: 13px;
+    /* letter-spacing is simulated with spaces in the button text */
+    padding: 10px 0px;
+    text-transform: uppercase;
+}
+
+QPushButton:hover {
+    /* We create a hard-stop gradient that looks like a solid fill */
+    background-color: #1769B4;
+    color: #FFFFFF;
+    border: 2px solid #70bdca;
+}
+
+QPushButton:pressed {
+    background-color: #0E5891;
+	color: #ffffff;
+    border-color: #268391;
+}</string>
+          </property>
+          <property name="text">
+           <string>Se Conecter</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="10" column="0">
+       <widget class="QPushButton" name="pushButton_3">
+        <property name="styleSheet">
+         <string notr="true">QPushButton {
+    background-color: transparent;
+    border: none;
+    border-radius: 4px;
+    /* Use a standard icon color */
+    color: #64748b; 
+    font-size: 16px;
+    padding: 2px;
+}
+
+QPushButton:hover {
+    background-color: #f1f5f9;
+    color: #1e293b;
+}
+
+/* Use the :checked state if you make the button 'Checkable' in Designer */
+QPushButton:checked {
+    color: #3b82f6; /* Blue color when password is visible */
+}
+
+QPushButton:pressed {
+    background-color: #e2e8f0;
+}</string>
+        </property>
+        <property name="text">
+         <string>Oublie mot de pass</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Mot do pass</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+     <zorder>label</zorder>
+     <zorder>pushButton_3</zorder>
+     <zorder>label_2</zorder>
+     <zorder>spacer</zorder>
+     <zorder>lineEdit_2</zorder>
+     <zorder>lineEdit</zorder>
+    </widget>
+   </widget>
+   <zorder>label_4</zorder>
+   <zorder>label_3</zorder>
+   <zorder>frame</zorder>
+   <zorder>frame_2</zorder>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>999</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections/>
+</ui>
