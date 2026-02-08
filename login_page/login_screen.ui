@@ -103,6 +103,14 @@ border-bottom-left-radius: 50px</string>
       <height>391</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <family>Lama Sans</family>
+      <pointsize>16</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
     <property name="frameShape">
      <enum>QFrame::StyledPanel</enum>
     </property>
@@ -118,7 +126,7 @@ border-bottom-left-radius: 50px</string>
        <height>281</height>
       </rect>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0,1,0,0,1,0,0,0,0" rowminimumheight="1,1,1,1,1,1,0,0,0,0">
       <property name="sizeConstraint">
        <enum>QLayout::SetMinimumSize</enum>
       </property>
@@ -126,7 +134,7 @@ border-bottom-left-radius: 50px</string>
        <number>6</number>
       </property>
       <item row="5" column="0">
-       <widget class="QLineEdit" name="lineEdit">
+       <widget class="QLineEdit" name="password_lineedit">
         <property name="styleSheet">
          <string notr="true">QLineEdit {
     background-color: #f8fafc;
@@ -164,6 +172,9 @@ QLineEdit {
         </property>
         <property name="echoMode">
          <enum>QLineEdit::Password</enum>
+        </property>
+        <property name="placeholderText">
+         <string>Mot de pass</string>
         </property>
        </widget>
       </item>
@@ -239,6 +250,9 @@ QPushButton:pressed {
       </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_2">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="text">
          <string>Mot do pass</string>
         </property>
@@ -308,7 +322,7 @@ QLineEdit {
      <zorder>label_2</zorder>
      <zorder>spacer</zorder>
      <zorder>userentry</zorder>
-     <zorder>lineEdit</zorder>
+     <zorder>password_lineedit</zorder>
     </widget>
    </widget>
    <zorder>label_4</zorder>
