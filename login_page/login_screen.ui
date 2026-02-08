@@ -60,7 +60,7 @@ QFrame {
      <string notr="true">QLabel {
 	/*border-image: url(:/images/C:/Users/Abdelfatah/Pictures/backgrounds/wallpaperflare.com_wallpaper (8).jpg);*/
     /* Fixed path: Removed the colon and added quotes */
-    border-image: url(&quot;login_img.jpg&quot;);
+    border-image: url(&quot;images/login_img.jpg&quot;);
     
     /* Ensures the image fills the widget entirely */
     background-position: center;
