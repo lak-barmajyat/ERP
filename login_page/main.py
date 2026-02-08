@@ -42,9 +42,8 @@ if __name__ == '__main__':
     connect = mysql.connector.connect(
         host=getenv("DB_HOST"),
         user=getenv("DB_USER"),
-        password=getenv("D4564B_PASSWORD"),
+        password=getenv("DB_PASSWORD"),
         database=getenv("DB_NAME"),
-        charset=getenv("DB_CHARSET")
     )
     cursor = connect.cursor()
     main(connect, cursor)
