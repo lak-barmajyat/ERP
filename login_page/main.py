@@ -5,11 +5,11 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 import mysql.connector
 
-from login_page.login_ui import MainWindow
+from login_ui import LoginScreen
 
 def main():
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = LoginScreen()
     window.setWindowFlags(Qt.FramelessWindowHint)
     window.setAttribute(Qt.WA_TranslucentBackground)
     window.show()

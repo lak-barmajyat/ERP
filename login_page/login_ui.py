@@ -1,16 +1,12 @@
-import sys
-from os import getenv
-from dotenv import load_dotenv
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLineEdit, QAction
+from PyQt5.QtWidgets import QMainWindow, QLineEdit, QAction
 from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import QPropertyAnimation, QRect, QEvent, Qt
+#from PyQt5.QtCore import QPropertyAnimation, QRect, QEvent, Qt
 from PyQt5.uic import loadUi
-import mysql.connector
 
 
-class MainWindow(QMainWindow):
+class LoginScreen(QMainWindow):
     def __init__(self):
-        super(MainWindow, self).__init__()
+        super(LoginScreen, self).__init__()
         loadUi('login_screen.ui', self)
 
         self.annuler_button.clicked.connect(self.close)
