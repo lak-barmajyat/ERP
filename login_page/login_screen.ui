@@ -125,42 +125,6 @@ border-bottom-left-radius: 50px</string>
       <property name="spacing">
        <number>6</number>
       </property>
-      <item row="2" column="0">
-       <widget class="QLineEdit" name="lineEdit_2">
-        <property name="styleSheet">
-         <string notr="true">QLineEdit {
-    background-color: #f8fafc;
-    border: 2px solid #E5E7EB; /* Soft gray instead of transparent for better visibility */
-    border-radius: 10px;
-    color: #0d0c22;
-    font-size: 16px;
-    height: 35px;
-    /* Extra left padding to make room for an icon */
-    padding-left: 10px; 
-    padding-right: 0px;
-}
-
-QLineEdit:hover {
-    border-color: #818cf8;
-    background-color: #ffffff;
-}
-
-QLineEdit:focus {
-    border-color: #818cf8;
-    background-color: #ffffff;
-    /* Qt doesn't support spread/blur shadows, so we use a solid highlight */
-    border: 2px solid #818cf8;
-}
-
-/* Placeholder color is handled specially in QSS */
-QLineEdit {
-    qproperty-placeholderText: &quot;Utilisateur&quot;;
-}
-
-</string>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="0">
        <widget class="QLineEdit" name="lineEdit">
         <property name="styleSheet">
@@ -195,28 +159,11 @@ QLineEdit {
 
 </string>
         </property>
-       </widget>
-      </item>
-      <item row="7" column="0">
-       <spacer name="spacer">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
+        <property name="inputMask">
+         <string comment="*"/>
         </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Fixed</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>25</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Utilisateur</string>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
         </property>
        </widget>
       </item>
@@ -284,57 +231,83 @@ QPushButton:pressed {
 }</string>
           </property>
           <property name="text">
-           <string>Se Connecter</string>
+           <string>Se Conecter</string>
           </property>
          </widget>
         </item>
        </layout>
       </item>
-      <item row="10" column="0">
-       <widget class="QPushButton" name="oublie_mot_de_passe_button">
-        <property name="styleSheet">
-         <string notr="true">QPushButton {
-    background-color: transparent;
-    border: none;
-    border-radius: 4px;
-    /* Use a standard icon color */
-    color: #64748b; 
-    font-size: 16px;
-    padding: 2px;
-}
-
-QPushButton:hover {
-    background-color: #f1f5f9;
-    color: #1e293b;
-}
-
-/* Use the :checked state if you make the button 'Checkable' in Designer */
-QPushButton:checked {
-    color: #3b82f6; /* Blue color when password is visible */
-}
-
-QPushButton:pressed {
-    background-color: #e2e8f0;
-}</string>
-        </property>
-        <property name="text">
-         <string>Oublie mot de passe</string>
-        </property>
-       </widget>
-      </item>
       <item row="4" column="0">
        <widget class="QLabel" name="label_2">
         <property name="text">
-         <string>Mot de passe</string>
+         <string>Mot do pass</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLineEdit" name="userentry">
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+    background-color: #f8fafc;
+    border: 2px solid #E5E7EB; /* Soft gray instead of transparent for better visibility */
+    border-radius: 10px;
+    color: #0d0c22;
+    font-size: 16px;
+    height: 35px;
+    /* Extra left padding to make room for an icon */
+    padding-left: 10px; 
+    padding-right: 0px;
+}
+
+QLineEdit:hover {
+    border-color: #818cf8;
+    background-color: #ffffff;
+}
+
+QLineEdit:focus {
+    border-color: #818cf8;
+    background-color: #ffffff;
+    /* Qt doesn't support spread/blur shadows, so we use a solid highlight */
+    border: 2px solid #818cf8;
+}
+
+/* Placeholder color is handled specially in QSS */
+QLineEdit {
+    qproperty-placeholderText: &quot;Utilisateur&quot;;
+}
+
+</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <spacer name="spacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>25</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Utilisateur</string>
         </property>
        </widget>
       </item>
      </layout>
      <zorder>label</zorder>
-     <zorder>se_connecter_button</zorder>
      <zorder>label_2</zorder>
      <zorder>spacer</zorder>
-     <zorder>lineEdit_2</zorder>
+     <zorder>userentry</zorder>
      <zorder>lineEdit</zorder>
     </widget>
    </widget>

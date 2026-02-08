@@ -13,28 +13,16 @@ class MainWindow(QMainWindow):
         loadUi('login_screen.ui', self)
 
         self.annuler_button.clicked.connect(self.close)
-        self.oublie_mot_de_passe_button.clicked.connect(self.close)
         self.se_connecter_button.clicked.connect(self.close)
 
 
-def main(connect, cursor):
-    try:
-        sql = """
-        INSERT INTO `utilisateurs` (`nom_utilisateur`, `mot_de_passe_hash`, `role`)
-        VALUES (%s, %s, %s)
-        """
-        values = ("Mossabe", "Hello123", "admin")
-        cursor.execute(sql, values)
-        connect.commit()
-        
-        app = QApplication(sys.argv)
-        window = MainWindow()
-        window.setWindowFlags(Qt.FramelessWindowHint)
-        window.setAttribute(Qt.WA_TranslucentBackground)
-        window.show()
-        sys.exit(app.exec_())
-    except mysql.connector.Error as err:
-        print(f"Error: {err}")        
+def main():
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.setWindowFlags(Qt.FramelessWindowHint)
+    window.setAttribute(Qt.WA_TranslucentBackground)
+    window.show()
+    sys.exit(app.exec_())
 
 
 if __name__ == '__main__':
@@ -43,10 +31,10 @@ if __name__ == '__main__':
         host=getenv("DB_HOST"),
         user=getenv("DB_USER"),
         password=getenv("DB_PASSWORD"),
-        database=getenv("DB_NAME"),
+        database=getenv("DB_NAME")
     )
     cursor = connect.cursor()
-    main(connect, cursor)
+    main()
 
     cursor.close()
     connect.close()
