@@ -5,10 +5,13 @@ from PyQt5.uic import loadUi
 import os
 from  tools import get_colored_icon
 from paths import ASSETS_LOGIN
+from program.windows.login.login_funcs import check_user
 
 def resource_path(relative_path):
     base_path = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_path, relative_path)
+
+
 
 
 class LoginWindow(QMainWindow):
@@ -20,11 +23,14 @@ class LoginWindow(QMainWindow):
         self.setAttribute(Qt.WA_TranslucentBackground)
 
         self.annuler_button.clicked.connect(self.close)
-        self.se_connecter_button.clicked.connect(self.close)
+        self.se_connecter_button.clicked.connect(lambda: check_user(self))
+        self.se_connecter_button.setDefault(True)
+        self.utilisateur_lineedit.returnPressed.connect(self.se_connecter_button.click)
+        self.mot_de_pass_lineedit.returnPressed.connect(self.se_connecter_button.click)
 
         # Create toggle action
         self.toggle_password_action = QAction(self)
-        self.toggle_password_action.setIcon(QIcon(get_colored_icon(f"{ASSETS_LOGIN}/eye-closed.svg", 'red')))
+        self.toggle_password_action.setIcon(QIcon(f"{ASSETS_LOGIN}/eye-closed.svg"))
         
         # Add action to password field
         self.mot_de_pass_lineedit.addAction(self.toggle_password_action, QLineEdit.TrailingPosition)

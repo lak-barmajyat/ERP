@@ -8,7 +8,7 @@ from program.services.db_connection import get_db_connection, close_db_connectio
 
 def main():
     app = QApplication(sys.argv)
-    window = DashboardWindow()
+    window = LoginWindow()
     window.show()
     sys.exit(app.exec_())
 
