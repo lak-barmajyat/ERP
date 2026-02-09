@@ -7,7 +7,7 @@ from PyQt5.uic import loadUi
 class LoginWindow(QMainWindow):
     def __init__(self):
         super(LoginWindow, self).__init__()
-        loadUi('login_screen.ui', self)
+        loadUi('login.ui', self)
 
         self.annuler_button.clicked.connect(self.close)
         self.se_connecter_button.clicked.connect(self.close)
