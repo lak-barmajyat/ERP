@@ -4,9 +4,9 @@ from PyQt5.QtGui import QIcon
 from PyQt5.uic import loadUi
 
 
-class LoginScreen(QMainWindow):
+class LoginWindow(QMainWindow):
     def __init__(self):
-        super(LoginScreen, self).__init__()
+        super(LoginWindow, self).__init__()
         loadUi('login_screen.ui', self)
 
         self.annuler_button.clicked.connect(self.close)
@@ -25,6 +25,8 @@ class LoginScreen(QMainWindow):
         # Set initial state
         self.is_password_hidden = True
         self.password_lineedit.setEchoMode(QLineEdit.Password)
+
+        self.connection_error_label.hide()
     
     def toggle_password_visibility(self):
         if self.is_password_hidden:

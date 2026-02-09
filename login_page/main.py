@@ -4,12 +4,12 @@ from dotenv import load_dotenv
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 import mysql.connector
+from login_ui import LoginWindow
 
-from login_ui import LoginScreen
 
 def main():
     app = QApplication(sys.argv)
-    window = LoginScreen()
+    window = LoginWindow()
     window.setWindowFlags(Qt.FramelessWindowHint)
     window.setAttribute(Qt.WA_TranslucentBackground)
     window.show()
