@@ -1,0 +1,15 @@
+[project]
+name = "ERP"
+version = "0.1.0"
+description = "ERP System with PyQt5 GUI"
+requires-python = ">=3.8"
+dependencies = [
+    "PyQt5==5.15.10",
+    "pymysql==1.1.0",
+    "python-dotenv==1.0.0",
+    "mysql-connector-python==8.3.0",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
