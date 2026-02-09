@@ -9,8 +9,6 @@ from program.services.db_connection import get_db_connection, close_db_connectio
 def main():
     app = QApplication(sys.argv)
     window = DashboardWindow()
-    #window.setWindowFlags(Qt.FramelessWindowHint)
-    #window.setAttribute(Qt.WA_TranslucentBackground)
     window.show()
     sys.exit(app.exec_())
 

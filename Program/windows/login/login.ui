@@ -91,7 +91,7 @@ QFrame {
       <property name="frameShadow">
        <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QLineEdit" name="userentry">
+      <widget class="QLineEdit" name="utilisateur_lineedit">
        <property name="geometry">
         <rect>
          <x>20</x>
@@ -167,7 +167,7 @@ color: rgb(255, 0, 0);</string>
         <string>utilisateur ou mot de pass est incorrect!</string>
        </property>
       </widget>
-      <widget class="QLineEdit" name="password_lineedit">
+      <widget class="QLineEdit" name="mot_de_pass_lineedit">
        <property name="geometry">
         <rect>
          <x>20</x>

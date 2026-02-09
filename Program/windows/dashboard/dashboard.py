@@ -17,7 +17,7 @@ class DashboardWindow(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
-    window = DashboardWindow()
+    window = QMainWindow()
     window.show()
     sys.exit(app.exec_())
 
