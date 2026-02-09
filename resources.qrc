@@ -2,4 +2,7 @@
   <qresource prefix="assets">
     <file>program/assets/login/login_img.jpg</file>
   </qresource>
+  <qresource prefix="global">
+    <file>program/assets/global/erp_logo.png</file>
+  </qresource>
 </RCC>
