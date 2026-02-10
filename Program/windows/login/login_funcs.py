@@ -1,5 +1,4 @@
-from program.windows.dashboard.dashboard import DashboardWindow
-from program.services.db_connection import get_db_connection, close_db_connection
+from program import *
 import bcrypt
 
 
@@ -34,6 +33,7 @@ def check_user(login):
         close_db_connection(connect, cursor)
         return
 
+    USERNAME = username
     login.connection_error_label.hide()
     close_db_connection(connect, cursor)
     dashboard = DashboardWindow()
