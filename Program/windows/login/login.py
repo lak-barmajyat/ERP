@@ -4,7 +4,8 @@ from PyQt5.QtCore import QPropertyAnimation, QRect, QEvent, Qt
 from PyQt5.uic import loadUi
 import os
 from  tools import get_colored_icon
-from program import *
+from paths import ASSETS_LOGIN
+from program.windows.login.login_funcs import check_user
 
 def resource_path(relative_path):
     base_path = os.path.dirname(os.path.abspath(__file__))
@@ -29,7 +30,7 @@ class LoginWindow(QMainWindow):
 
         # Create toggle action
         self.toggle_password_action = QAction(self)
-        self.toggle_password_action.setIcon(QIcon(f"{ASSETS_DIR / "login"}/eye-closed.svg"))
+        self.toggle_password_action.setIcon(QIcon(f"{ASSETS_LOGIN}/eye-closed.svg"))
         
         # Add action to password field
         self.mot_de_pass_lineedit.addAction(self.toggle_password_action, QLineEdit.TrailingPosition)
@@ -47,8 +48,8 @@ class LoginWindow(QMainWindow):
     def toggle_password_visibility(self):
         if self.is_password_hidden:
             self.mot_de_pass_lineedit.setEchoMode(QLineEdit.Normal)
-            self.toggle_password_action.setIcon(QIcon(f"{ASSETS_DIR / "login"}/eye-open.svg"))
+            self.toggle_password_action.setIcon(QIcon(f"{ASSETS_LOGIN}/eye-open.svg"))
         else:
             self.mot_de_pass_lineedit.setEchoMode(QLineEdit.Password)
-            self.toggle_password_action.setIcon(QIcon(f"{ASSETS_DIR / "login"}/eye-closed.svg"))
+            self.toggle_password_action.setIcon(QIcon(f"{ASSETS_LOGIN}/eye-closed.svg"))
         self.is_password_hidden = not self.is_password_hidden
