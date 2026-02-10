@@ -24,8 +24,8 @@ class LoginWindow(QMainWindow):
 
         self.annuler_button.clicked.connect(self.close)
         self.se_connecter_button.clicked.connect(lambda: check_user(self))
-        self.se_connecter_button.setDefault(True)
-        self.utilisateur_lineedit.returnPressed.connect(self.se_connecter_button.click)
+        self.se_connecter_button.setFocus(True)
+        self.utilisateur_lineedit.returnPressed.connect(self.mot_de_pass_lineedit.setFocus)
         self.mot_de_pass_lineedit.returnPressed.connect(self.se_connecter_button.click)
 
         # Create toggle action
