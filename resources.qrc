@@ -1,5 +1,16 @@
 <RCC>
   <qresource prefix="assets">
+    <file>program/assets/global/down_blue_arrow.svg</file>
+    <file>program/assets/dashboard/ajouter_client.svg</file>
+    <file>program/assets/dashboard/liste_clients.svg</file>
+    <file>program/assets/dashboard/fiche_client.svg</file>
+    <file>program/assets/dashboard/nouveau_doc.svg</file>
+    <file>program/assets/dashboard/liste_ventes.svg</file>
+    <file>program/assets/dashboard/ajouter_produit.svg</file>
+    <file>program/assets/dashboard/liste_produits.svg</file>
+    <file>program/assets/dashboard/ajuster_stock.svg</file>
+    <file>program/assets/dashboard/nouveau_pay.svg</file>
+    <file>program/assets/dashboard/liste_pay.svg</file>
     <file>program/assets/login/login_img.jpg</file>
   </qresource>
   <qresource prefix="global">

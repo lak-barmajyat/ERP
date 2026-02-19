@@ -24,7 +24,7 @@ class LoginWindow(QMainWindow):
 
         # Create toggle action
         self.toggle_password_action = QAction(self)
-        self.toggle_password_action.setIcon(QIcon(get_colored_icon(f"{ASSETS_LOGIN}/eye-closed.svg", 'red')))
+        self.toggle_password_action.setIcon(QIcon(f"{ASSETS_LOGIN}/eye-closed.svg"))
         
         # Add action to password field
         self.mot_de_pass_lineedit.addAction(self.toggle_password_action, QLineEdit.TrailingPosition)

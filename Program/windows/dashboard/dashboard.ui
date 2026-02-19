@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>1920</width>
-    <height>1089</height>
+    <height>1131</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -101,10 +101,7 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">QFrame
-{
-	background-color: #ffffff
-}</string>
+         <string notr="true"/>
         </property>
         <property name="frameShape">
          <enum>QFrame::StyledPanel</enum>
@@ -335,7 +332,8 @@
            <bool>false</bool>
           </property>
           <property name="styleSheet">
-           <string notr="true">image: url(&quot;program/assets/global/erp_logo.png&quot;);</string>
+           <string notr="true">image: url(&quot;program/assets/global/erp_logo.png&quot;);
+background-color: transparent;</string>
           </property>
           <property name="text">
            <string/>
@@ -383,7 +381,7 @@
           </property>
           <property name="font">
            <font>
-            <family>ABeeZee</family>
+            <family>Tajawal</family>
             <pointsize>16</pointsize>
             <weight>50</weight>
             <italic>false</italic>
@@ -392,9 +390,8 @@
           </property>
           <property name="styleSheet">
            <string notr="true">
-	font: 16pt &quot;ABeeZee&quot;;
+font: 16pt &quot;Tajawal&quot;;
 	background-color: transparent;
-	border: 1px solid #1E2430;
 	border-radius: 18px;
 	padding-left: 30px;
 </string>
@@ -426,6 +423,205 @@
         <property name="verticalSpacing">
          <number>5</number>
         </property>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_3">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 81 28pt &quot;Tajawal ExtraBold&quot;;
+padding-left:20px;
+padding-bottom:25px;
+background-color: transparent;</string>
+          </property>
+          <property name="text">
+           <string>Ventes</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QFrame" name="frame_4">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>499</width>
+            <height>181</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QToolButton
+{
+font: 57 15pt &quot;Tajawal Medium&quot;;
+				padding: 0px;
+                padding-top: 25px;
+				padding-bottom: 10px;
+                spacing: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #1e293b;
+                background-color: #e2e8f0;
+                border-radius: 10px;
+                border: none;
+}
+            QToolButton:hover {
+                background-color: #cbd5e1;
+            }
+            QToolButton:pressed {
+                background-color: #94a3b8;
+            }</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::StyledPanel</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <item>
+            <widget class="QToolButton" name="ajouter_client">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>125</height>
+              </size>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+             <property name="autoRepeat">
+              <bool>false</bool>
+             </property>
+             <property name="autoExclusive">
+              <bool>false</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="liste_clients">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>125</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QToolButton" name="fiche_client">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>125</width>
+               <height>125</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>52</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font: 81 28pt &quot;Tajawal ExtraBold&quot;;
+padding-left:20px;
+padding-bottom:25px;
+background-color: transparent;</string>
+          </property>
+          <property name="text">
+           <string>Clients</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>58</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item row="4" column="2">
          <widget class="QFrame" name="frame_8">
           <property name="sizePolicy">
@@ -447,15 +643,7 @@
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">QFrame{
-	background-color: #ffffff
-}
-QPushButton{
-	font: 600 12pt &quot;Inter Tight&quot;;
-	background-color: #E5E7EB;
-	border: none;
-	border-radius: 5px
-}</string>
+           <string notr="true"/>
           </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
@@ -465,7 +653,7 @@ QPushButton{
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_3">
            <item>
-            <widget class="QPushButton" name="pushButton_9">
+            <widget class="QToolButton" name="nouveau_pay">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -478,48 +666,69 @@ QPushButton{
                <height>125</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QToolButton
+{
+font: 57 15pt &quot;Tajawal Medium&quot;;
+				padding: 0px;
+                padding-top: 25px;
+				padding-bottom: 10px;
+                spacing: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #ffffff;
+                background-color: #1D7FD8;
+                border-radius: 10px;
+                border: none;
+}
+            QToolButton:hover {
+                background-color: #1769B4;
+            }
+            QToolButton:pressed {
+                background-color: #0E5891;
+            }</string>
+             </property>
              <property name="text">
-              <string>Nouvau Pay</string>
+              <string/>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_10">
+            <widget class="QToolButton" name="liste_pay">
              <property name="maximumSize">
               <size>
                <width>125</width>
                <height>125</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true">QToolButton
+{
+font: 57 15pt &quot;Tajawal Medium&quot;;
+				padding: 0px;
+                padding-top: 25px;
+				padding-bottom: 10px;
+                spacing: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #ffffff;
+                background-color: #1D7FD8;
+                border-radius: 10px;
+                border: none;
+}
+            QToolButton:hover {
+                background-color: #1769B4;
+            }
+            QToolButton:pressed {
+                background-color: #0E5891;
+            }</string>
+             </property>
              <property name="text">
-              <string>Liste ventes</string>
+              <string/>
              </property>
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>30</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">font: 600 19pt &quot;Inter Tight&quot;;
-padding-left:20px</string>
-          </property>
-          <property name="text">
-           <string>Ventes</string>
-          </property>
          </widget>
         </item>
         <item row="4" column="0">
@@ -537,15 +746,26 @@ padding-left:20px</string>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">QFrame{
-	background-color: #ffffff
+           <string notr="true">QToolButton
+{
+font: 57 15pt &quot;Tajawal Medium&quot;;
+				padding: 0px;
+                padding-top: 25px;
+				padding-bottom: 10px;
+                spacing: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #1e293b;
+                background-color: #e2e8f0;
+                border-radius: 10px;
+                border: none;
 }
-QPushButton{
-	font: 600 12pt &quot;Inter Tight&quot;;
-	background-color: #E5E7EB;
-	border: none;
-	border-radius: 5px
-}</string>
+            QToolButton:hover {
+                background-color: #cbd5e1;
+            }
+            QToolButton:pressed {
+                background-color: #94a3b8;
+            }</string>
           </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
@@ -555,7 +775,7 @@ QPushButton{
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
-            <widget class="QPushButton" name="pushButton_4">
+            <widget class="QToolButton" name="ajouter_produit">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -568,13 +788,16 @@ QPushButton{
                <height>125</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
-              <string>Ajouter produit</string>
+              <string/>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_5">
+            <widget class="QToolButton" name="liste_produits">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -587,13 +810,16 @@ QPushButton{
                <height>125</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
-              <string>Liste produits</string>
+              <string/>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_6">
+            <widget class="QToolButton" name="ajouter_stock">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -606,8 +832,11 @@ QPushButton{
                <height>125</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
-              <string>Ajouster stock</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -622,145 +851,44 @@ QPushButton{
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>52</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>30</height>
+            <height>53</height>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">font: 600 19pt &quot;Inter Tight&quot;;
-padding-left:20px</string>
+           <string notr="true">font: 81 28pt &quot;Tajawal ExtraBold&quot;;
+padding-left:20px;
+padding-bottom:25px;
+background-color: transparent;</string>
           </property>
           <property name="text">
            <string>Documents</string>
           </property>
          </widget>
         </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_2">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+        <item row="0" column="1">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
           </property>
-          <property name="maximumSize">
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
            <size>
-            <width>16777215</width>
-            <height>30</height>
+            <width>56</width>
+            <height>20</height>
            </size>
           </property>
-          <property name="styleSheet">
-           <string notr="true">font: 600 19pt &quot;Inter Tight&quot;;
-padding-left:20px</string>
-          </property>
-          <property name="text">
-           <string>Clients</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QFrame" name="frame_4">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>499</width>
-            <height>181</height>
-           </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QFrame{
-	background-color: #ffffff
-}
-QPushButton{
-	font: 600 12pt &quot;Inter Tight&quot;;
-	background-color: #E5E7EB;
-	border: none;
-	border-radius: 5px
-}
-</string>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::StyledPanel</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Raised</enum>
-          </property>
-          <layout class="QHBoxLayout" name="horizontalLayout">
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>125</width>
-               <height>125</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Ajouter clients</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_2">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>125</width>
-               <height>125</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Liste clients</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="pushButton_3">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>125</width>
-               <height>125</height>
-              </size>
-             </property>
-             <property name="font">
-              <font>
-               <family>Inter Tight</family>
-               <pointsize>12</pointsize>
-               <weight>75</weight>
-               <italic>false</italic>
-               <bold>true</bold>
-              </font>
-             </property>
-             <property name="text">
-              <string>Fiche client</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </widget>
+         </spacer>
         </item>
         <item row="1" column="2">
          <widget class="QFrame" name="frame_7">
@@ -783,15 +911,26 @@ QPushButton{
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">QFrame{
-	background-color: #ffffff
+           <string notr="true">QToolButton
+{
+font: 57 15pt &quot;Tajawal Medium&quot;;
+				padding: 0px;
+                padding-top: 25px;
+				padding-bottom: 10px;
+                spacing: 0px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #1e293b;
+                background-color: #e2e8f0;
+                border-radius: 10px;
+                border: none;
 }
-QPushButton{
-	font: 600 12pt &quot;Inter Tight&quot;;
-	background-color: #E5E7EB;
-	border: none;
-	border-radius: 5px
-}</string>
+            QToolButton:hover {
+                background-color: #cbd5e1;
+            }
+            QToolButton:pressed {
+                background-color: #94a3b8;
+            }</string>
           </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
@@ -801,7 +940,7 @@ QPushButton{
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <widget class="QPushButton" name="pushButton_7">
+            <widget class="QToolButton" name="nouvau_doc">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -814,13 +953,16 @@ QPushButton{
                <height>125</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
-              <string>Nouvau Doc</string>
+              <string/>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_8">
+            <widget class="QToolButton" name="liste_ventes">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Minimum" vsizetype="MinimumExpanding">
                <horstretch>0</horstretch>
@@ -833,8 +975,11 @@ QPushButton{
                <height>125</height>
               </size>
              </property>
+             <property name="styleSheet">
+              <string notr="true"/>
+             </property>
              <property name="text">
-              <string>Liste ventes</string>
+              <string/>
              </property>
             </widget>
            </item>
@@ -849,61 +994,28 @@ QPushButton{
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>52</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>30</height>
+            <height>52</height>
            </size>
           </property>
-          <property name="font">
-           <font>
-            <family>Inter Tight</family>
-            <pointsize>19</pointsize>
-            <weight>75</weight>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
-          </property>
           <property name="styleSheet">
-           <string notr="true">font: 600 19pt &quot;Inter Tight&quot;;
-padding-left:20px</string>
+           <string notr="true">font: 81 28pt &quot;Tajawal ExtraBold&quot;;
+padding-left:20px;
+padding-bottom:25px;
+background-color: transparent;</string>
           </property>
           <property name="text">
            <string>Paiement</string>
           </property>
          </widget>
-        </item>
-        <item row="0" column="1">
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>56</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="1">
-         <spacer name="verticalSpacer_4">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeType">
-           <enum>QSizePolicy::Fixed</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>58</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </item>

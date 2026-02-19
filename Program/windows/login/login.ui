@@ -16,6 +16,9 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: transparent;</string>
+  </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
   </property>
@@ -53,6 +56,7 @@ QFrame {
         stop:1 rgba(0, 0, 0, 0)
     );
     border-radius: 10px;
+	border: none;
 }</string>
      </property>
      <property name="frameShape">

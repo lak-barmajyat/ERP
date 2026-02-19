@@ -1,0 +1,19 @@
+{
+    "BG_MAIN": "#F3F4F6",
+    "CARD": "#FFFFFF",
+    "ROW_ALT": "#E5E7EB",
+    "BORDER": "#D1D5DB",
+    "DIVIDER": "#E5E7EB",
+
+    "TEXT_PRIMARY": "#1E2430",
+    "TEXT_SECONDARY": "#4C5363",
+    "TEXT_MUTED": "#6B7280",
+    "TEXT_DISABLED": "#9CA3AF",
+    "PLACEHOLDER": "#9CA3AF",
+
+    "PRIMARY": "#1D7FD8",
+    "PRIMARY_HOVER": "#1769B4",
+    "PRIMARY_PRESSED": "#0E5891",
+    "PRIMARY_SOFT": "#E7F1FB",
+    "PRIMARY_TEXT": "#FFFFFF"
+}
