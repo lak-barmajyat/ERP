@@ -136,7 +136,7 @@ border: none;
          </property>
          <property name="styleSheet">
           <string notr="true">QFrame{
-	padding: 10px;
+	padding: 0px;
 	border-radius: 15px;
 }
 QLineEdit{
@@ -193,7 +193,6 @@ QComboBox::drop-down {
 /* 4. The Arrow Icon (Blue chevron) */
 QComboBox::down-arrow {
     image: url(&quot;program/assets/global/down_blue_arrow.svg&quot;);
-	/*image: url(&amp;quot;program/assets/global/down_blue_arrow.svg&amp;quot;);*/
     width: 14px;
 padding-right: 15px;
     height: 14px;
@@ -270,13 +269,13 @@ QAbstractItemView {
               </property>
               <property name="minimumSize">
                <size>
-                <width>150</width>
+                <width>100</width>
                 <height>32</height>
                </size>
               </property>
               <property name="maximumSize">
                <size>
-                <width>150</width>
+                <width>100</width>
                 <height>32</height>
                </size>
               </property>
@@ -528,14 +527,17 @@ QAbstractItemView {
             <property name="styleSheet">
              <string notr="true">/* 1. The Main Table Container */
 QTableWidget {
+    background-color: white;
+    border: 1px solid #d1d9e6;
     border-radius: 12px; /* Keeps the outer box rounded */
     gridline-color: transparent;
     outline: 0;
-	padding:10;
+	padding:0;
 }
 
 /* 2. The Header Container - Key fix here */
 QHeaderView {
+    background-color: #e6f0f9; 
     border: none;
     border-bottom-left-radius: 0px; /* Matches the outer table curve */
     border-bottom-right-radius: 0px;
@@ -543,6 +545,8 @@ QHeaderView {
 
 /* 3. Individual Header Sections - Removing the internal radius */
 QHeaderView::section {
+    background-color: #e6f0f9;
+    color: #334155;
     font-weight: bold;
     font-size: 13px;
     padding: 8px;
@@ -554,7 +558,7 @@ QHeaderView::section {
     
     /* Clean separator lines */
     border: none;
-    border-right: 1px; 
+    border-right: 1px solid #cbd5e1; 
 }
 
 /* Remove the line from the very last header section */
@@ -564,12 +568,20 @@ QHeaderView::section:last {
 
 /* 4. Table Items (Cells) */
 QTableWidget::item {
+    color: #1e293b;
 	padding-left: 25px;
-    border-bottom: 1px; 
+    border-bottom: 1px solid #f1f5f9; 
+}
+
+/* 5. Selection style */
+QTableWidget::item:selected {
+    background-color: #dbeafe;
+    color: #1e40af;
 }
 
 /* 6. Fix for the empty top-left/top-right corners */
 QTableWidget QTableCornerButton::section {
+    background-color: #e6f0f9;
     border: none;
     border-top-left-radius: 10px;
 }</string>
@@ -674,20 +686,7 @@ QLineEdit{
 }</string>
          </property>
          <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="3">
-           <widget class="QLabel" name="label_4">
-            <property name="styleSheet">
-             <string notr="true">QLabel
-{
-	border: none;
-}</string>
-            </property>
-            <property name="text">
-             <string>N° Piece</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
+          <item row="1" column="1">
            <widget class="QDateEdit" name="dateEdit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -709,7 +708,7 @@ QLineEdit{
             </property>
            </widget>
           </item>
-          <item row="1" column="4">
+          <item row="1" column="3">
            <widget class="QPushButton" name="pushButton">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
@@ -748,6 +747,69 @@ QPushButton::pressed{
             </property>
             <property name="text">
              <string>Valider</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel
+{
+	border: none;
+}</string>
+            </property>
+            <property name="text">
+             <string>Client</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="lineEdit">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>200</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>200</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="placeholderText">
+             <string>N° Piece</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_4">
+            <property name="styleSheet">
+             <string notr="true">QLabel
+{
+	border: none;
+}</string>
+            </property>
+            <property name="text">
+             <string>N° Piece</string>
             </property>
            </widget>
           </item>
@@ -794,7 +856,6 @@ QComboBox::drop-down {
 /* 4. The Arrow Icon (Blue chevron) */
 QComboBox::down-arrow {
     image: url(&quot;program/assets/global/down_blue_arrow.svg&quot;);
-	/*image: url(&amp;quot;program/assets/global/down_blue_arrow.svg&amp;quot;);*/
     width: 14px;
 padding-right: 15px;
     height: 14px;
@@ -814,7 +875,7 @@ QAbstractItemView {
             </property>
            </widget>
           </item>
-          <item row="0" column="2">
+          <item row="0" column="1">
            <widget class="QLabel" name="label_3">
             <property name="styleSheet">
              <string notr="true">QLabel
@@ -824,100 +885,6 @@ QAbstractItemView {
             </property>
             <property name="text">
              <string>Date</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QLineEdit" name="lineEdit">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>200</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>N° Piece</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLabel" name="label_2">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QLabel
-{
-	border: none;
-}</string>
-            </property>
-            <property name="text">
-             <string>ICE</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_3">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>300</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>300</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>ICE</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="minimumSize">
-             <size>
-              <width>0</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>30</height>
-             </size>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QLabel
-{
-	border: none;
-}</string>
-            </property>
-            <property name="text">
-             <string>Client</string>
             </property>
            </widget>
           </item>
@@ -1077,6 +1044,7 @@ QAbstractItemView {
            <property name="styleSheet">
             <string notr="true">QLabel{
 	border-radius: 10px;
+	background-color: #ffffff;
 	padding-left: 10px
 }</string>
            </property>
@@ -1120,6 +1088,8 @@ QAbstractItemView {
            </property>
            <property name="styleSheet">
             <string notr="true">QLabel{
+	border-radius: 10px;
+	background-color: #ffffff;
 	padding-left: 10px
 }</string>
            </property>

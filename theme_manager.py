@@ -43,6 +43,22 @@ class ThemeManager:
             font-weight: 600;
         }}
 
+        QPushButton[transparent="true"] {{
+            background-color: transparent;
+            color: {C['TRANSPARENT_BUTTON']};
+            border: 0px solid {C['PRIMARY']};
+        }}
+
+        QPushButton[transparent="true"]:hover {{
+            background-color: {C['PRIMARY_SOFT']};
+            color: {C['TRANSPARENT_BUTTON']};
+        }}
+
+        QPushButton[transparent="true"]:pressed {{
+            background-color: {C['PRIMARY']};
+            color: {C['TRANSPARENT_BUTTON']};
+        }}
+
         QPushButton:hover {{
             background-color: {C['PRIMARY_HOVER']};
         }}
@@ -77,7 +93,7 @@ class ThemeManager:
         }}
 
         QComboBox::down-arrow {{
-            image: url(:/assets/program/assets/global/down_blue_arrow.svg);
+            image: url("program/assets/global/down_blue_arrow.svg");
             width: 12px;
             height: 12px;
         }}
@@ -171,3 +187,40 @@ class ThemeManager:
             border: none;
         }}
         """
+    @staticmethod
+    def apply_text_color_by_background(button):
+        """
+        Check if button has transparent background and apply appropriate text color.
+        Transparent background → Black text
+        Regular background → White text
+        """
+        current_style = button.styleSheet()
+        
+        # Check if background is transparent
+        is_transparent = (
+            'background-color: transparent' in current_style.lower() or
+            'background: transparent' in current_style.lower() or
+            'background-color:transparent' in current_style.lower() or
+            'background:transparent' in current_style.lower()
+        )
+        
+        if is_transparent:
+            # Keep existing style but ensure text is black
+            if 'color:' not in current_style.lower():
+                button.setStyleSheet(current_style + "\ncolor: #000000;")
+            elif 'color: #000000' not in current_style and 'color:#000000' not in current_style:
+                # Replace color with black
+                import re
+                new_style = re.sub(r'color:\s*[^;]+;?', 'color: #000000;', current_style, flags=re.IGNORECASE)
+                button.setStyleSheet(new_style)
+        else:
+            # Button has background, ensure text is white
+            if 'color:' not in current_style.lower():
+                button.setStyleSheet(current_style + "\ncolor: #FFFFFF;")
+            elif 'color: #ffffff' not in current_style.lower() and 'color:#ffffff' not in current_style.lower():
+                # Replace color with white
+                import re
+                new_style = re.sub(r'color:\s*[^;]+;?', 'color: #FFFFFF;', current_style, flags=re.IGNORECASE)
+                button.setStyleSheet(new_style)
+        
+        return is_transparent

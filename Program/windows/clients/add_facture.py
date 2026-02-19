@@ -21,15 +21,20 @@ class ClientsFacturesWindow(QMainWindow):
         # Widths match the input fields above the table
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
         
-        self.tableWidget.setColumnWidth(0, 240)  # Reference d'Article
-        self.tableWidget.setColumnWidth(1, 868)  # Designation (matches lineEdit_9)
-        self.tableWidget.setColumnWidth(2, 100)  # P.U.H.T
-        self.tableWidget.setColumnWidth(3, 100)  # P.T.T.C
-        self.tableWidget.setColumnWidth(4, 100)  # Qte
-        self.tableWidget.setColumnWidth(5, 150)  # Taxe (matches lineEdit_12)
-        self.tableWidget.setColumnWidth(6, 100)  # Total TTC (matches lineEdit_10)
+        self.tableWidget.setColumnWidth(0, 225)  # Reference d'Article
+        self.tableWidget.setColumnWidth(1, 885)  # Designation (matches lineEdit_9)
+        self.tableWidget.setColumnWidth(2, 115)  # P.U.H.T
+        self.tableWidget.setColumnWidth(3, 115)  # P.T.T.C
+        self.tableWidget.setColumnWidth(4, 115)  # Qte
+        self.tableWidget.setColumnWidth(5, 115)  # Taxe (matches lineEdit_12)
+        self.tableWidget.setColumnWidth(6, 115)  # Total TTC (matches lineEdit_10)
         
 
+        # Set transparent property for buttons with transparent background
+        self.pushButton_2.setProperty("transparent", "true")  # Annuler
+        self.pushButton_3.setProperty("transparent", "true")  # Supprimer
+        self.pushButton_8.setProperty("transparent", "true")  # Supprimer
+        
         # Connect buttons
         self.pushButton.clicked.connect(self.valider)
         self.pushButton_2.clicked.connect(self.button_2_clicked)

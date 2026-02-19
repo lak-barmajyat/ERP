@@ -11,12 +11,11 @@ from PyQt5.QtGui import QFontDatabase
 
 def main():
     app = QApplication(sys.argv)
-    window = LoginWindow()
-<<<<<<< HEAD
+    window = ClientsFacturesWindow()
+
     theme_manager = ThemeManager(app)
-    theme_manager.load_theme("dark")
-=======
->>>>>>> 48c07e308d1981e1431a1fce68946be8d57ae698
+    theme_manager.load_theme("light")  # Load default theme
+
     window.show()
     sys.exit(app.exec_())
 
