@@ -16,55 +16,57 @@ class DashboardWindow(QMainWindow):
         super(DashboardWindow, self).__init__()
         loadUi(resource_path("dashboard.ui"), self)
 
-        self.ajouter_client.setIcon(QIcon(resource_path("../../assets/dashboard/ajouter_client.svg")))
-        self.ajouter_client.setIconSize(QSize(70, 70))
-        self.ajouter_client.setText("Ajoute Client")
-        self.ajouter_client.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        # Store button configurations
+        self.button_configs = {
+            'ajouter_client': {'icon': "../../assets/dashboard/ajouter_client.svg", 'text': "Ajoute Client", 'size': 70},
+            'liste_clients': {'icon': "../../assets/dashboard/liste_clients.svg", 'text': "Liste Clients", 'size': 70},
+            'fiche_client': {'icon': "../../assets/dashboard/fiche_client.svg", 'text': "Fiche Client", 'size': 70},
+            'nouvau_doc': {'icon': "../../assets/dashboard/nouveau_doc.svg", 'text': "Nouveau Doc", 'size': 70},
+            'liste_ventes': {'icon': "../../assets/dashboard/liste_ventes.svg", 'text': "Liste Ventes", 'size': 70},
+            'ajouter_produit': {'icon': "../../assets/dashboard/ajouter_produit.svg", 'text': "Ajoute Produit", 'size': 70},
+            'liste_produits': {'icon': "../../assets/dashboard/liste_produits.svg", 'text': "Liste Produits", 'size': 70},
+            'ajouter_stock': {'icon': "../../assets/dashboard/ajouter_stock.svg", 'text': "Ajouter Stock", 'size': 70},
+            'nouveau_pay': {'icon': "../../assets/dashboard/nouveau_pay.svg", 'text': "Nouveau Pay", 'size': 80},
+            'liste_pay': {'icon': "../../assets/dashboard/liste_pay.svg", 'text': "Liste Pay", 'size': 75}
+        }
 
-        self.liste_clients.setIcon(QIcon(resource_path("../../assets/dashboard/liste_clients.svg")))
-        self.liste_clients.setIconSize(QSize(70, 70))
-        self.liste_clients.setText("Liste Clients")
-        self.liste_clients.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+        # Configure scroll area functionality
+        self._setup_scroll_area()
+        
+        # Initialize buttons with fixed sizes
+        self._setup_buttons()
 
-        self.fiche_client.setIcon(QIcon(resource_path("../../assets/dashboard/fiche_client.svg")))
-        self.fiche_client.setIconSize(QSize(70, 70))
-        self.fiche_client.setText("Fiche Client")
-        self.fiche_client.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+    def _setup_scroll_area(self):
+        """Configure the scroll area defined in the UI file"""
+        # The scroll area is already defined in the UI file
+        # Here we just configure its behavior
+        
+        # Set the scroll area as central widget
+        self.setCentralWidget(self.scrollArea)
+        
+        # Configure scroll bar policies (already set in UI, but can be modified here if needed)
+        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        
+        # Ensure the content widget has fixed size
+        self.scrollAreaWidgetContents.setMinimumSize(1920, 1080)
+        self.scrollAreaWidgetContents.setMaximumSize(1920, 1080)
+        
+        # Set widget resizable to False for fixed size content
+        self.scrollArea.setWidgetResizable(False)
+        
+        # Set minimum window size
+        self.setMinimumSize(640, 480)
 
-        self.nouvau_doc.setIcon(QIcon(resource_path("../../assets/dashboard/nouveau_doc.svg")))
-        self.nouvau_doc.setIconSize(QSize(47, 70))
-        self.nouvau_doc.setText("Nouveau Doc")
-        self.nouvau_doc.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-
-        self.liste_ventes.setIcon(QIcon(resource_path("../../assets/dashboard/liste_ventes.svg")))
-        self.liste_ventes.setIconSize(QSize(70, 70))
-        self.liste_ventes.setText("Liste Ventes")
-        self.liste_ventes.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-
-        self.ajouter_produit.setIcon(QIcon(resource_path("../../assets/dashboard/ajouter_produit.svg")))
-        self.ajouter_produit.setIconSize(QSize(58, 70))
-        self.ajouter_produit.setText("Ajoute Produit")
-        self.ajouter_produit.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-
-        self.liste_produits.setIcon(QIcon(resource_path("../../assets/dashboard/liste_produits.svg")))
-        self.liste_produits.setIconSize(QSize(70, 70))
-        self.liste_produits.setText("Liste Produits")
-        self.liste_produits.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-
-        self.ajouter_stock.setIcon(QIcon(resource_path("../../assets/dashboard/ajouter_stock.svg")))
-        self.ajouter_stock.setIconSize(QSize(60, 70))
-        self.ajouter_stock.setText("Ajouter Stock")
-        self.ajouter_stock.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-
-        self.nouveau_pay.setIcon(QIcon(resource_path("../../assets/dashboard/nouveau_pay.svg")))
-        self.nouveau_pay.setIconSize(QSize(80, 70))
-        self.nouveau_pay.setText("Nouveau Pay")
-        self.nouveau_pay.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
-
-        self.liste_pay.setIcon(QIcon(resource_path("../../assets/dashboard/liste_pay.svg")))
-        self.liste_pay.setIconSize(QSize(75, 70))
-        self.liste_pay.setText("Liste Pay")
-        self.liste_pay.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
+    def _setup_buttons(self):
+        """Setup all tool buttons with icons and text"""
+        for button_name, config in self.button_configs.items():
+            button = getattr(self, button_name, None)
+            if button:
+                button.setIcon(QIcon(resource_path(config['icon'])))
+                button.setIconSize(QSize(config['size'], config['size']))
+                button.setText(config['text'])
+                button.setToolButtonStyle(Qt.ToolButtonTextUnderIcon)
 
 
 def main():
