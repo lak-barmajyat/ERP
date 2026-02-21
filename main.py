@@ -11,7 +11,7 @@ from PyQt5.QtGui import QFontDatabase
 
 def main():
     app = QApplication(sys.argv)
-    window = DashboardWindow()
+    window = ClientsFacturesWindow()
 
     theme_manager = ThemeManager(app)
     theme_manager.load_theme("light")  # Load default theme

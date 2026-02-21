@@ -706,6 +706,36 @@ QLineEdit{
               <height>30</height>
              </size>
             </property>
+            <property name="styleSheet">
+             <string notr="true">/* تنسيق صندوق التاريخ نفسه */
+QDateEdit {
+    border: 1px solid #d1d9e6;
+    border-radius: 6px;
+    padding: 5px 10px;
+    background-color: white;
+    color: #334155;
+}
+
+/* تنسيق التقويم الذي يظهر عند الضغط */
+QCalendarWidget QWidget {
+    background-color: #ffffff;
+}
+
+/* تنسيق الهيدر (الشهر والسنة) في التقويم */
+QCalendarWidget QWidget#qt_calendar_navigationbar {
+    background-color: #e6f0f9;
+}
+
+/* تنسيق الأيام المحددة */
+QCalendarWidget QAbstractItemView:enabled {
+    selection-background-color: #2563eb;
+    selection-color: white;
+    border-radius: 4px;
+}</string>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item row="1" column="3">

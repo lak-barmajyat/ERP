@@ -28,32 +28,12 @@ class ClientsFacturesWindow(QMainWindow):
         self.tableWidget.setColumnWidth(4, 115)  # Qte
         self.tableWidget.setColumnWidth(5, 115)  # Taxe (matches lineEdit_12)
         self.tableWidget.setColumnWidth(6, 115)  # Total TTC (matches lineEdit_10)
-        
+
 
         # Set transparent property for buttons with transparent background
-        self.pushButton_2.setProperty("transparent", "true")  # Annuler
-        self.pushButton_3.setProperty("transparent", "true")  # Supprimer
-        self.pushButton_8.setProperty("transparent", "true")  # Supprimer
-        
-        # Connect buttons
-        self.pushButton.clicked.connect(self.valider)
-        self.pushButton_2.clicked.connect(self.button_2_clicked)
-        self.pushButton_3.clicked.connect(self.button_3_clicked)
-        self.pushButton_4.clicked.connect(self.button_4_clicked)
-        
-        # Connect combo boxes
-        self.comboBox.currentIndexChanged.connect(self.client_changed)
-        self.comboBox_2.currentIndexChanged.connect(self.article_changed)
-        
-        # Initialize table
-        self.setup_table()
-        
-        # Load initial data
-        self.load_clients()
-        self.load_articles()
-        
-        # Load sample data into table
-        self.load_sample_data()
+        self.annule.setProperty("transparent", "true")  # Annuler
+        self.suprimer.setProperty("transparent", "true")  # Supprimer
+        self.fermer.setProperty("transparent", "true")  # Fermer
     
     def setup_table(self):
         """Initialize the table widget"""
