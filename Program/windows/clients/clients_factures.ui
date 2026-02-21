@@ -151,7 +151,7 @@ QLineEdit{
           <item>
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
-             <widget class="QComboBox" name="comboBox_2">
+             <widget class="QComboBox" name="articles_combobox">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -210,7 +210,7 @@ QAbstractItemView {
              </widget>
             </item>
             <item row="0" column="2">
-             <widget class="QLineEdit" name="lineEdit_15">
+             <widget class="QLineEdit" name="puht_editline">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -235,7 +235,7 @@ QAbstractItemView {
              </widget>
             </item>
             <item row="0" column="4">
-             <widget class="QLineEdit" name="lineEdit_13">
+             <widget class="QLineEdit" name="qte_editline">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -260,7 +260,7 @@ QAbstractItemView {
              </widget>
             </item>
             <item row="0" column="5">
-             <widget class="QLineEdit" name="lineEdit_12">
+             <widget class="QLineEdit" name="taxe_editline">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -285,7 +285,7 @@ QAbstractItemView {
              </widget>
             </item>
             <item row="0" column="1">
-             <widget class="QLineEdit" name="lineEdit_9">
+             <widget class="QLineEdit" name="designation_editline">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -310,7 +310,7 @@ QAbstractItemView {
              </widget>
             </item>
             <item row="0" column="6">
-             <widget class="QLineEdit" name="lineEdit_10">
+             <widget class="QLineEdit" name="total_ttc_editline">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -335,7 +335,7 @@ QAbstractItemView {
              </widget>
             </item>
             <item row="0" column="3">
-             <widget class="QLineEdit" name="lineEdit_14">
+             <widget class="QLineEdit" name="pttc_editline">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -364,7 +364,7 @@ QAbstractItemView {
           <item>
            <layout class="QGridLayout" name="gridLayout_3" columnstretch="0,0,0,0,0">
             <item row="0" column="2">
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="suprimer">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -413,7 +413,7 @@ QAbstractItemView {
              </spacer>
             </item>
             <item row="0" column="1">
-             <widget class="QPushButton" name="pushButton_2">
+             <widget class="QPushButton" name="annule">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -445,7 +445,7 @@ QAbstractItemView {
              </widget>
             </item>
             <item row="0" column="3">
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="enrgistrer">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -709,7 +709,7 @@ QLineEdit{
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="valider">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -776,7 +776,7 @@ QPushButton::pressed{
            </widget>
           </item>
           <item row="1" column="2">
-           <widget class="QLineEdit" name="lineEdit">
+           <widget class="QLineEdit" name="n_piece_editline">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -814,7 +814,7 @@ QPushButton::pressed{
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="clients_combobox">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -913,7 +913,7 @@ QAbstractItemView {
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_8">
+          <widget class="QPushButton" name="fermer">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -946,7 +946,7 @@ QAbstractItemView {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_7">
+          <widget class="QPushButton" name="imprimer">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -978,7 +978,7 @@ QAbstractItemView {
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_6">
+          <widget class="QPushButton" name="nouveau">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -1028,7 +1028,7 @@ QAbstractItemView {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="total_tax_label">
            <property name="minimumSize">
             <size>
              <width>150</width>
@@ -1073,7 +1073,7 @@ QAbstractItemView {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_8">
+          <widget class="QLabel" name="total_UT_label">
            <property name="minimumSize">
             <size>
              <width>150</width>
@@ -1118,7 +1118,7 @@ QAbstractItemView {
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_9">
+          <widget class="QLabel" name="total_ttc_label">
            <property name="minimumSize">
             <size>
              <width>150</width>

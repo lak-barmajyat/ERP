@@ -19,6 +19,63 @@ class ThemeManager:
 
     def build_stylesheet(self, C):
         return f"""
+        /* 1. تنسيق شريط التمرير العمودي بالكامل */
+        QScrollBar:vertical {{
+            border: none;
+            background: transparent; /* خلفية شفافة لتبدو عصرية */
+            width: 10px; /* عرض نحيف */
+            margin: 0px 0px 0px 0px;
+        }}
+
+        /* 2. المقبض (الجزء الذي يتحرك) */
+        QScrollBar::handle:vertical {{
+            background: #cbd5e1; /* لون رمادي فاتح هادئ */
+            min-height: 30px;
+            border-radius: 5px; /* حواف دائرية كاملة */
+            margin: 2px; /* ترك مسافة بسيطة عن الحواف */
+        }}
+
+        /* تغيير لون المقبض عند تمرير الماوس */
+        QScrollBar::handle:vertical:hover {{
+            background: #94a3b8; /* لون أغمق قليلاً عند التفاعل */
+        }}
+
+        /* 3. إخفاء أزرار الأسهم (للحصول على مظهر نظيف) */
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
+            border: none;
+            background: none;
+            height: 0px;
+        }}
+
+        /* 4. إخفاء المساحة المتبقية من المسار (Track) */
+        QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
+            background: none;
+        }}
+
+        /* --- تكرار التنسيق للشريط الأفقي --- */
+        QScrollBar:horizontal {{
+            border: none;
+            background: transparent;
+            height: 10px;
+            margin: 0px;
+        }}
+
+        QScrollBar::handle:horizontal {{
+            background: #cbd5e1;
+            min-width: 30px;
+            border-radius: 5px;
+            margin: 2px;
+        }}
+
+        QScrollBar::handle:horizontal:hover {{
+            background: #94a3b8;
+        }}
+
+        QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {{
+            border: none;
+            background: none;
+            width: 0px;
+        }}
         QWidget {{
             background-color: {C['BG_MAIN']};
             color: {C['TEXT_PRIMARY']};

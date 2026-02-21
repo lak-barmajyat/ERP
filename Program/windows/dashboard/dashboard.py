@@ -1,4 +1,4 @@
-from PyQt5.QtGui import QIcon
+from PyQt5.QtGui import QGuiApplication, QIcon
 from PyQt5.QtCore import QSize, Qt
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow
@@ -15,6 +15,8 @@ class DashboardWindow(QMainWindow):
     def __init__(self):
         super(DashboardWindow, self).__init__()
         loadUi(resource_path("dashboard.ui"), self)
+
+        self._did_apply_default_screen_geometry = False
 
         # Store button configurations
         self.button_configs = {
@@ -47,16 +49,42 @@ class DashboardWindow(QMainWindow):
         # Configure scroll bar policies (already set in UI, but can be modified here if needed)
         self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
         self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
+        # When the window is larger than the fixed content, center it.
+        self.scrollArea.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
         
         # Ensure the content widget has fixed size
-        self.scrollAreaWidgetContents.setMinimumSize(1920, 1080)
-        self.scrollAreaWidgetContents.setMaximumSize(1920, 1080)
+        #self.scrollAreaWidgetContents.setMinimumSize(1920, 1080)
+        #self.scrollAreaWidgetContents.setMaximumSize(1920, 1080)
         
         # Set widget resizable to False for fixed size content
         self.scrollArea.setWidgetResizable(False)
         
         # Set minimum window size
         self.setMinimumSize(640, 480)
+
+    def _apply_default_window_geometry_from_screen(self):
+        """Maximize the window on the current screen (keeps title bar)."""
+        screen = self.screen() or QGuiApplication.primaryScreen()
+        if screen is None:
+            return
+
+        # Ensure the window is on the target screen before maximizing.
+        available = screen.availableGeometry()
+        if available.isValid():
+            self.move(available.topLeft())
+
+        # Use normal maximized state (not fullscreen) so the OS title bar
+        # with close/minimize buttons remains visible.
+        self.setWindowState(self.windowState() | Qt.WindowMaximized)
+
+    def showEvent(self, event):
+        super().showEvent(event)
+
+        # Apply once: make the default window size fit the current PC screen.
+        if not self._did_apply_default_screen_geometry:
+            self._apply_default_window_geometry_from_screen()
+            self._did_apply_default_screen_geometry = True
 
     def _setup_buttons(self):
         """Setup all tool buttons with icons and text"""
