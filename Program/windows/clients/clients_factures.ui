@@ -115,7 +115,7 @@ border: none;
          <property name="sizeHint" stdset="0">
           <size>
            <width>20</width>
-           <height>40</height>
+           <height>17</height>
           </size>
          </property>
         </spacer>
@@ -707,34 +707,90 @@ QLineEdit{
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">/* تنسيق صندوق التاريخ نفسه */
-QDateEdit {
-    border: 1px solid #d1d9e6;
-    border-radius: 6px;
-    padding: 5px 10px;
-    background-color: white;
-    color: #334155;
-}
-
-/* تنسيق التقويم الذي يظهر عند الضغط */
+             <string notr="true">/* 1. الحاوية الرئيسية للتقويم */
 QCalendarWidget QWidget {
-    background-color: #ffffff;
+    background-color: #FDFDFD; /* var(--c-bg-tertiary) */
+    font-family: &quot;Inter&quot;, &quot;Segoe UI&quot;;
 }
 
-/* تنسيق الهيدر (الشهر والسنة) في التقويم */
+/* 2. شريط التنقل العلوي (المكان الذي يوجد فيه اسم الشهر والأسهم) */
 QCalendarWidget QWidget#qt_calendar_navigationbar {
-    background-color: #e6f0f9;
+    background-color: #FDFDFD;
+    border-bottom: 1px solid #EAEBEC;
 }
 
-/* تنسيق الأيام المحددة */
-QCalendarWidget QAbstractItemView:enabled {
-    selection-background-color: #2563eb;
+/* 3. تنسيق أسهم التنقل */
+QCalendarWidget QToolButton {
+    color: #1F1F25; /* var(--c-text-primary) */
+    background-color: white;
+    border-radius: 8px;
+    margin: 5px;
+    width: 75px;
+    height: 20px;
+    icon-size: 20px;
+}
+
+QCalendarWidget QToolButton:hover {
+    background-color: #EAEBEC;
+}
+
+/* 4. أسماء الأيام (السبت، الأحد...) */
+QCalendarWidget QWidget#qt_calendar_calendarview {
+    outline: 0;
+    selection-background-color: #008FFD; /* var(--c-theme-primary) */
     selection-color: white;
-    border-radius: 4px;
+}
+
+/* 5. تنسيق الأيام داخل التقويم */
+QCalendarWidget QAbstractItemView:enabled {
+    color: #1F1F25;
+    font-weight: 600;
+    selection-background-color: #008FFD;
+    selection-color: white;
+    background-color: white;
+}
+
+/* الأيام &quot;الباهتة&quot; أو أيام الشهر السابق/القادم */
+QCalendarWidget QAbstractItemView:disabled {
+    color: #999FA6; /* var(--c-text-secondary) */
+}
+
+/* 6. تنسيق القوائم المنسدلة لاختيار الشهر والسنة */
+QCalendarWidget QMenu {
+    background-color: white;
+    color: #1F1F25;
+    border: 1px solid #EAEBEC;
+}
+
+QCalendarWidget QSpinBox {
+    width: 40px;
+	height: 5px;
+    font-size: 15px;
+    background: transparent;
+    color: #1F1F25;
+    selection-background-color: #CBE8FF;
+	selection-color: #000000;
 }</string>
+            </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2026</year>
+              <month>2</month>
+              <day>21</day>
+             </datetime>
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
+            </property>
+            <property name="date">
+             <date>
+              <year>2026</year>
+              <month>2</month>
+              <day>21</day>
+             </date>
             </property>
            </widget>
           </item>

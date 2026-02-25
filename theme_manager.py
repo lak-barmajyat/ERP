@@ -19,6 +19,72 @@ class ThemeManager:
 
     def build_stylesheet(self, C):
         return f"""
+        /* 1. الحاوية الرئيسية للتقويم */
+        QCalendarWidget QWidget {{
+            background-color: #FDFDFD; /* var(--c-bg-tertiary) */
+            font-family: "Inter", "Segoe UI";
+        }}
+
+        /* 2. شريط التنقل العلوي (المكان الذي يوجد فيه اسم الشهر والأسهم) */
+        QCalendarWidget QWidget#qt_calendar_navigationbar {{
+            background-color: #FDFDFD;
+            border-bottom: 1px solid #EAEBEC;
+        }}
+
+        /* 3. تنسيق أسهم التنقل */
+        QCalendarWidget QToolButton {{
+            color: #1F1F25; /* var(--c-text-primary) */
+            background-color: white;
+            border-radius: 8px;
+            margin: 5px;
+            width: 75px;
+            height: 20px;
+            icon-size: 20px;
+        }}
+
+        QCalendarWidget QToolButton:hover {{
+            background-color: #EAEBEC;
+        }}
+
+        /* 4. أسماء الأيام (السبت، الأحد...) */
+        QCalendarWidget QWidget#qt_calendar_calendarview {{
+            outline: 0;
+            selection-background-color: #008FFD; /* var(--c-theme-primary) */
+            selection-color: white;
+        }}
+
+        /* 5. تنسيق الأيام داخل التقويم */
+        QCalendarWidget QAbstractItemView:enabled {{
+            color: #1F1F25;
+            font-weight: 600;
+            selection-background-color: #008FFD;
+            selection-color: white;
+            background-color: white;
+        }}
+
+        /* الأيام "الباهتة" أو أيام الشهر السابق/القادم */
+        QCalendarWidget QAbstractItemView:disabled {{
+            color: #999FA6; /* var(--c-text-secondary) */
+        }}
+
+        /* 6. تنسيق القوائم المنسدلة لاختيار الشهر والسنة */
+        QCalendarWidget QMenu {{
+            background-color: white;
+            color: #1F1F25;
+            border: 1px solid #EAEBEC;
+            height: 150px;
+            width: 100px;
+        }}
+
+        QCalendarWidget QSpinBox {{
+            width: 40px;
+            height: 5px;
+            font-size: 15px;
+            background: transparent;
+            color: #1F1F25;
+            selection-background-color: #CBE8FF;
+            selection-color: #000000;
+        }}
         /* 1. تنسيق شريط التمرير العمودي بالكامل */
         QScrollBar:vertical {{
             border: none;
@@ -30,7 +96,7 @@ class ThemeManager:
         /* 2. المقبض (الجزء الذي يتحرك) */
         QScrollBar::handle:vertical {{
             background: #cbd5e1; /* لون رمادي فاتح هادئ */
-            min-height: 30px;
+            min-height: 10px;
             border-radius: 5px; /* حواف دائرية كاملة */
             margin: 2px; /* ترك مسافة بسيطة عن الحواف */
         }}
