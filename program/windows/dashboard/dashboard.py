@@ -32,35 +32,8 @@ class DashboardWindow(QMainWindow):
             'liste_pay': {'icon': "../../assets/dashboard/liste_pay.svg", 'text': "Liste Pay", 'size': 75}
         }
 
-        # Configure scroll area functionality
-        self._setup_scroll_area()
-        
         # Initialize buttons with fixed sizes
         self._setup_buttons()
-
-    def _setup_scroll_area(self):
-        """Configure the scroll area defined in the UI file"""
-        # The scroll area is already defined in the UI file
-        # Here we just configure its behavior
-        
-        # Set the scroll area as central widget
-        self.setCentralWidget(self.scrollArea)
-        
-        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-
-        # When the window is larger than the fixed content, center it.
-        self.scrollArea.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
-        
-        # Ensure the content widget has fixed size
-        #self.scrollAreaWidgetContents.setMinimumSize(1920, 1080)
-        #self.scrollAreaWidgetContents.setMaximumSize(1920, 1080)
-        
-        # Set widget resizable to False for fixed size content
-        self.scrollArea.setWidgetResizable(False)
-        
-        # Set minimum window size
-        self.setMinimumSize(640, 480)
 
     def _apply_default_window_geometry_from_screen(self):
         """Maximize the window on the current screen (keeps title bar)."""
