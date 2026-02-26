@@ -9,7 +9,7 @@ class ThemeManager:
 
     def load_theme(self, theme_name):
         base_path = os.path.dirname(os.path.abspath(__file__))
-        theme_path = os.path.join(base_path, "program", "themes", f"{theme_name}.json")
+        theme_path = os.path.join(base_path, f"{theme_name}.json")
 
         with open(theme_path, "r") as f:
             colors = json.load(f)
