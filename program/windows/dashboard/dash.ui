@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1668</width>
-    <height>860</height>
+    <height>941</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -546,8 +546,8 @@ QPushButton#btn_admin:hover { background-color: #f3f4f6; color: #111827; }</stri
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>1521</width>
-             <height>769</height>
+             <width>1446</width>
+             <height>888</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="scrollContentLayout">
@@ -1283,204 +1283,174 @@ QToolButton#btn_liste_ventes_doc:hover { border: 1px solid #9ca3af; }</string>
                  </widget>
                 </item>
                 <item>
-                 <layout class="QHBoxLayout" name="ventesPaiementLayout">
+                 <layout class="QVBoxLayout" name="verticalLayout">
                   <property name="spacing">
                    <number>24</number>
                   </property>
                   <item>
-                   <widget class="QFrame" name="sectionVentesFrame">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-                      <horstretch>1</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
+                   <layout class="QHBoxLayout" name="ventesTitleLayout">
+                    <property name="spacing">
+                     <number>10</number>
                     </property>
-                    <property name="styleSheet">
-                     <string notr="true">QFrame#sectionVentesFrame { background-color: transparent; border: none; }</string>
+                    <item>
+                     <widget class="QFrame" name="accentVentes">
+                      <property name="minimumSize">
+                       <size>
+                        <width>4</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>4</width>
+                        <height>24</height>
+                       </size>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QFrame#accentVentes { background-color: #6366f1; border-radius: 3px; }</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="secTitleVentes">
+                      <property name="styleSheet">
+                       <string notr="true">QLabel#secTitleVentes { color: #111827; font: 600 11pt &quot;Inter&quot;; background-color: transparent; }</string>
+                      </property>
+                      <property name="text">
+                       <string>Ventes</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="ventesTitleSpacer">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::MinimumExpanding</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
+                  </item>
+                  <item>
+                   <layout class="QHBoxLayout" name="ventesBtnsLayout">
+                    <property name="spacing">
+                     <number>12</number>
                     </property>
-                    <layout class="QVBoxLayout" name="sectionVentesLayout">
-                     <property name="spacing">
-                      <number>12</number>
-                     </property>
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <layout class="QHBoxLayout" name="ventesTitleLayout">
-                       <property name="spacing">
-                        <number>10</number>
-                       </property>
-                       <item>
-                        <widget class="QFrame" name="accentVentes">
-                         <property name="minimumSize">
-                          <size>
-                           <width>4</width>
-                           <height>24</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>4</width>
-                           <height>24</height>
-                          </size>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">QFrame#accentVentes { background-color: #6366f1; border-radius: 3px; }</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QLabel" name="secTitleVentes">
-                         <property name="styleSheet">
-                          <string notr="true">QLabel#secTitleVentes { color: #111827; font: 600 11pt &quot;Inter&quot;; background-color: transparent; }</string>
-                         </property>
-                         <property name="text">
-                          <string>Ventes</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <spacer name="ventesTitleSpacer">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::MinimumExpanding</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                      </layout>
-                     </item>
-                     <item>
-                      <layout class="QHBoxLayout" name="ventesBtnsLayout">
-                       <property name="spacing">
-                        <number>12</number>
-                       </property>
-                       <item>
-                        <widget class="QToolButton" name="btn_ajouter_produit">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                           <horstretch>1</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>250</width>
-                           <height>100</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>250</width>
-                           <height>190</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">QToolButton#btn_ajouter_produit { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
+                    <item>
+                     <widget class="QToolButton" name="btn_ajouter_produit">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>1</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>250</width>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>250</width>
+                        <height>190</height>
+                       </size>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QToolButton#btn_ajouter_produit { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
 QToolButton#btn_ajouter_produit:hover { border: 1px solid rgba(99,102,241,0.5); color: #6366f1; }</string>
-                         </property>
-                         <property name="text">
-                          <string>Ajouter produit</string>
-                         </property>
-                         <property name="icon">
-                          <iconset>
-                           <normaloff>../../assets/dashboard/ajouter_produit.svg</normaloff>../../assets/dashboard/ajouter_produit.svg</iconset>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>36</width>
-                           <height>36</height>
-                          </size>
-                         </property>
-                         <property name="toolButtonStyle">
-                          <enum>Qt::ToolButtonTextBesideIcon</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <widget class="QToolButton" name="btn_liste_produits">
-                         <property name="sizePolicy">
-                          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                           <horstretch>1</horstretch>
-                           <verstretch>0</verstretch>
-                          </sizepolicy>
-                         </property>
-                         <property name="minimumSize">
-                          <size>
-                           <width>250</width>
-                           <height>100</height>
-                          </size>
-                         </property>
-                         <property name="maximumSize">
-                          <size>
-                           <width>250</width>
-                           <height>100</height>
-                          </size>
-                         </property>
-                         <property name="cursor">
-                          <cursorShape>PointingHandCursor</cursorShape>
-                         </property>
-                         <property name="styleSheet">
-                          <string notr="true">QToolButton#btn_liste_produits { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
+                      </property>
+                      <property name="text">
+                       <string>Ajouter produit</string>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>../../assets/dashboard/ajouter_produit.svg</normaloff>../../assets/dashboard/ajouter_produit.svg</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>36</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="toolButtonStyle">
+                       <enum>Qt::ToolButtonTextBesideIcon</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QToolButton" name="btn_liste_produits">
+                      <property name="sizePolicy">
+                       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>1</horstretch>
+                        <verstretch>0</verstretch>
+                       </sizepolicy>
+                      </property>
+                      <property name="minimumSize">
+                       <size>
+                        <width>250</width>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <property name="maximumSize">
+                       <size>
+                        <width>250</width>
+                        <height>100</height>
+                       </size>
+                      </property>
+                      <property name="cursor">
+                       <cursorShape>PointingHandCursor</cursorShape>
+                      </property>
+                      <property name="styleSheet">
+                       <string notr="true">QToolButton#btn_liste_produits { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
 QToolButton#btn_liste_produits:hover { border: 1px solid rgba(99,102,241,0.5); color: #6366f1; }</string>
-                         </property>
-                         <property name="text">
-                          <string>Liste produits</string>
-                         </property>
-                         <property name="icon">
-                          <iconset>
-                           <normaloff>../../assets/dashboard/liste_produits.svg</normaloff>../../assets/dashboard/liste_produits.svg</iconset>
-                         </property>
-                         <property name="iconSize">
-                          <size>
-                           <width>36</width>
-                           <height>36</height>
-                          </size>
-                         </property>
-                         <property name="toolButtonStyle">
-                          <enum>Qt::ToolButtonTextBesideIcon</enum>
-                         </property>
-                        </widget>
-                       </item>
-                       <item>
-                        <spacer name="ventesTitleSpacer_2">
-                         <property name="orientation">
-                          <enum>Qt::Horizontal</enum>
-                         </property>
-                         <property name="sizeType">
-                          <enum>QSizePolicy::MinimumExpanding</enum>
-                         </property>
-                         <property name="sizeHint" stdset="0">
-                          <size>
-                           <width>40</width>
-                           <height>20</height>
-                          </size>
-                         </property>
-                        </spacer>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
-                   </widget>
+                      </property>
+                      <property name="text">
+                       <string>Liste produits</string>
+                      </property>
+                      <property name="icon">
+                       <iconset>
+                        <normaloff>../../assets/dashboard/liste_produits.svg</normaloff>../../assets/dashboard/liste_produits.svg</iconset>
+                      </property>
+                      <property name="iconSize">
+                       <size>
+                        <width>36</width>
+                        <height>36</height>
+                       </size>
+                      </property>
+                      <property name="toolButtonStyle">
+                       <enum>Qt::ToolButtonTextBesideIcon</enum>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <spacer name="ventesTitleSpacer_2">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeType">
+                       <enum>QSizePolicy::MinimumExpanding</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                   </layout>
                   </item>
                   <item>
                    <widget class="QFrame" name="sectionPayFrame">
@@ -1616,7 +1586,7 @@ QToolButton#btn_nouveau_pay:hover { background-color: #1a6fcb; }</string>
                          </property>
                         </widget>
                        </item>
-                       <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+                       <item>
                         <widget class="QToolButton" name="btn_liste_pay">
                          <property name="sizePolicy">
                           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -1689,6 +1659,36 @@ QToolButton#btn_liste_pay:hover { background-color: #1a6fcb; }</string>
                        </item>
                       </layout>
                      </item>
+                    </layout>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QFrame" name="sectionVentesFrame">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                      <horstretch>1</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QFrame#sectionVentesFrame { background-color: transparent; border: none; }</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="sectionVentesLayout">
+                     <property name="spacing">
+                      <number>12</number>
+                     </property>
+                     <property name="leftMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="topMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="rightMargin">
+                      <number>0</number>
+                     </property>
+                     <property name="bottomMargin">
+                      <number>0</number>
+                     </property>
                     </layout>
                    </widget>
                   </item>
@@ -1778,7 +1778,7 @@ QToolButton#btn_liste_pay:hover { background-color: #1a6fcb; }</string>
                        <string notr="true">QLabel#activityTitle { color: #111827; font: 600 10pt &quot;Inter&quot;; background-color: transparent; }</string>
                       </property>
                       <property name="text">
-                       <string>HIstorique</string>
+                       <string>Historique</string>
                       </property>
                      </widget>
                     </item>
