@@ -23,7 +23,7 @@ class DashboardWindow(QMainWindow):
             'ajouter_client': {'icon': "../../assets/dashboard/ajouter_client.svg", 'text': "Ajoute Client", 'size': 70},
             'liste_clients': {'icon': "../../assets/dashboard/liste_clients.svg", 'text': "Liste Clients", 'size': 70},
             'fiche_client': {'icon': "../../assets/dashboard/fiche_client.svg", 'text': "Fiche Client", 'size': 70},
-            'nouvau_doc': {'icon': "../../assets/dashboard/nouveau_doc.svg", 'text': "Nouveau Doc", 'size': 70},
+            'nouveau_doc': {'icon': "../../assets/dashboard/nouveau_doc.svg", 'text': "Nouveau Doc", 'size': 70},
             'liste_ventes': {'icon': "../../assets/dashboard/liste_ventes.svg", 'text': "Liste Ventes", 'size': 70},
             'ajouter_produit': {'icon': "../../assets/dashboard/ajouter_produit.svg", 'text': "Ajoute Produit", 'size': 70},
             'liste_produits': {'icon': "../../assets/dashboard/liste_produits.svg", 'text': "Liste Produits", 'size': 70},

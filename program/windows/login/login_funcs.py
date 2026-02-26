@@ -1,26 +1,30 @@
-from program import get_db_connection, close_db_connection, USERNAME, USER_ROLE
-from program.windows.dashboard.dashboard import DashboardWindow
+from program.services.db_connection import *
 import bcrypt
-from program.services.db_helper_funcs import fetch_one
+from program.windows.dashboard import DashboardWindow, dashboard_setup
+from program.services.db_connection import with_db_session
+from program.services import Utilisateur, select
 
 
-def authenticate_user(username, password, cursor):
-    query = "SELECT mot_de_passe_hash FROM utilisateurs WHERE nom_utilisateur = %s"
-    cursor.execute(query, (username,))
-    result = cursor.fetchone()
+def authenticate_user(username, password, session):
+    query = (
+        select(Utilisateur.mot_de_passe_hash)
+        .where(Utilisateur.nom_utilisateur == username)
+        .limit(1)
+    )
+    result = session.execute(query).first()
 
     if result is None:
         return False
 
     stored_hash = result[0]
+    if isinstance(stored_hash, str):
+        stored_hash = stored_hash.encode()
 
-    return bcrypt.checkpw(password.encode(), stored_hash.encode())
+    return bcrypt.checkpw(password.encode(), stored_hash)
 
 
-def check_user(login):
-    global USERNAME, USER_ROLE
-
-    connect, cursor = get_db_connection()
+@with_db_session
+def check_user(login, session):
 
     username = login.utilisateur_lineedit.text().strip()
     password = login.mot_de_pass_lineedit.text()
@@ -28,23 +32,15 @@ def check_user(login):
     if not username or not password:
         login.connection_error_label.setText("Veuillez remplir tous les champs.")
         login.connection_error_label.show()
-        close_db_connection(connect, cursor)
         return
 
-    if not authenticate_user(username, password, cursor):
+    if not authenticate_user(username, password, session):
         login.connection_error_label.setText("Nom d'utilisateur ou mot de passe incorrect.")
         login.connection_error_label.show()
-        close_db_connection(connect, cursor)
         return
 
-    USERNAME = username
-    result = fetch_one("SELECT `role` FROM utilisateurs WHERE nom_utilisateur = %s", (username,))
-    if result:
-        USER_ROLE = result[0]
 
     login.connection_error_label.hide()
-    close_db_connection(connect, cursor)
-    dashboard = DashboardWindow()
-    login.dashboard = dashboard
-    dashboard.show()
     login.close()
+    login.dashboard_window = DashboardWindow()
+    dashboard_setup(login.dashboard_window)

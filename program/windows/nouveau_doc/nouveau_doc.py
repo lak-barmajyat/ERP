@@ -13,10 +13,10 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-class ClientsFacturesWindow(QMainWindow):
+class NouveauDocWindow(QMainWindow):
     def __init__(self):
-        super(ClientsFacturesWindow, self).__init__()
-        loadUi(resource_path("clients_factures.ui"), self)
+        super(NouveauDocWindow, self).__init__()
+        loadUi(resource_path("nouveau_doc.ui"), self)
         
         # Set all columns to Fixed mode to match input fields exactly
         # Widths match the input fields above the table
@@ -36,6 +36,7 @@ class ClientsFacturesWindow(QMainWindow):
         self.annule.setProperty("transparent", "true")  # Annuler
         self.suprimer.setProperty("transparent", "true")  # Supprimer
         self.fermer.setProperty("transparent", "true")  # Fermer
+        
     
     def setup_table(self):
         """Initialize the table widget"""
@@ -44,9 +45,9 @@ class ClientsFacturesWindow(QMainWindow):
  
 
 def main():
-    """Main function for testing the ClientsFacturesWindow"""
+    """Main function for testing the NouveauDocWindow"""
     app = QApplication(sys.argv)
-    window = ClientsFacturesWindow()
+    window = NouveauDocWindow()
     window.show()
     sys.exit(app.exec_())
 
