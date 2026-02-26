@@ -16,9 +16,6 @@ USER_PERMISSIONS = None
 
 #===================== Imports ==================#
 
-from program.services.db_connection import close_db_connection, get_db_connection
-
-
 
 __all__ = [
     "DashboardWindow",

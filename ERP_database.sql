@@ -7,12 +7,12 @@
    - Ajoute audit_log
    ========================================================== */
 
-DROP DATABASE IF EXISTS gestion_ventes_ma;
-CREATE DATABASE gestion_ventes_ma
+DROP DATABASE IF EXISTS erp;
+CREATE DATABASE IF NOT EXISTS erp
   DEFAULT CHARACTER SET utf8mb4
   DEFAULT COLLATE utf8mb4_general_ci;
 
-USE gestion_ventes_ma;
+USE erp;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -20,7 +20,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- TABLE: informations_societe
 -- =========================
 DROP TABLE IF EXISTS informations_societe;
-CREATE TABLE informations_societe (
+CREATE TABLE IF NOT EXISTS informations_societe (
   id_societe            INT AUTO_INCREMENT PRIMARY KEY,
   nom_societe           VARCHAR(150) NOT NULL,
   activite              VARCHAR(150) NULL,
@@ -44,7 +44,7 @@ CREATE TABLE informations_societe (
 -- TABLE: utilisateurs
 -- =========================
 DROP TABLE IF EXISTS utilisateurs;
-CREATE TABLE utilisateurs (
+CREATE TABLE IF NOT EXISTS utilisateurs (
   id_utilisateur        INT AUTO_INCREMENT PRIMARY KEY,
   nom_utilisateur       VARCHAR(80) NOT NULL UNIQUE,
   mot_de_passe_hash     VARCHAR(255) NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE utilisateurs (
 
 -- A) ref_domaines (EDITED: ordre 0/1/2)
 DROP TABLE IF EXISTS ref_domaines;
-CREATE TABLE ref_domaines (
+CREATE TABLE IF NOT EXISTS ref_domaines (
   id_domaine       INT AUTO_INCREMENT PRIMARY KEY,
   code_domaine     VARCHAR(20) NOT NULL UNIQUE,     -- VENTE / ACHAT / STOCK
   libelle_domaine  VARCHAR(60) NOT NULL,            -- "Vente", "Achat", "Stock"
@@ -74,7 +74,7 @@ INSERT INTO ref_domaines (code_domaine, libelle_domaine, ordre) VALUES
 
 -- B) ref_statuts_documents
 DROP TABLE IF EXISTS ref_statuts_documents;
-CREATE TABLE ref_statuts_documents (
+CREATE TABLE IF NOT EXISTS ref_statuts_documents (
   id_statut        INT AUTO_INCREMENT PRIMARY KEY,
   code_statut      VARCHAR(30) NOT NULL UNIQUE,     -- BROUILLON / VALIDE / ANNULE / PARTIEL / PAYE
   libelle_statut   VARCHAR(60) NOT NULL,
@@ -92,7 +92,7 @@ INSERT INTO ref_statuts_documents (code_statut, libelle_statut, ordre) VALUES
 
 -- C) ref_modes_paiement
 DROP TABLE IF EXISTS ref_modes_paiement;
-CREATE TABLE ref_modes_paiement (
+CREATE TABLE IF NOT EXISTS ref_modes_paiement (
   id_mode_paiement    INT AUTO_INCREMENT PRIMARY KEY,
   code_mode           VARCHAR(20) NOT NULL UNIQUE,  -- ESPECES / CHEQUE / VIREMENT / EFFET
   libelle_mode        VARCHAR(60) NOT NULL,
@@ -110,7 +110,7 @@ INSERT INTO ref_modes_paiement (code_mode, libelle_mode, besoin_reference, besoi
 
 -- D) ref_types_tiers
 DROP TABLE IF EXISTS ref_types_tiers;
-CREATE TABLE ref_types_tiers (
+CREATE TABLE IF NOT EXISTS ref_types_tiers (
   id_type_tiers     INT AUTO_INCREMENT PRIMARY KEY,
   code_type_tiers   VARCHAR(30) NOT NULL UNIQUE,    -- SOCIETE / PARTICULIER / ADMIN
   libelle_type      VARCHAR(60) NOT NULL,
@@ -127,7 +127,7 @@ INSERT INTO ref_types_tiers (code_type_tiers, libelle_type, ordre) VALUES
 -- TABLE: familles
 -- =========================
 DROP TABLE IF EXISTS familles;
-CREATE TABLE familles (
+CREATE TABLE IF NOT EXISTS familles (
   id_famille            INT AUTO_INCREMENT PRIMARY KEY,
   nom_famille           VARCHAR(120) NOT NULL,
   description           VARCHAR(255) NULL,
@@ -143,7 +143,7 @@ CREATE TABLE familles (
 -- TABLE: articles
 -- =========================
 DROP TABLE IF EXISTS articles;
-CREATE TABLE articles (
+CREATE TABLE IF NOT EXISTS articles (
   id_article            INT AUTO_INCREMENT PRIMARY KEY,
   nom_article           VARCHAR(160) NOT NULL,
   description           VARCHAR(255) NULL,
@@ -169,7 +169,7 @@ CREATE TABLE articles (
 -- TABLE: tiers (clients + fournisseurs)
 -- =========================
 DROP TABLE IF EXISTS tiers;
-CREATE TABLE tiers (
+CREATE TABLE IF NOT EXISTS tiers (
   id_tiers              INT AUTO_INCREMENT PRIMARY KEY,
   type_tiers            ENUM('CLIENT','FOURNISSEUR') NOT NULL,
   id_type_tiers         INT NULL,
@@ -195,7 +195,7 @@ CREATE TABLE tiers (
 -- TABLE: ref_types_documents (depends on ref_domaines)
 -- =========================
 DROP TABLE IF EXISTS ref_types_documents;
-CREATE TABLE ref_types_documents (
+CREATE TABLE IF NOT EXISTS ref_types_documents (
   id_type_document   INT AUTO_INCREMENT PRIMARY KEY,
   code_type          VARCHAR(10) NOT NULL UNIQUE,   -- DV, BC, BL, FA, AV...
   libelle_type       VARCHAR(80) NOT NULL,
@@ -224,11 +224,33 @@ SELECT 'FA','Facture', d.id_domaine, 1,-1, 4 FROM ref_domaines d WHERE d.code_do
 UNION ALL
 SELECT 'AV','Avoir', d.id_domaine, 1,+1, 5 FROM ref_domaines d WHERE d.code_domaine='VENTE';
 
+CREATE TABLE IF NOT EXISTS document_counters (
+  id_counter BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  id_type_document INT NOT NULL,
+  annee INT NOT NULL,
+  valeur_courante INT NOT NULL DEFAULT 0,
+  longueur INT NOT NULL DEFAULT 3,
+  prefixe VARCHAR(10) NOT NULL,
+  suffixe VARCHAR(20) NULL,
+  reset_annuel TINYINT(1) NOT NULL DEFAULT 1,
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_counter),
+  UNIQUE KEY uq_counter_type_year (id_type_document, annee),
+  KEY idx_counter_type (id_type_document)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT IGNORE INTO document_counters
+(id_type_document, annee, valeur_courante, longueur, prefixe, suffixe, reset_annuel)
+SELECT id_type_document, 2026, 0, 3, code_type, NULL, 1
+FROM ref_types_documents
+WHERE code_type IN ('DV', 'BC', 'BL', 'FA', 'AV');
+
 -- =========================
 -- TABLE: documents
 -- =========================
 DROP TABLE IF EXISTS documents;
-CREATE TABLE documents (
+CREATE TABLE IF NOT EXISTS documents (
   id_document           BIGINT AUTO_INCREMENT PRIMARY KEY,
 
   id_domaine            INT NOT NULL,                 -- ref_domaines
@@ -283,7 +305,7 @@ CREATE TABLE documents (
 -- TABLE: details_documents
 -- =========================
 DROP TABLE IF EXISTS details_documents;
-CREATE TABLE details_documents (
+CREATE TABLE IF NOT EXISTS details_documents (
   id_detail             BIGINT AUTO_INCREMENT PRIMARY KEY,
   id_document           BIGINT NOT NULL,
 
@@ -322,7 +344,7 @@ CREATE TABLE details_documents (
 -- TABLE: paiements
 -- =========================
 DROP TABLE IF EXISTS paiements;
-CREATE TABLE paiements (
+CREATE TABLE IF NOT EXISTS paiements (
   id_paiement          BIGINT AUTO_INCREMENT PRIMARY KEY,
   id_document          BIGINT NOT NULL,
   date_paiement        DATE NOT NULL,
@@ -354,7 +376,7 @@ CREATE TABLE paiements (
 -- TABLE: mouvements_stock (optionnel mais recommandé)
 -- =========================
 DROP TABLE IF EXISTS mouvements_stock;
-CREATE TABLE mouvements_stock (
+CREATE TABLE IF NOT EXISTS mouvements_stock (
   id_mouvement          BIGINT AUTO_INCREMENT PRIMARY KEY,
   id_article            INT NOT NULL,
   date_mouvement        DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -378,7 +400,7 @@ CREATE TABLE mouvements_stock (
 -- TABLE: audit_log (historique des changements)
 -- =========================
 DROP TABLE IF EXISTS audit_log;
-CREATE TABLE audit_log (
+CREATE TABLE IF NOT EXISTS audit_log (
   id_audit          BIGINT AUTO_INCREMENT PRIMARY KEY,
   date_action       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   id_utilisateur    INT NULL,
@@ -432,3 +454,93 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+-- "admin" / "password"
+-- "admin2" / ""
+
+INSERT IGNORE INTO `utilisateurs` (`id_utilisateur`, `nom_utilisateur`, `mot_de_passe_hash`, `role`, `permissions_json`, `actif`, `created_at`, `updated_at`) VALUES
+(4, 'admin', '$2b$12$wXYP3T8npdFM52DqzU2izO2cOZq./F9gVicytcXd6Ei4gBsPggUvS', 'admin', NULL, 1, '2026-02-20 11:12:08', '2026-02-20 11:12:08'),
+(5, 'admin2', '$2b$12$TH5ytK6Z/AtDFpFkCnnEcuuqHHyyeRUNFfacBamCmlHoHQJYUhk3K', 'admin', NULL, 1, '2026-02-20 11:13:26', '2026-02-20 11:13:26');
+
+-- =========================
+-- Données de test: 10 clients (tiers)
+-- =========================
+INSERT IGNORE INTO ref_types_tiers (code_type_tiers, libelle_type, ordre)
+VALUES ('CLIENT', 'Client', 4);
+
+INSERT IGNORE INTO tiers (
+  type_tiers,
+  id_type_tiers,
+  nom_tiers,
+  adresse,
+  ice,
+  telephone,
+  email,
+  plafond_credit,
+  actif
+)
+SELECT
+  'CLIENT',
+  r.id_type_tiers,
+  c.nom_tiers,
+  c.adresse,
+  c.ice,
+  c.telephone,
+  c.email,
+  c.plafond_credit,
+  1
+FROM (
+  SELECT 'Société Atlas' AS nom_tiers, '12 Rue Atlas, Casablanca' AS adresse, '001234567890123' AS ice, '0612345678' AS telephone, 'atlas@example.com' AS email, 15000.00 AS plafond_credit
+  UNION ALL SELECT 'Maroc Distribution', '45 Bd Zerktouni, Casablanca', '001234567890124', '0623456789', 'marocdist@example.com', 22000.00
+  UNION ALL SELECT 'Nord Commerce', '8 Av Mohammed V, Rabat', '001234567890125', '0634567890', 'nordcommerce@example.com', 18000.00
+  UNION ALL SELECT 'Sahara Market', '22 Rue Ibn Sina, Marrakech', '001234567890126', '0645678901', 'sahara@example.com', 12000.00
+  UNION ALL SELECT 'Rif Services', '3 Rue Hassan II, Tanger', '001234567890127', '0656789012', 'rifservices@example.com', 9000.00
+  UNION ALL SELECT 'Andalous Trading', '17 Av FAR, Fès', '001234567890128', '0667890123', 'andalous@example.com', 30000.00
+  UNION ALL SELECT 'Maghreb Tech', '101 Bd Abdelmoumen, Casablanca', '001234567890129', '0678901234', 'maghrebtech@example.com', 25000.00
+  UNION ALL SELECT 'Ocean Pro', '9 Rue du Port, Agadir', '001234567890130', '0689012345', 'oceanpro@example.com', 14000.00
+  UNION ALL SELECT 'Oriental Supply', '33 Av Allal Ben Abdellah, Oujda', '001234567890131', '0690123456', 'oriental@example.com', 16000.00
+  UNION ALL SELECT 'Casanet Equipement', '60 Rue Ghandi, Casablanca', '001234567890132', '0601234567', 'casanet@example.com', 20000.00
+) c
+JOIN ref_types_tiers r ON r.code_type_tiers = 'CLIENT';
+
+-- =========================
+-- Données de test: 10 fournisseurs (tiers)
+-- =========================
+INSERT IGNORE INTO ref_types_tiers (code_type_tiers, libelle_type, ordre)
+VALUES ('FOURNISSEUR', 'Fournisseur', 5);
+
+INSERT IGNORE INTO tiers (
+  type_tiers,
+  id_type_tiers,
+  nom_tiers,
+  adresse,
+  ice,
+  telephone,
+  email,
+  plafond_credit,
+  actif
+)
+SELECT
+  'FOURNISSEUR',
+  r.id_type_tiers,
+  f.nom_tiers,
+  f.adresse,
+  f.ice,
+  f.telephone,
+  f.email,
+  f.plafond_credit,
+  1
+FROM (
+  SELECT 'Atlas Fournitures' AS nom_tiers, '14 Zone Industrielle, Casablanca' AS adresse, '009876543210001' AS ice, '0522001100' AS telephone, 'atlas.fournitures@example.com' AS email, 50000.00 AS plafond_credit
+  UNION ALL SELECT 'Rif Matériaux', '28 Rue Tétouan, Tanger', '009876543210002', '0539002200', 'rif.materiaux@example.com', 42000.00
+  UNION ALL SELECT 'Sahara Equipements', '7 Quartier Industriel, Marrakech', '009876543210003', '0524303300', 'sahara.equipements@example.com', 38000.00
+  UNION ALL SELECT 'Nord Papeterie Pro', '52 Av Hassan II, Rabat', '009876543210004', '0537704400', 'nord.papeterie@example.com', 21000.00
+  UNION ALL SELECT 'Maghreb Electric', '90 Bd Abdelmoumen, Casablanca', '009876543210005', '0522605500', 'maghreb.electric@example.com', 47000.00
+  UNION ALL SELECT 'Oriental Industrie', '13 Zone Franche, Oujda', '009876543210006', '0536506600', 'oriental.industrie@example.com', 36000.00
+  UNION ALL SELECT 'Andalous Packaging', '31 Rue Saiss, Fès', '009876543210007', '0535007700', 'andalous.packaging@example.com', 29000.00
+  UNION ALL SELECT 'Ocean Distribution Pro', '6 Port Commercial, Agadir', '009876543210008', '0528808800', 'ocean.distribution@example.com', 33000.00
+  UNION ALL SELECT 'Casanet Solutions B2B', '66 Rue Ghandi, Casablanca', '009876543210009', '0522209900', 'casanet.solutions@example.com', 41000.00
+  UNION ALL SELECT 'Premium Supply Maroc', '19 Av Mohammed V, Meknès', '009876543210010', '0535401010', 'premium.supply@example.com', 45000.00
+) f
+JOIN ref_types_tiers r ON r.code_type_tiers = 'FOURNISSEUR';

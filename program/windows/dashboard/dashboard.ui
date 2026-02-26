@@ -1327,7 +1327,7 @@ font: 57 15pt &quot;Tajawal Medium&quot;;
                 <number>6</number>
                </property>
                <item>
-                <widget class="QToolButton" name="nouvau_doc">
+                <widget class="QToolButton" name="nouveau_doc">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                    <horstretch>0</horstretch>
