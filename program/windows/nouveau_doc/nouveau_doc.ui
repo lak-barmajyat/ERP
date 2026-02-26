@@ -152,6 +152,12 @@ QLineEdit{
            <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
              <widget class="QComboBox" name="articles_combobox">
+              <property name="editable">
+               <bool>true</bool>
+              </property>
+              <property name="insertPolicy">
+               <enum>QComboBox::NoInsert</enum>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
                 <horstretch>0</horstretch>
@@ -901,6 +907,12 @@ QPushButton::pressed{
           </item>
           <item row="1" column="0">
            <widget class="QComboBox" name="clients_combobox">
+            <property name="editable">
+             <bool>true</bool>
+            </property>
+            <property name="insertPolicy">
+             <enum>QComboBox::NoInsert</enum>
+            </property>
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>

@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView
+from .select_doc_type import SelectDocTypeDialog
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
 import os
@@ -19,6 +20,7 @@ class NouveauDocWindow(QMainWindow):
         
         # Set all columns to Fixed mode to match input fields exactly
         # Widths match the input fields above the table
+        self.doc_type_window = SelectDocTypeDialog()
         self.tableWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Fixed)
         
         self.tableWidget.setColumnWidth(0, 225)  # Reference d'Article

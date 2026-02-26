@@ -46,9 +46,8 @@ class DashboardWindow(QMainWindow):
         # Set the scroll area as central widget
         self.setCentralWidget(self.scrollArea)
         
-        # Configure scroll bar policies (already set in UI, but can be modified here if needed)
-        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
-        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        self.scrollArea.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.scrollArea.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
         # When the window is larger than the fixed content, center it.
         self.scrollArea.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
