@@ -1,0 +1,1290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DocWindow</class>
+ <widget class="QMainWindow" name="DocWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1236</width>
+    <height>659</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>New Invoice - ERP System</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+QMainWindow, QWidget#centralwidget {
+    background-color: #f3f4f6;
+    font-family: &quot;Inter&quot;;
+}
+QScrollBar:vertical {
+    border: none;
+    background: transparent;
+    width: 8px;
+    margin: 0px;
+}
+QScrollBar::handle:vertical {
+    background: #cbd5e1;
+    min-height: 30px;
+    border-radius: 4px;
+    margin: 2px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #94a3b8;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: none; background: none; height: 0px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+   </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="headerFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>107</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>107</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#headerFrame { background-color: #ffffff; border: none; border-bottom: 1px solid #e5e7eb; border-radius: 0px; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QHBoxLayout" name="headerFormLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="leftMargin">
+        <number>24</number>
+       </property>
+       <property name="topMargin">
+        <number>20</number>
+       </property>
+       <property name="rightMargin">
+        <number>24</number>
+       </property>
+       <property name="bottomMargin">
+        <number>20</number>
+       </property>
+       <item>
+        <layout class="QVBoxLayout" name="clientidGroupLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <property name="sizeConstraint">
+          <enum>QLayout::SetDefaultConstraint</enum>
+         </property>
+         <item>
+          <widget class="QLabel" name="clientidLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel#clientidLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>Client id</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="clientidinput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLineEdit#clientidinput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151;  } 
+
+QLineEdit#clientidinput:hover { border-color: #d1d5db; }
+
+ QLineEdit#clientidinput:focus { border-color: #1d7ae2; }</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="placeholderText">
+            <string>Client ID</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="clientGroupLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="clientLabel">
+           <property name="styleSheet">
+            <string notr="true">QLabel#clientLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>CLIENT</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="clientinput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>142</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLineEdit#clientinput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } 
+
+QLineEdit#clientinput:hover { border-color: #d1d5db; }
+
+ QLineEdit#clientinput:focus { border-color: #1d7ae2; }</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="placeholderText">
+            <string>Client</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="dateGroupLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="dateLabel">
+           <property name="styleSheet">
+            <string notr="true">QLabel#dateLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>DATE</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateEdit" name="dateInput">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QDateEdit#dateInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QDateEdit#dateInput:hover { border-color: #d1d5db; } QDateEdit#dateInput:focus { border-color: #1d7ae2; } QDateEdit#dateInput::drop-down { border: none; width: 20px; } QDateEdit#dateInput::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }</string>
+           </property>
+           <property name="displayFormat">
+            <string>dd/MM/yyyy</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="pieceGroupLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="pieceLabel">
+           <property name="styleSheet">
+            <string notr="true">QLabel#pieceLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>N° document</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="pieceRowLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="pieceInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>142</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#pieceInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } QLineEdit#pieceInput:hover { border-color: #d1d5db; } QLineEdit#pieceInput:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="placeholderText">
+              <string>CLIENT</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btn_valider">
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }</string>
+             </property>
+             <property name="text">
+              <string>Valider</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="entryFrame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>135</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>135</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#entryFrame { background-color: #f3f4f6; border: none; border-bottom: 1px solid #e5e7eb; border-radius: 0px; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QVBoxLayout" name="entryMainLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="leftMargin">
+        <number>16</number>
+       </property>
+       <property name="topMargin">
+        <number>14</number>
+       </property>
+       <property name="rightMargin">
+        <number>16</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="entryFieldsLayout">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="entryRefGroupLayout">
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryRefLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryRefLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Reference</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="refInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>200</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#refInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#desigInput:hover { border-color: #d1d5db; } QLineEdit#refInput:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="placeholderText">
+              <string>Reference</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryDesigGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryDesigLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryDesigLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Designation</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="desigInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>390</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#desigInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#desigInput:hover { border-color: #d1d5db; } QLineEdit#desigInput:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="placeholderText">
+              <string>Designation</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryPuhtGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryPuhtLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryPuhtLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>P.U.H.T</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="puhtInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>118</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#puhtInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#puhtInput:hover { border-color: #d1d5db; } QLineEdit#puhtInput:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="placeholderText">
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryPttcGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryPttcLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryPttcLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>P.T.T.C</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="pttcInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>118</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#pttcInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#pttcInput:hover { border-color: #d1d5db; } QLineEdit#pttcInput:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="placeholderText">
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryQteGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryQteLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryQteLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Qte</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="qteInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>73</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#qteInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qteInput:hover { border-color: #d1d5db; } QLineEdit#qteInput:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="text">
+              <string>1</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryTaxeGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryTaxeLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryTaxeLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Taxe</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="taxeInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>73</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#taxeInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#taxeInput:hover { border-color: #d1d5db; } QLineEdit#taxeInput:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="text">
+              <string>1</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryTotalGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryTotalLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryTotalLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total TTC</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="totalTtcEntryInput">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>114</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>150</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#totalTtcEntryInput { background-color: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #9ca3af; min-width: 90px; max-width: 120px; }</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="placeholderText">
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="entryActionsLayout">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <spacer name="entryActionsSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_annuler">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Inter</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#btn_annuler { background-color: transparent; border: none; color: #4b5563; font: 400 10pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 4px; }
+
+
+ QPushButton#btn_annuler:hover { color: #111827; background-color: #f3f4f6; }</string>
+           </property>
+           <property name="text">
+            <string>Annuler</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_supprimer">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#btn_supprimer { background-color: transparent; border: 1px solid transparent; color: #ef4444; font: 500 8pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 6px; } QPushButton#btn_supprimer:hover { color: #dc2626; background-color: #fef2f2; border-color: #fecaca; }</string>
+           </property>
+           <property name="text">
+            <string>Supprimer</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btn_enregistrer">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#btn_enregistrer { background-color: #1d7ae2; border: none; border-radius: 14px; color: #ffffff; font: 600 8pt &quot;Inter&quot;; padding: 6px 20px; } QPushButton#btn_enregistrer:hover { background-color: #1a6fcb; } QPushButton#btn_enregistrer:pressed { background-color: #155bbf; }</string>
+           </property>
+           <property name="text">
+            <string>Enregistrer</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="docTable">
+      <property name="styleSheet">
+       <string notr="true">
+QTableWidget#docTable {
+    background-color: #ffffff;
+    border: none;
+    gridline-color: #e5e7eb;
+    font: 400 9pt &quot;Inter&quot;;
+    color: #374151;
+    selection-background-color: rgba(29,122,226,0.08);
+    selection-color: #111827;
+    outline: 0;
+}
+QTableWidget#docTable::item {
+    padding: 6px 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+QTableWidget#docTable::item:alternate {
+    background-color: #f9fafb;
+}
+QTableWidget#docTable::item:selected {
+    background-color: rgba(29,122,226,0.08);
+    color: #111827;
+}
+QTableWidget#docTable::item:hover {
+    background-color: #f9fafb;
+}
+QHeaderView::section {
+    background-color: #f9fafb;
+    color: #374151;
+    font: 600 9pt &quot;Inter&quot;;
+    padding: 10px 12px;
+    border: none;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 2px solid #e5e7eb;
+}
+QHeaderView::section:last {
+    border-right: none;
+}
+       </string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="showGrid">
+       <bool>false</bool>
+      </property>
+      <column>
+       <property name="text">
+        <string>Reference Article</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Designation</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>P.U.H.T</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>P.T.T.C</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Qte</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Taxe</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Totale TTC</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="footerFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>67</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#footerFrame { background-color: #ffffff; border: none; border-top: 1px solid #e5e7eb; border-radius: 0px; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QHBoxLayout" name="footerLayout">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <property name="leftMargin">
+        <number>24</number>
+       </property>
+       <property name="topMargin">
+        <number>16</number>
+       </property>
+       <property name="rightMargin">
+        <number>24</number>
+       </property>
+       <property name="bottomMargin">
+        <number>16</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="footerTotalsLayout">
+         <property name="spacing">
+          <number>24</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="totalTaxLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="totalTaxLabel">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel#totalTaxLabel { color: #374151; font: 600 11pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total Tax</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="totalTaxValue">
+             <property name="minimumSize">
+              <size>
+               <width>132</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#totalTaxValue { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#totalTaxValue:read-only { background-color: #ffffff; }</string>
+             </property>
+             <property name="text">
+              <string>0.00</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="totalUTLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="totalUTLabel">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Inter</family>
+               <pointsize>11</pointsize>
+               <weight>75</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel#totalUTLabel { color: #374151; font: 600 11pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total U.T</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="totalUTValue">
+             <property name="minimumSize">
+              <size>
+               <width>132</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#totalUTValue { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#totalUTValue:read-only { background-color: #ffffff; }</string>
+             </property>
+             <property name="text">
+              <string>0.00</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="totalTTCLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="totalTTCLabel">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel#totalTTCLabel { color: #111827; font: 700 12pt &quot;Inter&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total TTC</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="totalTTCValue">
+             <property name="minimumSize">
+              <size>
+               <width>152</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#totalTTCValue { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Inter&quot;; color: #1d7ae2; min-width: 130px; } QLineEdit#totalTTCValue:read-only { background-color: #ffffff; }</string>
+             </property>
+             <property name="text">
+              <string>0.00</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="footerSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_imprimer">
+         <property name="minimumSize">
+          <size>
+           <width>116</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>116</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton#btn_imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_imprimer:hover { background-color: #1a6fcb; } QPushButton#btn_imprimer:pressed { background-color: #155bbf; }</string>
+         </property>
+         <property name="text">
+          <string>🖨  Imprimer</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_nouveau">
+         <property name="minimumSize">
+          <size>
+           <width>116</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>116</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton#btn_nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_nouveau:hover { background-color: #1a6fcb; } QPushButton#btn_nouveau:pressed { background-color: #155bbf; }</string>
+         </property>
+         <property name="text">
+          <string>+  Nouveau</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_fermer">
+         <property name="minimumSize">
+          <size>
+           <width>116</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>116</width>
+           <height>30</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton#btn_fermer { background-color: transparent; border: none; color: #6b7280; font: 600 8pt &quot;Inter&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#btn_fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
+         </property>
+         <property name="text">
+          <string>FERMER</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
