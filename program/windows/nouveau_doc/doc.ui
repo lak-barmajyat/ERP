@@ -190,7 +190,7 @@ QLineEdit#clientidinput:hover { border-color: #d1d5db; }
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="clientinput">
+          <widget class="QLineEdit" name="clients_combobox">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -210,11 +210,11 @@ QLineEdit#clientidinput:hover { border-color: #d1d5db; }
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QLineEdit#clientinput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } 
+            <string notr="true">QLineEdit#clients_combobox { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } 
 
-QLineEdit#clientinput:hover { border-color: #d1d5db; }
+QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
 
- QLineEdit#clientinput:focus { border-color: #1d7ae2; }</string>
+ QLineEdit#clients_combobox:focus { border-color: #1d7ae2; }</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -242,7 +242,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
           </widget>
          </item>
          <item>
-          <widget class="QDateEdit" name="dateInput">
+          <widget class="QDateEdit" name="dateEdit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -262,7 +262,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QDateEdit#dateInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QDateEdit#dateInput:hover { border-color: #d1d5db; } QDateEdit#dateInput:focus { border-color: #1d7ae2; } QDateEdit#dateInput::drop-down { border: none; width: 20px; } QDateEdit#dateInput::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }</string>
+            <string notr="true">QDateEdit#dateEdit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QDateEdit#dateEdit:hover { border-color: #d1d5db; } QDateEdit#dateEdit:focus { border-color: #1d7ae2; } QDateEdit#dateEdit::drop-down { border: none; width: 20px; } QDateEdit#dateEdit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }</string>
            </property>
            <property name="displayFormat">
             <string>dd/MM/yyyy</string>
@@ -295,7 +295,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             <number>8</number>
            </property>
            <item>
-            <widget class="QLineEdit" name="pieceInput">
+            <widget class="QLineEdit" name="n_piece_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -315,7 +315,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#pieceInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } QLineEdit#pieceInput:hover { border-color: #d1d5db; } QLineEdit#pieceInput:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#n_piece_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } QLineEdit#n_piece_editline:hover { border-color: #d1d5db; } QLineEdit#n_piece_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -326,7 +326,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_valider">
+            <widget class="QPushButton" name="valider">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -337,7 +337,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }</string>
+              <string notr="true">QPushButton#valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#valider:hover { background-color: #1a6fcb; } QPushButton#valider:pressed { background-color: #155bbf; }</string>
              </property>
              <property name="text">
               <string>Valider</string>
@@ -408,7 +408,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="refInput">
+            <widget class="QLineEdit" name="articles_combobox">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -428,7 +428,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#refInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#desigInput:hover { border-color: #d1d5db; } QLineEdit#refInput:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#articles_combobox { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#articles_combobox:hover { border-color: #d1d5db; } QLineEdit#articles_combobox:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="placeholderText">
               <string>Reference</string>
@@ -453,7 +453,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="desigInput">
+            <widget class="QLineEdit" name="designation_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -473,7 +473,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#desigInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#desigInput:hover { border-color: #d1d5db; } QLineEdit#desigInput:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#designation_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#designation_editline:hover { border-color: #d1d5db; } QLineEdit#designation_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="placeholderText">
               <string>Designation</string>
@@ -498,7 +498,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="puhtInput">
+            <widget class="QLineEdit" name="puht_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -518,7 +518,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#puhtInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#puhtInput:hover { border-color: #d1d5db; } QLineEdit#puhtInput:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#puht_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#puht_editline:hover { border-color: #d1d5db; } QLineEdit#puht_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -546,7 +546,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="pttcInput">
+            <widget class="QLineEdit" name="pttc_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -566,7 +566,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#pttcInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#pttcInput:hover { border-color: #d1d5db; } QLineEdit#pttcInput:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#pttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#pttc_editline:hover { border-color: #d1d5db; } QLineEdit#pttc_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -594,7 +594,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="qteInput">
+            <widget class="QLineEdit" name="qte_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -614,7 +614,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#qteInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qteInput:hover { border-color: #d1d5db; } QLineEdit#qteInput:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#qte_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qte_editline:hover { border-color: #d1d5db; } QLineEdit#qte_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="text">
               <string>1</string>
@@ -642,7 +642,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="taxeInput">
+            <widget class="QLineEdit" name="taxe_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -662,7 +662,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#taxeInput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#taxeInput:hover { border-color: #d1d5db; } QLineEdit#taxeInput:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#taxe_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#taxe_editline:hover { border-color: #d1d5db; } QLineEdit#taxe_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="text">
               <string>1</string>
@@ -690,7 +690,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="totalTtcEntryInput">
+            <widget class="QLineEdit" name="total_ttc_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -713,7 +713,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#totalTtcEntryInput { background-color: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #9ca3af; min-width: 90px; max-width: 120px; }</string>
+              <string notr="true">QLineEdit#total_ttc_editline { background-color: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #9ca3af; min-width: 90px; max-width: 120px; }</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -752,7 +752,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="btn_annuler">
+          <widget class="QPushButton" name="annule">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -778,10 +778,10 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#btn_annuler { background-color: transparent; border: none; color: #4b5563; font: 400 10pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 4px; }
+            <string notr="true">QPushButton#annule { background-color: transparent; border: none; color: #4b5563; font: 400 10pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 4px; }
 
 
- QPushButton#btn_annuler:hover { color: #111827; background-color: #f3f4f6; }</string>
+ QPushButton#annule:hover { color: #111827; background-color: #f3f4f6; }</string>
            </property>
            <property name="text">
             <string>Annuler</string>
@@ -789,7 +789,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btn_supprimer">
+          <widget class="QPushButton" name="suprimer">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -806,7 +806,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#btn_supprimer { background-color: transparent; border: 1px solid transparent; color: #ef4444; font: 500 8pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 6px; } QPushButton#btn_supprimer:hover { color: #dc2626; background-color: #fef2f2; border-color: #fecaca; }</string>
+            <string notr="true">QPushButton#suprimer { background-color: transparent; border: 1px solid transparent; color: #ef4444; font: 500 8pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 6px; } QPushButton#suprimer:hover { color: #dc2626; background-color: #fef2f2; border-color: #fecaca; }</string>
            </property>
            <property name="text">
             <string>Supprimer</string>
@@ -814,7 +814,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="btn_enregistrer">
+          <widget class="QPushButton" name="enrgistrer">
            <property name="minimumSize">
             <size>
              <width>100</width>
@@ -831,7 +831,7 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#btn_enregistrer { background-color: #1d7ae2; border: none; border-radius: 14px; color: #ffffff; font: 600 8pt &quot;Inter&quot;; padding: 6px 20px; } QPushButton#btn_enregistrer:hover { background-color: #1a6fcb; } QPushButton#btn_enregistrer:pressed { background-color: #155bbf; }</string>
+            <string notr="true">QPushButton#enrgistrer { background-color: #1d7ae2; border: none; border-radius: 14px; color: #ffffff; font: 600 8pt &quot;Inter&quot;; padding: 6px 20px; } QPushButton#enrgistrer:hover { background-color: #1a6fcb; } QPushButton#enrgistrer:pressed { background-color: #155bbf; }</string>
            </property>
            <property name="text">
             <string>Enregistrer</string>
@@ -860,10 +860,10 @@ QLineEdit#clientinput:hover { border-color: #d1d5db; }
      </widget>
     </item>
     <item>
-     <widget class="QTableWidget" name="docTable">
+     <widget class="QTableWidget" name="tableWidget">
       <property name="styleSheet">
        <string notr="true">
-QTableWidget#docTable {
+QTableWidget#tableWidget {
     background-color: #ffffff;
     border: none;
     gridline-color: #e5e7eb;
@@ -873,18 +873,18 @@ QTableWidget#docTable {
     selection-color: #111827;
     outline: 0;
 }
-QTableWidget#docTable::item {
+QTableWidget#tableWidget::item {
     padding: 6px 12px;
     border-bottom: 1px solid #f3f4f6;
 }
-QTableWidget#docTable::item:alternate {
+QTableWidget#tableWidget::item:alternate {
     background-color: #f9fafb;
 }
-QTableWidget#docTable::item:selected {
+QTableWidget#tableWidget::item:selected {
     background-color: rgba(29,122,226,0.08);
     color: #111827;
 }
-QTableWidget#docTable::item:hover {
+QTableWidget#tableWidget::item:hover {
     background-color: #f9fafb;
 }
 QHeaderView::section {
@@ -1011,8 +1011,8 @@ QHeaderView::section:last {
            <property name="spacing">
             <number>8</number>
            </property>
-           <item>
-            <widget class="QLabel" name="totalTaxLabel">
+         <item>
+          <widget class="QLabel" name="label_5">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1034,7 +1034,7 @@ QHeaderView::section:last {
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="totalTaxValue">
+            <widget class="QLineEdit" name="total_tax_label">
              <property name="minimumSize">
               <size>
                <width>132</width>
@@ -1048,7 +1048,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#totalTaxValue { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#totalTaxValue:read-only { background-color: #ffffff; }</string>
+              <string notr="true">QLineEdit#total_tax_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#total_tax_label:read-only { background-color: #ffffff; }</string>
              </property>
              <property name="text">
               <string>0.00</string>
@@ -1069,7 +1069,7 @@ QHeaderView::section:last {
             <number>8</number>
            </property>
            <item>
-            <widget class="QLabel" name="totalUTLabel">
+            <widget class="QLabel" name="label_10">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1100,7 +1100,7 @@ QHeaderView::section:last {
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="totalUTValue">
+            <widget class="QLineEdit" name="total_UT_label">
              <property name="minimumSize">
               <size>
                <width>132</width>
@@ -1114,7 +1114,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#totalUTValue { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#totalUTValue:read-only { background-color: #ffffff; }</string>
+              <string notr="true">QLineEdit#total_UT_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#total_UT_label:read-only { background-color: #ffffff; }</string>
              </property>
              <property name="text">
               <string>0.00</string>
@@ -1135,7 +1135,7 @@ QHeaderView::section:last {
             <number>8</number>
            </property>
            <item>
-            <widget class="QLabel" name="totalTTCLabel">
+            <widget class="QLabel" name="label_7">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1157,7 +1157,7 @@ QHeaderView::section:last {
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="totalTTCValue">
+            <widget class="QLineEdit" name="total_ttc_label">
              <property name="minimumSize">
               <size>
                <width>152</width>
@@ -1171,7 +1171,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#totalTTCValue { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Inter&quot;; color: #1d7ae2; min-width: 130px; } QLineEdit#totalTTCValue:read-only { background-color: #ffffff; }</string>
+              <string notr="true">QLineEdit#total_ttc_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Inter&quot;; color: #1d7ae2; min-width: 130px; } QLineEdit#total_ttc_label:read-only { background-color: #ffffff; }</string>
              </property>
              <property name="text">
               <string>0.00</string>
@@ -1205,7 +1205,7 @@ QHeaderView::section:last {
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_imprimer">
+        <widget class="QPushButton" name="imprimer">
          <property name="minimumSize">
           <size>
            <width>116</width>
@@ -1222,7 +1222,7 @@ QHeaderView::section:last {
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#btn_imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_imprimer:hover { background-color: #1a6fcb; } QPushButton#btn_imprimer:pressed { background-color: #155bbf; }</string>
+          <string notr="true">QPushButton#imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#imprimer:hover { background-color: #1a6fcb; } QPushButton#imprimer:pressed { background-color: #155bbf; }</string>
          </property>
          <property name="text">
           <string>🖨  Imprimer</string>
@@ -1230,7 +1230,7 @@ QHeaderView::section:last {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_nouveau">
+        <widget class="QPushButton" name="nouveau">
          <property name="minimumSize">
           <size>
            <width>116</width>
@@ -1247,7 +1247,7 @@ QHeaderView::section:last {
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#btn_nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_nouveau:hover { background-color: #1a6fcb; } QPushButton#btn_nouveau:pressed { background-color: #155bbf; }</string>
+          <string notr="true">QPushButton#nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#nouveau:hover { background-color: #1a6fcb; } QPushButton#nouveau:pressed { background-color: #155bbf; }</string>
          </property>
          <property name="text">
           <string>+  Nouveau</string>
@@ -1255,7 +1255,7 @@ QHeaderView::section:last {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_fermer">
+        <widget class="QPushButton" name="fermer">
          <property name="minimumSize">
           <size>
            <width>116</width>
@@ -1272,7 +1272,7 @@ QHeaderView::section:last {
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#btn_fermer { background-color: transparent; border: none; color: #6b7280; font: 600 8pt &quot;Inter&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#btn_fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
+          <string notr="true">QPushButton#fermer { background-color: transparent; border: none; color: #6b7280; font: 600 8pt &quot;Inter&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
          </property>
          <property name="text">
           <string>FERMER</string>
