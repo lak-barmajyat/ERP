@@ -1,4 +1,3 @@
-from .dashboard import DashboardWindow
 from program.windows.nouveau_doc import NouveauDocWindow, nouveau_doc_setup
 
 

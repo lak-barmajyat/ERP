@@ -1,5 +1,6 @@
 from program.services.db_connection import *
 import bcrypt
+from PyQt5.QtWidgets import QApplication
 from program.windows.dashboard import DashboardWindow, dashboard_setup
 from program.services.db_connection import with_db_session
 from program.services import Utilisateur, select
@@ -39,8 +40,9 @@ def check_user(login, session):
         login.connection_error_label.show()
         return
 
-
     login.connection_error_label.hide()
     login.close()
-    login.dashboard_window = DashboardWindow()
-    dashboard_setup(login.dashboard_window)
+
+    app = QApplication.instance()          # get the running app
+    app._dashboard_window = DashboardWindow()   # keep reference alive on app
+    dashboard_setup(app._dashboard_window)
