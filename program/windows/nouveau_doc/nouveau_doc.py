@@ -34,17 +34,17 @@ class NouveauDocWindow(QMainWindow):
 
     def _setup_table(self):
         """Configure the document lines table."""
-        header = self.docTable.horizontalHeader()
+        header = self.tableWidget.horizontalHeader()
         # Stretch Designation column, fix the rest
         header.setSectionResizeMode(QHeaderView.Interactive)
         header.setSectionResizeMode(1, QHeaderView.Stretch)   # Designation expands
 
-        self.docTable.setColumnWidth(0, 150)   # Reference Article
-        self.docTable.setColumnWidth(2, 100)   # P.U.H.T
-        self.docTable.setColumnWidth(3, 100)   # P.T.T.C
-        self.docTable.setColumnWidth(4, 70)    # Qte
-        self.docTable.setColumnWidth(5, 80)    # Taxe
-        self.docTable.setColumnWidth(6, 110)   # Totale TTC
+        self.tableWidget.setColumnWidth(0, 150)   # Reference Article
+        self.tableWidget.setColumnWidth(2, 100)   # P.U.H.T
+        self.tableWidget.setColumnWidth(3, 100)   # P.T.T.C
+        self.tableWidget.setColumnWidth(4, 70)    # Qte
+        self.tableWidget.setColumnWidth(5, 80)    # Taxe
+        self.tableWidget.setColumnWidth(6, 110)   # Totale TTC
 
         self.docTable.verticalHeader().setVisible(False)
         self.docTable.setRowCount(0)
@@ -61,101 +61,101 @@ class NouveauDocWindow(QMainWindow):
 
     def _setup_defaults(self):
         """Set sensible default values for form fields."""
-        self.dateInput.setDate(QDate.currentDate())
-        self.qteInput.setText("1")
-        self.totalTtcEntryInput.setReadOnly(True)
-        self.totalTaxValue.setReadOnly(True)
-        self.totalUTValue.setReadOnly(True)
-        self.totalTTCValue.setReadOnly(True)
+        self.dateEdit.setDate(QDate.currentDate())
+        self.qte_editline.setText("1")
+        self.total_ttc_editline.setReadOnly(True)
+        self.total_tax_label.setReadOnly(True)
+        self.total_UT_label.setReadOnly(True)
+        self.total_ttc_label.setReadOnly(True)
 
     def _connect_signals(self):
         """Wire up button signals."""
-        self.btn_annuler.clicked.connect(self._on_annuler)
-        self.btn_supprimer.clicked.connect(self._on_supprimer)
-        self.btn_enregistrer.clicked.connect(self._on_enregistrer)
-        self.btn_fermer.clicked.connect(self.close)
-        self.btn_nouveau.clicked.connect(self._on_nouveau)
+        self.annule.clicked.connect(self._on_annuler)
+        self.suprimer.clicked.connect(self._on_supprimer)
+        self.enrgistrer.clicked.connect(self._on_enregistrer)
+        self.fermer.clicked.connect(self.close)
+        self.nouveau.clicked.connect(self._on_nouveau)
 
         # Auto-calculate Total TTC entry field when inputs change
-        self.puhtInput.textChanged.connect(self._recalculate_entry)
-        self.qteInput.textChanged.connect(self._recalculate_entry)
-        self.taxeInput.textChanged.connect(self._recalculate_entry)
+        self.puht_editline.textChanged.connect(self._recalculate_entry)
+        self.qte_editline.textChanged.connect(self._recalculate_entry)
+        self.taxe_editline.textChanged.connect(self._recalculate_entry)
 
     # ── Entry-row helpers ────────────────────────────────────────────────────
 
     def _recalculate_entry(self):
         """Recalculate the per-line Total TTC preview field."""
         try:
-            puht = float(self.puhtInput.text() or 0)
-            qte = float(self.qteInput.text() or 1)
-            taxe_text = self.taxeInput.text().replace("%", "")
+            puht = float(self.puht_editline.text() or 0)
+            qte = float(self.qte_editline.text() or 1)
+            taxe_text = self.taxe_editline.text().replace("%", "")
             taxe = float(taxe_text) / 100
             pttc = puht * (1 + taxe)
             total = pttc * qte
-            self.pttcInput.setText(f"{pttc:.2f}")
-            self.totalTtcEntryInput.setText(f"{total:.2f}")
+            self.pttc_editline.setText(f"{pttc:.2f}")
+            self.total_ttc_editline.setText(f"{total:.2f}")
         except ValueError:
-            self.totalTtcEntryInput.setText("")
+            self.total_ttc_editline.setText("")
 
     def _on_annuler(self):
         """Clear the article entry fields."""
-        self.refInput.clear()
-        self.desigInput.clear()
-        self.puhtInput.clear()
-        self.pttcInput.clear()
-        self.qteInput.setText("1")
-        self.totalTtcEntryInput.clear()
+        self.articles_combobox.clear()
+        self.designation_editline.clear()
+        self.puht_editline.clear()
+        self.pttc_editline.clear()
+        self.qte_editline.setText("1")
+        self.total_ttc_editline.clear()
 
     def _on_supprimer(self):
         """Remove the currently selected row from the table."""
-        selected = self.docTable.selectedItems()
+        selected = self.tableWidget.selectedItems()
         if selected:
-            row = self.docTable.currentRow()
-            self.docTable.removeRow(row)
+            row = self.tableWidget.currentRow()
+            self.tableWidget.removeRow(row)
             self._recalculate_totals()
 
     def _on_enregistrer(self):
         """Add the current entry row to the document table."""
-        ref = self.refInput.text()
-        desig = self.desigInput.text()
-        puht = self.puhtInput.text()
-        pttc = self.pttcInput.text()
-        qte = self.qteInput.text()
-        taxe = self.taxeInput.text()
-        total = self.totalTtcEntryInput.text()
+        ref = self.articles_combobox.text()
+        desig = self.designation_editline.text()
+        puht = self.puht_editline.text()
+        pttc = self.pttc_editline.text()
+        qte = self.qte_editline.text()
+        taxe = self.taxe_editline.text()
+        total = self.total_ttc_editline.text()
 
-        row = self.docTable.rowCount()
-        self.docTable.insertRow(row)
+        row = self.tableWidget.rowCount()
+        self.tableWidget.insertRow(row)
         for col, value in enumerate([ref, desig, puht, pttc, qte, taxe, total]):
             item = QTableWidgetItem(value)
             item.setTextAlignment(Qt.AlignVCenter | (Qt.AlignRight if col not in (0, 1) else Qt.AlignLeft))
-            self.docTable.setItem(row, col, item)
+            self.tableWidget.setItem(row, col, item)
 
         self._recalculate_totals()
         self._on_annuler()  # clear entry fields after adding
 
     def _on_nouveau(self):
         """Reset the entire document form."""
-        self.docTable.setRowCount(0)
+        self.tableWidget.setRowCount(0)
         self._on_annuler()
-        self.dateInput.setDate(QDate.currentDate())
-        self.pieceInput.clear()
+        self.dateEdit.setDate(QDate.currentDate())
+        self.n_piece_editline.clear()
         self.clientidinput.clear()
-        self.clientinput.clear()
-        self.totalTaxValue.setText("0.00")
-        self.totalUTValue.setText("0.00")
-        self.totalTTCValue.setText("0.00")
+        self.clients_combobox.clear()
+        self.total_tax_label.setText("0.00")
+        self.total_UT_label.setText("0.00")
+        self.total_ttc_label.setText("0.00")
 
     def _recalculate_totals(self):
         """Recompute footer totals from the table rows."""
         total_ht = 0.0
         total_tax = 0.0
         total_ttc = 0.0
-        for row in range(self.docTable.rowCount()):
+        for row in range(self.tableWidget.rowCount()):
             try:
-                puht = float((self.docTable.item(row, 2) or QTableWidgetItem("0")).text() or 0)
-                qte = float((self.docTable.item(row, 4) or QTableWidgetItem("1")).text() or 1)
-                taxe_text = (self.docTable.item(row, 5) or QTableWidgetItem("0%")).text().replace("%", "")
+                puht = float((self.tableWidget.item(row, 2) or QTableWidgetItem("0")).text() or 0)
+                qte = float((self.tableWidget.item(row, 4) or QTableWidgetItem("1")).text() or 1)
+                taxe_text = (self.tableWidget.item(row, 5) or QTableWidgetItem("0%")).text().replace("%", "")
                 taxe = float(taxe_text) / 100
                 ht = puht * qte
                 tax = ht * taxe
