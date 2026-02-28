@@ -10,8 +10,8 @@ from PyQt5.QtGui import QFontDatabase
 
 def main():
     app = QApplication(sys.argv)
-    window = NouveauDocWindow()
-    nouveau_doc_setup(window)
+    window = LoginWindow()
+    # nouveau_doc_setup(window)
 
     sys.exit(app.exec_())
 
