@@ -1196,7 +1196,7 @@ QToolButton#btn_fiche_client:hover { border: 1px solid rgba(29,122,226,0.5); col
                        </property>
                        <property name="styleSheet">
                         <string notr="true">QToolButton#btn_nouveau_doc { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
-QToolButton#btn_nouveau_doc:hover { border: 1px solid #9ca3af; }</string>
+QToolButton#btn_nouveau_doc:hover { border: 1px solid rgba(29,122,226,0.5); color: #1d7ae2; }</string>
                        </property>
                        <property name="text">
                         <string>Nouveau doc</string>
@@ -1241,7 +1241,7 @@ QToolButton#btn_nouveau_doc:hover { border: 1px solid #9ca3af; }</string>
                        </property>
                        <property name="styleSheet">
                         <string notr="true">QToolButton#btn_liste_ventes_doc { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
-QToolButton#btn_liste_ventes_doc:hover { border: 1px solid #9ca3af; }</string>
+QToolButton#btn_liste_ventes_doc:hover { border: 1px solid rgba(29,122,226,0.5); color: #1d7ae2; }</string>
                        </property>
                        <property name="text">
                         <string>Liste ventes</string>
@@ -1369,7 +1369,7 @@ QToolButton#btn_liste_ventes_doc:hover { border: 1px solid #9ca3af; }</string>
                       </property>
                       <property name="styleSheet">
                        <string notr="true">QToolButton#btn_ajouter_produit { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
-QToolButton#btn_ajouter_produit:hover { border: 1px solid rgba(99,102,241,0.5); color: #6366f1; }</string>
+QToolButton#btn_ajouter_produit:hover { border: 1px solid rgba(29,122,226,0.5); color: #1d7ae2; }</string>
                       </property>
                       <property name="text">
                        <string>Ajouter produit</string>
@@ -1414,7 +1414,7 @@ QToolButton#btn_ajouter_produit:hover { border: 1px solid rgba(99,102,241,0.5); 
                       </property>
                       <property name="styleSheet">
                        <string notr="true">QToolButton#btn_liste_produits { background-color: #ffffff; color: #374151; border: 1px solid #e5e7eb; border-radius: 12px; font: 550 13pt &quot;Inter&quot;; padding: 12px 8px; padding-left: 20px;}
-QToolButton#btn_liste_produits:hover { border: 1px solid rgba(99,102,241,0.5); color: #6366f1; }</string>
+QToolButton#btn_liste_produits:hover { border: 1px solid rgba(29,122,226,0.5); color: #1d7ae2; }</string>
                       </property>
                       <property name="text">
                        <string>Liste produits</string>
@@ -1566,7 +1566,7 @@ padding: 12px 12px;
 text-align: center;
 padding-left: 20px
  }
-QToolButton#btn_nouveau_pay:hover { background-color: #1a6fcb; }</string>
+QToolButton#btn_nouveau_pay:hover { border: 1px solid rgba(29,122,226,0.5); color: #1d7ae2; }</string>
                          </property>
                          <property name="text">
                           <string>Nouveau Pay</string>
@@ -1621,7 +1621,7 @@ text-align: center;
     padding: 12px 12px;
     padding-left: 20px
 }
-QToolButton#btn_liste_pay:hover { background-color: #1a6fcb; }</string>
+QToolButton#btn_liste_pay:hover { border: 1px solid rgba(29,122,226,0.5); color: #1d7ae2; }</string>
                          </property>
                          <property name="text">
                           <string>Liste ventes</string>

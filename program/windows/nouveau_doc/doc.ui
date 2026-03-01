@@ -102,12 +102,9 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         <number>20</number>
        </property>
        <item>
-        <layout class="QVBoxLayout" name="clientidGroupLayout">
-         <property name="spacing">
-          <number>5</number>
-         </property>
-         <property name="sizeConstraint">
-          <enum>QLayout::SetDefaultConstraint</enum>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="rightMargin">
+          <number>0</number>
          </property>
          <item>
           <widget class="QLabel" name="clientidLabel">
@@ -147,7 +144,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
            </property>
            <property name="minimumSize">
             <size>
-             <width>0</width>
+             <width>142</width>
              <height>40</height>
             </size>
            </property>
@@ -156,6 +153,15 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
              <width>16777215</width>
              <height>40</height>
             </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Inter</family>
+             <pointsize>9</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
            </property>
            <property name="styleSheet">
             <string notr="true">QLineEdit#clientidinput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151;  } 
@@ -326,7 +332,7 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="valider">
+            <widget class="QPushButton" name="btn_valider">
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -337,7 +343,7 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton#valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#valider:hover { background-color: #1a6fcb; } QPushButton#valider:pressed { background-color: #155bbf; }</string>
+              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }</string>
              </property>
              <property name="text">
               <string>Valider</string>
@@ -699,13 +705,13 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
              </property>
              <property name="minimumSize">
               <size>
-               <width>114</width>
+               <width>108</width>
                <height>35</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>150</width>
+               <width>138</width>
                <height>35</height>
               </size>
              </property>
@@ -1011,8 +1017,8 @@ QHeaderView::section:last {
            <property name="spacing">
             <number>8</number>
            </property>
-         <item>
-          <widget class="QLabel" name="label_5">
+           <item>
+            <widget class="QLabel" name="label_5">
              <property name="minimumSize">
               <size>
                <width>0</width>
@@ -1205,7 +1211,7 @@ QHeaderView::section:last {
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="imprimer">
+        <widget class="QPushButton" name="btn_imprimer">
          <property name="minimumSize">
           <size>
            <width>116</width>
@@ -1222,7 +1228,7 @@ QHeaderView::section:last {
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#imprimer:hover { background-color: #1a6fcb; } QPushButton#imprimer:pressed { background-color: #155bbf; }</string>
+          <string notr="true">QPushButton#btn_imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_imprimer:hover { background-color: #1a6fcb; } QPushButton#btn_imprimer:pressed { background-color: #155bbf; }</string>
          </property>
          <property name="text">
           <string>🖨  Imprimer</string>
@@ -1230,7 +1236,7 @@ QHeaderView::section:last {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="nouveau">
+        <widget class="QPushButton" name="btn_nouveau">
          <property name="minimumSize">
           <size>
            <width>116</width>
@@ -1247,7 +1253,7 @@ QHeaderView::section:last {
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#nouveau:hover { background-color: #1a6fcb; } QPushButton#nouveau:pressed { background-color: #155bbf; }</string>
+          <string notr="true">QPushButton#btn_nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_nouveau:hover { background-color: #1a6fcb; } QPushButton#btn_nouveau:pressed { background-color: #155bbf; }</string>
          </property>
          <property name="text">
           <string>+  Nouveau</string>
@@ -1255,7 +1261,7 @@ QHeaderView::section:last {
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="fermer">
+        <widget class="QPushButton" name="btn_fermer">
          <property name="minimumSize">
           <size>
            <width>116</width>
@@ -1272,7 +1278,7 @@ QHeaderView::section:last {
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#fermer { background-color: transparent; border: none; color: #6b7280; font: 600 8pt &quot;Inter&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
+          <string notr="true">QPushButton#btn_fermer { background-color: transparent; border: none; color: #6b7280; font: 600 8pt &quot;Inter&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#btn_fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
          </property>
          <property name="text">
           <string>FERMER</string>
