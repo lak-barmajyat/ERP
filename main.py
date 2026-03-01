@@ -2,17 +2,17 @@ import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt
 from program.windows.login.login import LoginWindow
-from program.windows.dashboard.dashboard import DashboardWindow
-from program.windows.nouveau_doc.nouveau_doc import NouveauDocWindow
-from program.windows.liste_ventes.liste_ventes import SalesDocumentsWindow
+from program.windows.dashboard import DashboardWindow, dashboard_setup
+from program.windows.nouveau_doc import NouveauDocWindow, nouveau_doc_setup
+from program.windows.liste_ventes import SalesDocumentsWindow
 from program.themes.theme_manager import ThemeManager
 from PyQt5.QtGui import QFontDatabase
 
 
 def main():
     app = QApplication(sys.argv)
-    window = LoginWindow()
-    # nouveau_doc_setup(window)
+    window = NouveauDocWindow()
+    nouveau_doc_setup(window)
 
     window.show()
     sys.exit(app.exec_())

@@ -1,19 +1,21 @@
 import os
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem
-from PyQt5.QtWidgets import QHeaderView
+
+from PyQt5.QtWidgets import (QMainWindow,
+                             QApplication,
+                             QTableWidgetItem,
+                             QHeaderView,
+                             QLineEdit)
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.uic import loadUi
-import os
 
-
-import os
-import sys
-
-from PyQt5.uic import loadUi
-from PyQt5.QtWidgets import QApplication, QMainWindow, QHeaderView, QLineEdit
-
-from program.services import generate_document_number, with_db_session, select, Tiers
+from program.services import (generate_document_number,
+                              with_db_session,
+                              select,
+                              insert,
+                              Tiers,
+                              and_,
+                              Document)
 from program.widgetstyles.lineedit_combo_style import LineEditAutoComplete
 from .select_doc_type import SelectDocTypeDialog
 
@@ -73,8 +75,8 @@ class NouveauDocWindow(QMainWindow):
         self.annule.clicked.connect(self._on_annuler)
         self.suprimer.clicked.connect(self._on_supprimer)
         self.enrgistrer.clicked.connect(self._on_enregistrer)
-        self.fermer.clicked.connect(self.close)
-        self.nouveau.clicked.connect(self._on_nouveau)
+        self.btn_fermer.clicked.connect(self.close)
+        self.btn_nouveau.clicked.connect(self._on_nouveau)
 
         # Auto-calculate Total TTC entry field when inputs change
         self.puht_editline.textChanged.connect(self._recalculate_entry)
@@ -184,7 +186,38 @@ class NouveauDocWindow(QMainWindow):
         clients = self._normalize_client_names(clients)
         self._clients_autocomplete.set_items(clients)
 
+        self.clients_lineedit.textChanged.connect(lambda: _on_client_name_text_changed(self.clients_lineedit.text()))
+        self.clientidinput.textChanged.connect(lambda: _on_client_id_text_changed(self.clientidinput.text()))
+
+
+        def _on_client_name_text_changed(lineedit_text):
+            if self.clients_lineedit.hasFocus():
+                if lineedit_text.strip() == "":
+                    self.clientidinput.clear()
+                else:
+                    stmt = (select(Tiers.code_tiers)
+                            .where(and_(Tiers.type_tiers == "CLIENT",
+                                        Tiers.nom_tiers.like(f"%{lineedit_text}%")))
+                            .order_by(Tiers.nom_tiers).limit(1))
+                    
+                    result = session.execute(stmt).scalar_one_or_none()
+                    self.clientidinput.setText(result if result else "")
         
+        def _on_client_id_text_changed(id_input_text):
+            if self.clientidinput.hasFocus():
+                if id_input_text.strip() == "":
+                    self.clients_lineedit.clear()
+                else:
+                    stmt = (select(Tiers.nom_tiers)
+                            .where(and_(Tiers.type_tiers == "CLIENT",
+                                        Tiers.code_tiers.like(f"%{id_input_text}%")))
+                            .order_by(Tiers.nom_tiers).limit(1))
+                    
+                    result = session.execute(stmt).scalar_one_or_none()
+                    self.clients_lineedit.setText(result if result else "")
+
+    
+
     @staticmethod
     def _normalize_client_names(client_names):
         unique_names = []

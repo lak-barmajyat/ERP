@@ -6,10 +6,14 @@ from program.services import (Tiers,
                             insert,
                             Document,
                             Article,
-                            DetailDocument)
+                            DetailDocument,
+                            and_,
+                            RefTypeDocument)
 from PyQt5.QtWidgets import QDialog, QCompleter, QComboBox, QMessageBox, QTableWidgetItem
 from PyQt5.QtCore import QStringListModel, Qt, QSortFilterProxyModel
+from PyQt5.QtGui import QPalette, QColor
 from datetime import datetime
+import os
 
 
 def show_error_message(message_text=None):
@@ -45,84 +49,61 @@ def create_document(data: dict, *, session):
     return inserted_id
 
 @with_db_session
-def valider_doc(nouveau_doc_window, session=None):
-    client_name = nouveau_doc_window.clients_lineedit.text().strip()
-    stmt = select(Tiers).where(Tiers.nom_tiers == client_name, Tiers.type_tiers == "CLIENT")
-    client = session.execute(stmt).scalar_one_or_none()
-    if not client:
-        show_error_message("Client non trouvé. Veuillez sélectionner un client valide.")
+def _valider(self, session=None):
+    stmt = (select(Tiers.id_tiers)
+            .where((Tiers.nom_tiers == self.clients_lineedit.text().strip()) &
+                    (Tiers.code_tiers == self.clientidinput.text().strip()) &
+                    (Tiers.type_tiers == "CLIENT")))
+    result = session.execute(stmt).scalar_one_or_none()
+    if not result:
+        stmt = (select(Tiers.nom_tiers, Tiers.code_tiers)
+                .where(and_(Tiers.type_tiers == "CLIENT",
+                            Tiers.code_tiers == self.clientidinput.text().strip()))
+                .order_by(Tiers.nom_tiers).limit(1))
+        
+        result = session.execute(stmt).scalar_one_or_none()
+        if result:
+            self.clients_lineedit.setText(result[0])
+            self.clientidinput.setText(result[1])
+        else:
+            self.clients_lineedit.clear()
+            self.clientidinput.clear()
         return
 
-    date = nouveau_doc_window.dateEdit.date().toPyDate()
-    if date > datetime.now().date():
-        show_error_message("La date ne peut pas être dans le futur.")
+    id_type_document = session.execute(
+        select(RefTypeDocument.id_type_document)
+        .where(RefTypeDocument.code_type == self.selected_doc_type)
+    ).scalar_one_or_none()
+
+    if not id_type_document:
+        show_error_message(f"Type de document '{self.selected_doc_type}' introuvable.")
         return
 
-    n_piece = nouveau_doc_window.n_piece_editline.text().strip()
-
-    create_document({
-        "id_domaine": 1,
-        "id_type_document": nouveau_doc_window.selected_doc_type,
-        "numero_document": n_piece,
-        "id_tiers": client.id_tiers,
-        "date_document": date,
-        "date_livraison": None,
-        "mode_prix": "HT",
-        "total_ht": float(0),
-        "total_tva": float(0),
-        "total_ttc": float(0),
-        "solde": float(0),
-        "id_vendeur":4,
-        "id_statut": 1,
-        "commentaire": "",
-        "created_at": datetime.now(),
-        "updated_at": datetime.now()
-    }, session=session)
-
-    nouveau_doc_window.clients_lineedit.setReadOnly(True)
-    nouveau_doc_window.valider_button.setEnabled(False)
-
-
-@with_db_session
-def fetch_doc_articles(doc_id: int, *, session):
-    stmt = (
-        select(
-            Article.reference_interne,          # Référence d'article
-            Article.nom_article,                # Désignation
-            DetailDocument.prix_unitaire_ht,    # P.U.H.T
-            DetailDocument.total_ligne_ttc,     # P.T.T.C (المجموع TTC للسطر)
-            DetailDocument.quantite             # Qte
+    document = Document(
+        id_domaine=1,
+        id_type_document=id_type_document,
+        numero_document=self.n_piece_editline.text().strip(),
+        id_tiers=session.execute(select(Tiers.id_tiers).where(and_(Tiers.nom_tiers == self.clients_lineedit.text().strip(), Tiers.type_tiers == "CLIENT"))).scalar_one_or_none(),
+        date_livraison=None,
+        mode_prix="HT",
+        total_ht=0,
+        total_tva=0,
+        total_ttc=0,
+        solde=0,
+        id_vendeur=os.getenv('USER_ID', 6),  # default to 6 if not set
+        id_statut=1,
+        commentaire=""
         )
-        .join(DetailDocument, DetailDocument.id_article == Article.id_article)
-        .where(DetailDocument.id_document == doc_id)
-        .order_by(DetailDocument.id_detail.asc())
-    )
 
-    rows = session.execute(stmt).all()
-    # rows = list of tuples: (ref, name, pu_ht, pt_ttc, qte)
-    return rows
+    session.add(document)
+    session.commit()
 
-def load_doc_articles_into_table(nouveau_doc_window, doc_id: int):
-    rows = fetch_doc_articles(doc_id)
+    self.clients_lineedit.setReadOnly(True)
+    self.clientidinput.setReadOnly(True)
+    self.dateEdit.setReadOnly(True)
+    self.btn_valider.setEnabled(False)
 
-    nouveau_doc_window.tableWidget.setRowCount(len(rows))
-
-    for r, (ref, name, pu_ht, pt_ttc, qte) in enumerate(rows):
-        values = [
-            ref or "",
-            name or "",
-            f"{float(pu_ht):.2f}" if pu_ht is not None else "0.00",
-            f"{float(pt_ttc):.2f}" if pt_ttc is not None else "0.00",
-            f"{float(qte):.3f}" if qte is not None else "0.000",
-        ]
-
-        for c, v in enumerate(values):
-            item = QTableWidgetItem(v)
-            item.setFlags(item.flags() & ~Qt.ItemIsEditable)  # read-only
-            nouveau_doc_window.tableWidget.setItem(r, c, item)
-
-    nouveau_doc_window.tableWidget.resizeColumnsToContents()
-
+    self.current_document_id = document.id_document
 
 def nouveau_doc_setup(nouveau_doc_window):
     result = nouveau_doc_window.doc_type_window.exec_()
@@ -136,7 +117,7 @@ def nouveau_doc_setup(nouveau_doc_window):
     nouveau_doc_window.n_piece_editline.setReadOnly(True)
     nouveau_doc_window.n_piece_editline.setStyleSheet("color: gray;")
 
-    nouveau_doc_window.valider.clicked.connect(lambda: valider_doc(nouveau_doc_window))
+    nouveau_doc_window.btn_valider.clicked.connect(lambda: _valider(nouveau_doc_window))
 
 
     # you have to link database documents to their tables after creating them, so we load the articles for the new document (which will be empty)

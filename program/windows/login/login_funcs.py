@@ -3,6 +3,7 @@ import bcrypt
 from PyQt5.QtWidgets import QApplication
 from program.windows.dashboard import DashboardWindow, dashboard_setup
 from program.services import Utilisateur, select, with_db_session
+import os
 
 
 def authenticate_user(username, password, session):
@@ -15,6 +16,11 @@ def authenticate_user(username, password, session):
 
     if result is None:
         return False
+
+    stmt = select(Utilisateur.id_utilisateur).where(Utilisateur.nom_utilisateur == username)
+    user_id = session.execute(stmt).scalar_one()
+
+    os.environ['USER_ID'] = str(user_id)
 
     stored_hash = result[0]
     if isinstance(stored_hash, str):
