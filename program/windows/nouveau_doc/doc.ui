@@ -168,7 +168,20 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
 
 QLineEdit#clientidinput:hover { border-color: #d1d5db; }
 
- QLineEdit#clientidinput:focus { border-color: #1d7ae2; }</string>
+ QLineEdit#clientidinput:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#clientidinput[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #9ca3af;               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#clientidinput[readOnly=&quot;true&quot;]:hover,
+QLineEdit#clientidinput[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -220,7 +233,20 @@ QLineEdit#clientidinput:hover { border-color: #d1d5db; }
 
 QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
 
- QLineEdit#clients_combobox:focus { border-color: #1d7ae2; }</string>
+ QLineEdit#clients_combobox:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#clients_combobox[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #9ca3af;               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#clients_combobox[readOnly=&quot;true&quot;]:hover,
+QLineEdit#clients_combobox[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -249,6 +275,9 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
          </item>
          <item>
           <widget class="QDateEdit" name="dateEdit">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
              <horstretch>0</horstretch>
@@ -268,7 +297,26 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QDateEdit#dateEdit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QDateEdit#dateEdit:hover { border-color: #d1d5db; } QDateEdit#dateEdit:focus { border-color: #1d7ae2; } QDateEdit#dateEdit::drop-down { border: none; width: 20px; } QDateEdit#dateEdit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }</string>
+            <string notr="true">QDateEdit#dateEdit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QDateEdit#dateEdit:hover { border-color: #d1d5db; } QDateEdit#dateEdit:focus { border-color: #1d7ae2; } QDateEdit#dateEdit::drop-down { border: none; width: 20px; } QDateEdit#dateEdit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
+
+/* Disabled State for the entire widget */
+QDateEdit#dateEdit:disabled {
+    background-color: #f1f5f9;    /* Muted grey-blue background */
+    color: #94a3b8;               /* Muted &quot;ghost&quot; text color */
+    border: 1px solid #e2e8f0;    /* Very faint, flat border */
+}
+
+/* Styling the Dropdown Button when disabled */
+QDateEdit#dateEdit::drop-down:disabled {
+    background-color: #f1f5f9;
+    border-left: 1px solid #e2e8f0;
+}
+
+/* Styling the Arrow Icon when disabled */
+QDateEdit#dateEdit::down-arrow:disabled {
+    /* You can use a different, lighter icon or lower the opacity */
+    opacity: 150; 
+}</string>
            </property>
            <property name="displayFormat">
             <string>dd/MM/yyyy</string>
@@ -321,7 +369,20 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#n_piece_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } QLineEdit#n_piece_editline:hover { border-color: #d1d5db; } QLineEdit#n_piece_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#n_piece_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: gray; min-width: 120px; } QLineEdit#n_piece_editline:hover { border-color: #d1d5db; } QLineEdit#n_piece_editline:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#n_piece_editline[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #9ca3af;               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:hover,
+QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -333,6 +394,9 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
            </item>
            <item>
             <widget class="QPushButton" name="btn_valider">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="minimumSize">
               <size>
                <width>80</width>
@@ -343,7 +407,21 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }</string>
+              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }
+
+/* Disabled State: Triggered when setEnabled(False) is called */
+QPushButton#btn_valider:disabled {
+    background-color: #e2e8f0;    /* Muted grey-blue background */
+    color: #94a3b8;               /* Muted &quot;ghost&quot; text color */
+    border: 1px solid #cbd5e1;    /* Subtle flat border */
+}
+
+/* Optional: Specific styling for ToolButtons in disabled state */
+QToolButton#btn_valider:disabled {
+    background-color: #f1f5f9;
+    color: #cbd5e1;
+    border: none;
+}</string>
              </property>
              <property name="text">
               <string>Valider</string>
@@ -705,13 +783,13 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
              </property>
              <property name="minimumSize">
               <size>
-               <width>108</width>
+               <width>0</width>
                <height>35</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>138</width>
+               <width>16777215</width>
                <height>35</height>
               </size>
              </property>
@@ -719,7 +797,20 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#total_ttc_editline { background-color: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #9ca3af; min-width: 90px; max-width: 120px; }</string>
+              <string notr="true">QLineEdit#total_ttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #000000  } QLineEdit#total_ttc_editline:hover { border-color: #d1d5db; } QLineEdit#total_ttc_editline:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #000000;               /* Lighter grey text */
+    border: 1px solid #rgb(143, 144, 145);    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:hover,
+QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -867,6 +958,9 @@ QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
     </item>
     <item>
      <widget class="QTableWidget" name="tableWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="styleSheet">
        <string notr="true">
 QTableWidget#tableWidget {
