@@ -4,7 +4,7 @@ from PyQt5.QtCore import QPropertyAnimation, QRect, QEvent, Qt, QTimer
 from PyQt5.uic import loadUi
 import os
 from  tools import get_colored_icon
-from paths import ASSETS_LOGIN
+from program.services.paths import ASSETS_LOGIN
 from program.windows.login.login_funcs import check_user
 
 def resource_path(relative_path):

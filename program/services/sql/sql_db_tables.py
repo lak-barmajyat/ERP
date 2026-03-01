@@ -135,8 +135,7 @@ class RefTypeTiers(Base):
     libelle_type: Mapped[str] = mapped_column(String(60), nullable=False)
     actif: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("1"))
     ordre: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
-
-    tiers: Mapped[List["Tiers"]] = relationship(back_populates="type_tiers_ref")
+    # no relationships — tiers table has no FK pointing to ref_types_tiers
 
 
 class Famille(Base):
@@ -164,6 +163,10 @@ class Famille(Base):
 
 class Article(Base):
     __tablename__ = "articles"
+    __table_args__ = (
+        Index("idx_articles_nom",     "nom_article"),   # ← add
+        Index("idx_articles_famille", "id_famille"),    # ← add
+    )
 
     id_article: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     nom_article: Mapped[str] = mapped_column(String(160), nullable=False)
@@ -203,16 +206,20 @@ class Article(Base):
 
 class Tiers(Base):
     __tablename__ = "tiers"
-
-    id_tiers: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
-
-    type_tiers: Mapped[str] = mapped_column(
-        Enum("CLIENT", "FOURNISSEUR", name="tiers_type_enum"),
-        nullable=False,
+    __table_args__ = (
+        Index("idx_tiers_type", "type_tiers"),   # ← add
+        Index("idx_tiers_nom",  "nom_tiers"),    # ← add
     )
 
-    id_type_tiers: Mapped[Optional[int]] = mapped_column(
-        ForeignKey("ref_types_tiers.id_type_tiers", onupdate="CASCADE", ondelete="SET NULL")
+    id_tiers: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    code_tiers: Mapped[Optional[str]] = mapped_column(String(20), unique=True)
+
+    type_tiers: Mapped[str] = mapped_column(
+        Enum(
+            "CLIENT", "FOURNISSEUR", "ADMIN", "PARTICULIER", "SOCIETE",
+            name="tiers_type_enum",
+        ),
+        nullable=False,
     )
 
     nom_tiers: Mapped[str] = mapped_column(String(160), nullable=False)
@@ -233,7 +240,7 @@ class Tiers(Base):
         server_onupdate=text("CURRENT_TIMESTAMP"),
     )
 
-    type_tiers_ref: Mapped[Optional["RefTypeTiers"]] = relationship(back_populates="tiers")
+    # ← NO type_tiers_ref relationship (ref_types_tiers has no FK from tiers)
     documents: Mapped[List["Document"]] = relationship(back_populates="tiers")
 
 
@@ -258,21 +265,32 @@ class RefTypeDocument(Base):
     documents: Mapped[List["Document"]] = relationship(back_populates="type_document")
 
 
-class DocumentCounter(Base):
-    __tablename__ = "document_counters"
+# ← Remove DocumentCounter class entirely, replace with Counter below
+
+class Counter(Base):
+    """Maps the 'counters' table (replaces the old document_counters)."""
+    __tablename__ = "counters"
     __table_args__ = (
-        UniqueConstraint("id_type_document", "annee", name="uq_counter_type_year"),
-        Index("idx_counter_type", "id_type_document"),
+        UniqueConstraint("categorie", "code", "annee", name="uq_counter_cat_code_year"),
+        Index("idx_counter_cat",  "categorie"),   # ← fix: was using string, now column name
+        Index("idx_counter_code", "code"),
     )
 
     id_counter: Mapped[int] = mapped_column(BIGINT(unsigned=True), primary_key=True, autoincrement=True)
-    id_type_document: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    categorie: Mapped[str] = mapped_column(
+        Enum("DOCUMENT", "TIERS", "ARTICLE", name="counter_categorie_enum"),
+        nullable=False,
+    )
+    code: Mapped[str] = mapped_column(String(10), nullable=False)
     annee: Mapped[int] = mapped_column(Integer, nullable=False)
     valeur_courante: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("0"))
     longueur: Mapped[int] = mapped_column(Integer, nullable=False, server_default=text("3"))
-    prefixe: Mapped[str] = mapped_column(String(10), nullable=False)
+    prefixe: Mapped[str] = mapped_column(String(10), nullable=False)           # NOT NULL — no Optional
     suffixe: Mapped[Optional[str]] = mapped_column(String(20))
-    reset_annuel: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("1"))
+    reset_annuel: Mapped[bool] = mapped_column(
+        Boolean, nullable=False, server_default=text("0")                      # ← add server_default
+    )
 
     created_at: Mapped[datetime] = mapped_column(
         TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP")
@@ -287,6 +305,16 @@ class DocumentCounter(Base):
 
 class Document(Base):
     __tablename__ = "documents"
+    __table_args__ = (
+        UniqueConstraint(                              # ← add missing unique constraint
+            "id_domaine",
+            "id_type_document",
+            "numero_document",
+            name="uq_documents_numero",
+        ),
+        Index("idx_documents_date",  "date_document"),
+        Index("idx_documents_tiers", "id_tiers"),
+    )
 
     id_document: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
@@ -359,6 +387,10 @@ class Document(Base):
 
 class DetailDocument(Base):
     __tablename__ = "details_documents"
+    __table_args__ = (
+        Index("idx_details_doc",     "id_document"),   # ← add
+        Index("idx_details_article", "id_article"),    # ← add
+    )
 
     id_detail: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
@@ -396,6 +428,10 @@ class DetailDocument(Base):
 
 class Paiement(Base):
     __tablename__ = "paiements"
+    __table_args__ = (
+        Index("idx_paiements_doc",  "id_document"),    # ← add
+        Index("idx_paiements_date", "date_paiement"),  # ← add
+    )
 
     id_paiement: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
@@ -432,6 +468,9 @@ class Paiement(Base):
 
 class MouvementStock(Base):
     __tablename__ = "mouvements_stock"
+    __table_args__ = (
+        Index("idx_mvt_article_date", "id_article", "date_mouvement"),  # ← add composite index
+    )
 
     id_mouvement: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
 
@@ -459,6 +498,10 @@ class MouvementStock(Base):
 
 class AuditLog(Base):
     __tablename__ = "audit_log"
+    __table_args__ = (
+        Index("idx_audit_table_record", "table_name", "record_id"),   # ← add
+        Index("idx_audit_date",         "date_action"),               # ← add
+    )
 
     id_audit: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
     date_action: Mapped[datetime] = mapped_column(

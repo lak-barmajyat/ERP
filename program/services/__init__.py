@@ -1,4 +1,4 @@
-from .sql_db_tables import (
+from .sql.sql_db_tables import (
     Base,
     InformationsSociete,
     Utilisateur,
@@ -10,7 +10,7 @@ from .sql_db_tables import (
     Article,
     Tiers,
     RefTypeDocument,
-    DocumentCounter,
+    Counter,
     Document,
     DetailDocument,
     Paiement,
@@ -38,7 +38,7 @@ from sqlalchemy import (
     literal_column,
 )
 
-from .db_connection import with_db_session
+from .sql.db_connection import with_db_session
 from .document_num_generator import generate_document_number, reset_document_counter
 
 __all__ = [
@@ -53,7 +53,7 @@ __all__ = [
     "Article",
     "Tiers",
     "RefTypeDocument",
-    "DocumentCounter",
+    "Counter",
     "Document",
     "DetailDocument",
     "Paiement",

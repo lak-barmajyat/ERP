@@ -102,7 +102,7 @@ CREATE TABLE IF NOT EXISTS ref_modes_paiement (
   ordre               INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB;
 
-INSERT INTO ref_modes_paiement (code_mode, libelle_mode, besoin_reference, besoin_echeance, ordre) VALUES
+INSERT IGNORE INTO ref_modes_paiement (code_mode, libelle_mode, besoin_reference, besoin_echeance, ordre) VALUES
 ('ESPECES','Espèces',0,0,1),
 ('CHEQUE','Chèque',1,1,2),
 ('VIREMENT','Virement',1,0,3),
@@ -118,10 +118,12 @@ CREATE TABLE IF NOT EXISTS ref_types_tiers (
   ordre             INT NOT NULL DEFAULT 0
 ) ENGINE=InnoDB;
 
-INSERT INTO ref_types_tiers (code_type_tiers, libelle_type, ordre) VALUES
+INSERT IGNORE INTO ref_types_tiers (code_type_tiers, libelle_type, ordre) VALUES
 ('SOCIETE','Société',1),
 ('PARTICULIER','Particulier',2),
-('ADMIN','Administration',3);
+('ADMIN','Administration',3),
+('CLIENT','Client',4),
+('FOURNISSEUR','Fournisseur',5);
 
 -- =========================
 -- TABLE: familles
@@ -171,24 +173,31 @@ CREATE TABLE IF NOT EXISTS articles (
 DROP TABLE IF EXISTS tiers;
 CREATE TABLE IF NOT EXISTS tiers (
   id_tiers              INT AUTO_INCREMENT PRIMARY KEY,
-  type_tiers            ENUM('CLIENT','FOURNISSEUR') NOT NULL,
-  id_type_tiers         INT NULL,
+
+  -- Business identification
+  code_tiers             VARCHAR(20) NULL,
+
+  -- Tier category (keeps your current logic)
+  type_tiers            ENUM('CLIENT','FOURNISSEUR', 'ADMIN', 'PARTICULIER', 'SOCIETE') NOT NULL,
+
+  -- Identity
   nom_tiers             VARCHAR(160) NOT NULL,
   adresse               VARCHAR(255) NULL,
   ice                   VARCHAR(30) NULL,
   telephone             VARCHAR(30) NULL,
   email                 VARCHAR(120) NULL,
   plafond_credit        DECIMAL(12,2) NULL,
+
+  -- Status & timestamps
   actif                 TINYINT(1) NOT NULL DEFAULT 1,
   created_at            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
-  CONSTRAINT fk_tiers_type
-    FOREIGN KEY (id_type_tiers) REFERENCES ref_types_tiers(id_type_tiers)
-    ON UPDATE CASCADE ON DELETE SET NULL,
-
+  -- Indexes
+  UNIQUE KEY uq_tiers_code (code_tiers),
   INDEX idx_tiers_type (type_tiers),
   INDEX idx_tiers_nom (nom_tiers)
+
 ) ENGINE=InnoDB;
 
 -- =========================
@@ -224,27 +233,45 @@ SELECT 'FA','Facture', d.id_domaine, 1,-1, 4 FROM ref_domaines d WHERE d.code_do
 UNION ALL
 SELECT 'AV','Avoir', d.id_domaine, 1,+1, 5 FROM ref_domaines d WHERE d.code_domaine='VENTE';
 
-CREATE TABLE IF NOT EXISTS document_counters (
-  id_counter BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  id_type_document INT NOT NULL,
-  annee INT NOT NULL,
-  valeur_courante INT NOT NULL DEFAULT 0,
-  longueur INT NOT NULL DEFAULT 3,
-  prefixe VARCHAR(10) NOT NULL,
-  suffixe VARCHAR(20) NULL,
-  reset_annuel TINYINT(1) NOT NULL DEFAULT 1,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+CREATE TABLE IF NOT EXISTS counters (
+  id_counter        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+
+  -- Generalization
+  categorie         ENUM('DOCUMENT','TIERS', 'ARTICLE') NOT NULL,
+  code              VARCHAR(10) NOT NULL,           -- DV/FA/... or CL/FR
+
+  annee             INT NOT NULL,
+  valeur_courante   INT NOT NULL DEFAULT 0,
+  longueur          INT NOT NULL DEFAULT 3,
+  prefixe           VARCHAR(10) NOT NULL,
+  suffixe           VARCHAR(20) NULL,
+  reset_annuel      TINYINT(1) NOT NULL DEFAULT 0,
+  created_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at        TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+
   PRIMARY KEY (id_counter),
-  UNIQUE KEY uq_counter_type_year (id_type_document, annee),
-  KEY idx_counter_type (id_type_document)
+  UNIQUE KEY uq_counter_cat_code_year (categorie, code, annee),
+  KEY idx_counter_cat (categorie),
+  KEY idx_counter_code (code)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT IGNORE INTO document_counters
-(id_type_document, annee, valeur_courante, longueur, prefixe, suffixe, reset_annuel)
-SELECT id_type_document, 2026, 0, 3, code_type, NULL, 1
-FROM ref_types_documents
-WHERE code_type IN ('DV', 'BC', 'BL', 'FA', 'AV');
+INSERT IGNORE INTO counters
+(categorie, code, annee, valeur_courante, longueur, prefixe, suffixe, reset_annuel)
+VALUES
+('DOCUMENT', 'DV', YEAR(CURDATE()), 0, 3, 'DV', NULL, 1),
+('DOCUMENT', 'BC', YEAR(CURDATE()), 0, 3, 'BC', NULL, 1),
+('DOCUMENT', 'BL', YEAR(CURDATE()), 0, 3, 'BL', NULL, 1),
+('DOCUMENT', 'FA', YEAR(CURDATE()), 0, 3, 'FA', NULL, 1),
+('DOCUMENT', 'AV', YEAR(CURDATE()), 0, 3, 'AV', NULL, 1);
+
+INSERT IGNORE INTO counters
+(categorie, code, annee, valeur_courante, longueur, prefixe, suffixe, reset_annuel)
+VALUES
+('TIERS', 'CL', YEAR(CURDATE()), 0, 3, 'CL', NULL, 1),
+('TIERS', 'FR', YEAR(CURDATE()), 0, 3, 'FR', NULL, 1),
+('TIERS', 'AD', YEAR(CURDATE()), 0, 3, 'AD', NULL, 1),
+('TIERS', 'PR', YEAR(CURDATE()), 0, 3, 'PR', NULL, 1),
+('TIERS', 'SC', YEAR(CURDATE()), 0, 3, 'SC', NULL, 1);
 
 -- =========================
 -- TABLE: documents
@@ -454,93 +481,3 @@ BEGIN
 END $$
 
 DELIMITER ;
-
-
--- "admin" / "password"
--- "admin2" / ""
-
-INSERT IGNORE INTO `utilisateurs` (`id_utilisateur`, `nom_utilisateur`, `mot_de_passe_hash`, `role`, `permissions_json`, `actif`, `created_at`, `updated_at`) VALUES
-(4, 'admin', '$2b$12$wXYP3T8npdFM52DqzU2izO2cOZq./F9gVicytcXd6Ei4gBsPggUvS', 'admin', NULL, 1, '2026-02-20 11:12:08', '2026-02-20 11:12:08'),
-(5, 'admin2', '$2b$12$TH5ytK6Z/AtDFpFkCnnEcuuqHHyyeRUNFfacBamCmlHoHQJYUhk3K', 'admin', NULL, 1, '2026-02-20 11:13:26', '2026-02-20 11:13:26');
-
--- =========================
--- Données de test: 10 clients (tiers)
--- =========================
-INSERT IGNORE INTO ref_types_tiers (code_type_tiers, libelle_type, ordre)
-VALUES ('CLIENT', 'Client', 4);
-
-INSERT IGNORE INTO tiers (
-  type_tiers,
-  id_type_tiers,
-  nom_tiers,
-  adresse,
-  ice,
-  telephone,
-  email,
-  plafond_credit,
-  actif
-)
-SELECT
-  'CLIENT',
-  r.id_type_tiers,
-  c.nom_tiers,
-  c.adresse,
-  c.ice,
-  c.telephone,
-  c.email,
-  c.plafond_credit,
-  1
-FROM (
-  SELECT 'Société Atlas' AS nom_tiers, '12 Rue Atlas, Casablanca' AS adresse, '001234567890123' AS ice, '0612345678' AS telephone, 'atlas@example.com' AS email, 15000.00 AS plafond_credit
-  UNION ALL SELECT 'Maroc Distribution', '45 Bd Zerktouni, Casablanca', '001234567890124', '0623456789', 'marocdist@example.com', 22000.00
-  UNION ALL SELECT 'Nord Commerce', '8 Av Mohammed V, Rabat', '001234567890125', '0634567890', 'nordcommerce@example.com', 18000.00
-  UNION ALL SELECT 'Sahara Market', '22 Rue Ibn Sina, Marrakech', '001234567890126', '0645678901', 'sahara@example.com', 12000.00
-  UNION ALL SELECT 'Rif Services', '3 Rue Hassan II, Tanger', '001234567890127', '0656789012', 'rifservices@example.com', 9000.00
-  UNION ALL SELECT 'Andalous Trading', '17 Av FAR, Fès', '001234567890128', '0667890123', 'andalous@example.com', 30000.00
-  UNION ALL SELECT 'Maghreb Tech', '101 Bd Abdelmoumen, Casablanca', '001234567890129', '0678901234', 'maghrebtech@example.com', 25000.00
-  UNION ALL SELECT 'Ocean Pro', '9 Rue du Port, Agadir', '001234567890130', '0689012345', 'oceanpro@example.com', 14000.00
-  UNION ALL SELECT 'Oriental Supply', '33 Av Allal Ben Abdellah, Oujda', '001234567890131', '0690123456', 'oriental@example.com', 16000.00
-  UNION ALL SELECT 'Casanet Equipement', '60 Rue Ghandi, Casablanca', '001234567890132', '0601234567', 'casanet@example.com', 20000.00
-) c
-JOIN ref_types_tiers r ON r.code_type_tiers = 'CLIENT';
-
--- =========================
--- Données de test: 10 fournisseurs (tiers)
--- =========================
-INSERT IGNORE INTO ref_types_tiers (code_type_tiers, libelle_type, ordre)
-VALUES ('FOURNISSEUR', 'Fournisseur', 5);
-
-INSERT IGNORE INTO tiers (
-  type_tiers,
-  id_type_tiers,
-  nom_tiers,
-  adresse,
-  ice,
-  telephone,
-  email,
-  plafond_credit,
-  actif
-)
-SELECT
-  'FOURNISSEUR',
-  r.id_type_tiers,
-  f.nom_tiers,
-  f.adresse,
-  f.ice,
-  f.telephone,
-  f.email,
-  f.plafond_credit,
-  1
-FROM (
-  SELECT 'Atlas Fournitures' AS nom_tiers, '14 Zone Industrielle, Casablanca' AS adresse, '009876543210001' AS ice, '0522001100' AS telephone, 'atlas.fournitures@example.com' AS email, 50000.00 AS plafond_credit
-  UNION ALL SELECT 'Rif Matériaux', '28 Rue Tétouan, Tanger', '009876543210002', '0539002200', 'rif.materiaux@example.com', 42000.00
-  UNION ALL SELECT 'Sahara Equipements', '7 Quartier Industriel, Marrakech', '009876543210003', '0524303300', 'sahara.equipements@example.com', 38000.00
-  UNION ALL SELECT 'Nord Papeterie Pro', '52 Av Hassan II, Rabat', '009876543210004', '0537704400', 'nord.papeterie@example.com', 21000.00
-  UNION ALL SELECT 'Maghreb Electric', '90 Bd Abdelmoumen, Casablanca', '009876543210005', '0522605500', 'maghreb.electric@example.com', 47000.00
-  UNION ALL SELECT 'Oriental Industrie', '13 Zone Franche, Oujda', '009876543210006', '0536506600', 'oriental.industrie@example.com', 36000.00
-  UNION ALL SELECT 'Andalous Packaging', '31 Rue Saiss, Fès', '009876543210007', '0535007700', 'andalous.packaging@example.com', 29000.00
-  UNION ALL SELECT 'Ocean Distribution Pro', '6 Port Commercial, Agadir', '009876543210008', '0528808800', 'ocean.distribution@example.com', 33000.00
-  UNION ALL SELECT 'Casanet Solutions B2B', '66 Rue Ghandi, Casablanca', '009876543210009', '0522209900', 'casanet.solutions@example.com', 41000.00
-  UNION ALL SELECT 'Premium Supply Maroc', '19 Av Mohammed V, Meknès', '009876543210010', '0535401010', 'premium.supply@example.com', 45000.00
-) f
-JOIN ref_types_tiers r ON r.code_type_tiers = 'FOURNISSEUR';

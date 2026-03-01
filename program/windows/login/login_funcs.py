@@ -1,9 +1,8 @@
-from program.services.db_connection import *
+from program.services.sql.db_connection import *
 import bcrypt
 from PyQt5.QtWidgets import QApplication
 from program.windows.dashboard import DashboardWindow, dashboard_setup
-from program.services.db_connection import with_db_session
-from program.services import Utilisateur, select
+from program.services import Utilisateur, select, with_db_session
 
 
 def authenticate_user(username, password, session):

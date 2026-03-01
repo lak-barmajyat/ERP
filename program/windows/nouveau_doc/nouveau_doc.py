@@ -46,8 +46,8 @@ class NouveauDocWindow(QMainWindow):
         self.tableWidget.setColumnWidth(5, 80)    # Taxe
         self.tableWidget.setColumnWidth(6, 110)   # Totale TTC
 
-        self.docTable.verticalHeader().setVisible(False)
-        self.docTable.setRowCount(0)
+        self.tableWidget.verticalHeader().setVisible(False)
+        self.tableWidget.setRowCount(0)
 
         self.doc_type_window = SelectDocTypeDialog()
         self.selected_doc_type = self.doc_type_window.get_selected_doc_type()
@@ -140,7 +140,7 @@ class NouveauDocWindow(QMainWindow):
         self._on_annuler()
         self.dateEdit.setDate(QDate.currentDate())
         self.n_piece_editline.clear()
-        self.clientidinput.clear()
+        self.clients_lineedit.clear()
         self.clients_combobox.clear()
         self.total_tax_label.setText("0.00")
         self.total_UT_label.setText("0.00")
@@ -164,9 +164,9 @@ class NouveauDocWindow(QMainWindow):
                 total_ttc += ht + tax
             except ValueError:
                 continue
-        self.totalUTValue.setText(f"{total_ht:.2f}")
-        self.totalTaxValue.setText(f"{total_tax:.2f}")
-        self.totalTTCValue.setText(f"{total_ttc:.2f}")
+        self.total_UT_label.setText(f"{total_ht:.2f}")
+        self.total_tax_label.setText(f"{total_tax:.2f}")
+        self.total_ttc_label.setText(f"{total_ttc:.2f}")
     
     @with_db_session
     def _setup_clients_lineedit(self, session=None):

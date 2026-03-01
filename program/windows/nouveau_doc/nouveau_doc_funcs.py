@@ -136,4 +136,11 @@ def nouveau_doc_setup(nouveau_doc_window):
     nouveau_doc_window.n_piece_editline.setReadOnly(True)
     nouveau_doc_window.n_piece_editline.setStyleSheet("color: gray;")
 
-    nouveau_doc_window.valider_button.clicked.connect(lambda: valider_doc(nouveau_doc_window))
+    nouveau_doc_window.valider.clicked.connect(lambda: valider_doc(nouveau_doc_window))
+
+
+    # you have to link database documents to their tables after creating them, so we load the articles for the new document (which will be empty)
+
+    # and unlink id type tiers and link type tiers only
+
+    # id_type_tiers will be the id to define the clients or the founissers by (CL001 , FR001)

@@ -1,7 +1,6 @@
 from datetime import datetime
 from sqlalchemy import select, update
-from program.services.db_connection import with_db_session
-from program.services.sql_db_tables import DocumentCounter, RefTypeDocument
+from program.services import Counter, RefTypeDocument, with_db_session
 
 
 @with_db_session
@@ -22,10 +21,10 @@ def generate_document_number(code_type: str, session=None) -> str:
         raise ValueError(f"Type document '{code_type}' not found")
 
     counter_stmt = (
-        select(DocumentCounter)
+        select(Counter)
         .where(
-            DocumentCounter.id_type_document == type_obj.id_type_document,
-            DocumentCounter.annee == current_year,
+            Counter.id_counter == type_obj.id_type_document,
+            Counter.annee == current_year,
         )
         .with_for_update()
     )
@@ -33,7 +32,7 @@ def generate_document_number(code_type: str, session=None) -> str:
     counter = session.execute(counter_stmt).scalar_one_or_none()
 
     if not counter:
-        counter = DocumentCounter(
+        counter = Counter(
             id_type_document=type_obj.id_type_document,
             annee=current_year,
             valeur_courante=0,
@@ -77,18 +76,18 @@ def reset_document_counter(code_type: str = None, year: int = None, session=None
             raise ValueError(f"Type document '{code_type}' not found")
 
         stmt = (
-            update(DocumentCounter)
+            update(Counter)
             .where(
-                DocumentCounter.id_type_document == type_obj.id_type_document,
-                DocumentCounter.annee == target_year,
+                Counter.id_type_document == type_obj.id_type_document,
+                Counter.annee == target_year,
             )
             .values(valeur_courante=0)
         )
     else:
         # Reset all types
         stmt = (
-            update(DocumentCounter)
-            .where(DocumentCounter.annee == target_year)
+            update(Counter)
+            .where(Counter.annee == target_year)
             .values(valeur_courante=0)
         )
 

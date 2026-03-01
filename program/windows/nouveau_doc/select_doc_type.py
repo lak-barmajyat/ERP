@@ -25,7 +25,7 @@ class SelectDocTypeDialog(QDialog):
             self.radioBonCommande: "Bon de commande",
             self.radioBonLivraison: "Bon de livraison",
             self.radioFacture: "Facture",
-            self.radioFactureAvoir: "Facture d'avoir"
+            self.radioFactureAvoir: "Avoir"
         }
     
     def get_selected_doc_type(self):
@@ -40,7 +40,7 @@ class SelectDocTypeDialog(QDialog):
                     return "BL"
                 elif doc_type == "Facture":
                     return "FA"
-                elif doc_type == "Facture d'avoir":
+                elif doc_type == "Avoir":
                     return "AV"
 
         return None

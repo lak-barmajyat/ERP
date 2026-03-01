@@ -125,7 +125,7 @@ QPushButton#cancelButton:hover {
    <item>
     <widget class="QRadioButton" name="radioFactureAvoir">
      <property name="text">
-      <string>Facture d'avoir</string>
+      <string>Avoir</string>
      </property>
     </widget>
    </item>
