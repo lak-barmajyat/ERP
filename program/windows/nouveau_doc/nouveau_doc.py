@@ -2,7 +2,8 @@ import os
 import sys
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem
 from PyQt5.QtWidgets import QHeaderView
-from PyQt5.QtCore import Qt, QDate
+from PyQt5.QtCore import Qt, QDate, QSize
+from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor
 from PyQt5.uic import loadUi
 import os
 
@@ -23,6 +24,19 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
+def get_colored_icon(icon_path: str, color_name: str) -> QIcon:
+    """Return a QIcon with all opaque pixels recolored to *color_name*."""
+    full_path = resource_path(icon_path)
+    pixmap = QPixmap(full_path)
+    if pixmap.isNull():
+        return QIcon()
+    painter = QPainter(pixmap)
+    painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+    painter.fillRect(pixmap.rect(), QColor(color_name))
+    painter.end()
+    return QIcon(pixmap)
+
+
 class NouveauDocWindow(QMainWindow):
     def __init__(self):
         super(NouveauDocWindow, self).__init__()
@@ -31,6 +45,7 @@ class NouveauDocWindow(QMainWindow):
         self._setup_table()
         self._setup_defaults()
         self._connect_signals()
+        self._setup_icons()
 
     def _setup_table(self):
         """Configure the document lines table."""
@@ -54,7 +69,6 @@ class NouveauDocWindow(QMainWindow):
         self.setWindowTitle(f"Nouveau document - {self.selected_doc_type}")
         self.n_piece_editline.setText(generate_document_number(self.selected_doc_type))
         self.n_piece_editline.setReadOnly(True)
-        self.n_piece_editline.setStyleSheet("color: gray;")
 
         # Clients LineEdit with autocomplete
         self._setup_clients_lineedit()
@@ -73,13 +87,23 @@ class NouveauDocWindow(QMainWindow):
         self.annule.clicked.connect(self._on_annuler)
         self.suprimer.clicked.connect(self._on_supprimer)
         self.enrgistrer.clicked.connect(self._on_enregistrer)
-        self.fermer.clicked.connect(self.close)
-        self.nouveau.clicked.connect(self._on_nouveau)
+        self.btn_fermer.clicked.connect(self.close)
+        self.btn_nouveau.clicked.connect(self._on_nouveau)
 
         # Auto-calculate Total TTC entry field when inputs change
         self.puht_editline.textChanged.connect(self._recalculate_entry)
         self.qte_editline.textChanged.connect(self._recalculate_entry)
         self.taxe_editline.textChanged.connect(self._recalculate_entry)
+
+    def _setup_icons(self):
+        """Apply colored icons to buttons."""
+        # Set white print icon
+        self.btn_imprimer.setIcon(get_colored_icon('../../assets/global/print.svg', '#ffffff'))
+        self.btn_imprimer.setIconSize(QSize(16, 16))
+        
+        # Set white icon for nouveau button
+        self.btn_nouveau.setIcon(get_colored_icon('../../assets/global/add.svg', '#ffffff'))
+        self.btn_nouveau.setIconSize(QSize(80, 80))
 
     # ── Entry-row helpers ────────────────────────────────────────────────────
 
@@ -141,7 +165,7 @@ class NouveauDocWindow(QMainWindow):
         self.dateEdit.setDate(QDate.currentDate())
         self.n_piece_editline.clear()
         self.clients_lineedit.clear()
-        self.clients_combobox.clear()
+        self.clients_lineedit.clear()
         self.total_tax_label.setText("0.00")
         self.total_UT_label.setText("0.00")
         self.total_ttc_label.setText("0.00")
@@ -171,7 +195,16 @@ class NouveauDocWindow(QMainWindow):
     @with_db_session
     def _setup_clients_lineedit(self, session=None):
         line_edit: QLineEdit = self.clients_lineedit
+        
+        # Store the original stylesheet from the UI file
+        original_stylesheet = line_edit.styleSheet()
+        
+        # Create the autocomplete functionality
         self._clients_autocomplete = LineEditAutoComplete(line_edit, self)
+
+        # Ensure the original stylesheet is preserved
+        if original_stylesheet:
+            line_edit.setStyleSheet(original_stylesheet)
 
         query = (
             select(Tiers.nom_tiers)

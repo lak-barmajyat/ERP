@@ -17,7 +17,7 @@
    <string notr="true">
 QMainWindow, QWidget#centralwidget {
     background-color: #f3f4f6;
-    font-family: &quot;Inter&quot;;
+    font-family: &quot;Overpass&quot;;
 }
 QScrollBar:vertical {
     border: none;
@@ -93,13 +93,13 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
         <number>24</number>
        </property>
        <property name="topMargin">
-        <number>20</number>
+        <number>18</number>
        </property>
        <property name="rightMargin">
         <number>24</number>
        </property>
        <property name="bottomMargin">
-        <number>20</number>
+        <number>18</number>
        </property>
        <item>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -127,7 +127,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QLabel#clientidLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+            <string notr="true">QLabel#clientidLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
            </property>
            <property name="text">
             <string>Client id</string>
@@ -156,15 +156,15 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
            </property>
            <property name="font">
             <font>
-             <family>Inter</family>
-             <pointsize>9</pointsize>
-             <weight>50</weight>
+             <family>Overpass</family>
+             <pointsize>10</pointsize>
+             <weight>62</weight>
              <italic>false</italic>
-             <bold>false</bold>
+             <bold>true</bold>
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">QLineEdit#clientidinput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151;  } 
+            <string notr="true">QLineEdit#clientidinput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151;  } 
 
 QLineEdit#clientidinput:hover { border-color: #d1d5db; }
 
@@ -201,7 +201,7 @@ QLineEdit#clientidinput[readOnly=&quot;true&quot;]:focus {
          <item>
           <widget class="QLabel" name="clientLabel">
            <property name="styleSheet">
-            <string notr="true">QLabel#clientLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+            <string notr="true">QLabel#clientLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
            </property>
            <property name="text">
             <string>CLIENT</string>
@@ -229,22 +229,22 @@ QLineEdit#clientidinput[readOnly=&quot;true&quot;]:focus {
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QLineEdit#clients_combobox { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 120px; } 
+            <string notr="true">QLineEdit#clients_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151; min-width: 120px; } 
 
-QLineEdit#clients_combobox:hover { border-color: #d1d5db; }
+QLineEdit#clients_lineedit:hover { border-color: #d1d5db; }
 
- QLineEdit#clients_combobox:focus { border-color: #1d7ae2; }
+ QLineEdit#clients_lineedit:focus { border-color: #1d7ae2; }
 
 /* --- Added Read-Only State --- */
-QLineEdit#clients_combobox[readOnly=&quot;true&quot;] {
+QLineEdit#clients_lineedit[readOnly=&quot;true&quot;] {
     background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
     color: #9ca3af;               /* Lighter grey text */
     border: 1px solid #f3f4f6;    /* Very faint border */
 }
 
 /* Prevents the hover/focus colors from appearing when read-only */
-QLineEdit#clients_combobox[readOnly=&quot;true&quot;]:hover,
-QLineEdit#clients_combobox[readOnly=&quot;true&quot;]:focus {
+QLineEdit#clients_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#clients_lineedit[readOnly=&quot;true&quot;]:focus {
     border-color: #f3f4f6;
 }</string>
            </property>
@@ -266,7 +266,7 @@ QLineEdit#clients_combobox[readOnly=&quot;true&quot;]:focus {
          <item>
           <widget class="QLabel" name="dateLabel">
            <property name="styleSheet">
-            <string notr="true">QLabel#dateLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+            <string notr="true">QLabel#dateLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
            </property>
            <property name="text">
             <string>DATE</string>
@@ -297,7 +297,7 @@ QLineEdit#clients_combobox[readOnly=&quot;true&quot;]:focus {
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QDateEdit#dateEdit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QDateEdit#dateEdit:hover { border-color: #d1d5db; } QDateEdit#dateEdit:focus { border-color: #1d7ae2; } QDateEdit#dateEdit::drop-down { border: none; width: 20px; } QDateEdit#dateEdit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
+            <string notr="true">QDateEdit#dateEdit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QDateEdit#dateEdit:hover { border-color: #d1d5db; } QDateEdit#dateEdit:focus { border-color: #1d7ae2; } QDateEdit#dateEdit::drop-down { border: none; width: 20px; } QDateEdit#dateEdit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
 
 /* Disabled State for the entire widget */
 QDateEdit#dateEdit:disabled {
@@ -336,7 +336,7 @@ QDateEdit#dateEdit::down-arrow:disabled {
          <item>
           <widget class="QLabel" name="pieceLabel">
            <property name="styleSheet">
-            <string notr="true">QLabel#pieceLabel { color: #6b7280; font: 500 9pt &quot;Inter&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+            <string notr="true">QLabel#pieceLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
            </property>
            <property name="text">
             <string>N° document</string>
@@ -368,13 +368,22 @@ QDateEdit#dateEdit::down-arrow:disabled {
                <height>40</height>
               </size>
              </property>
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>10</pointsize>
+               <weight>62</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#n_piece_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: gray; min-width: 120px; } QLineEdit#n_piece_editline:hover { border-color: #d1d5db; } QLineEdit#n_piece_editline:focus { border-color: #1d7ae2; }
+              <string notr="true">QLineEdit#n_piece_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: rgb(132, 132, 132); min-width: 120px; } QLineEdit#n_piece_editline:hover { border-color: #d1d5db; } QLineEdit#n_piece_editline:focus { border-color: #1d7ae2; }
 
 /* --- Added Read-Only State --- */
 QLineEdit#n_piece_editline[readOnly=&quot;true&quot;] {
     background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
-    color: #9ca3af;               /* Lighter grey text */
+    color: rgb(132, 132, 132);               /* Lighter grey text */
     border: 1px solid #f3f4f6;    /* Very faint border */
 }
 
@@ -388,7 +397,7 @@ QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:focus {
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
              <property name="placeholderText">
-              <string>CLIENT</string>
+              <string>N° document</string>
              </property>
             </widget>
            </item>
@@ -407,7 +416,7 @@ QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:focus {
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }
+              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }
 
 /* Disabled State: Triggered when setEnabled(False) is called */
 QPushButton#btn_valider:disabled {
@@ -483,8 +492,17 @@ QToolButton#btn_valider:disabled {
            </property>
            <item>
             <widget class="QLabel" name="entryRefLabel">
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>10</pointsize>
+               <weight>62</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
              <property name="styleSheet">
-              <string notr="true">QLabel#entryRefLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#entryRefLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Reference</string>
@@ -512,7 +530,7 @@ QToolButton#btn_valider:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#articles_combobox { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#articles_combobox:hover { border-color: #d1d5db; } QLineEdit#articles_combobox:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#articles_combobox { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QLineEdit#articles_combobox:hover { border-color: #d1d5db; } QLineEdit#articles_combobox:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="placeholderText">
               <string>Reference</string>
@@ -529,7 +547,7 @@ QToolButton#btn_valider:disabled {
            <item>
             <widget class="QLabel" name="entryDesigLabel">
              <property name="styleSheet">
-              <string notr="true">QLabel#entryDesigLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#entryDesigLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Designation</string>
@@ -557,7 +575,7 @@ QToolButton#btn_valider:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#designation_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; } QLineEdit#designation_editline:hover { border-color: #d1d5db; } QLineEdit#designation_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#designation_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QLineEdit#designation_editline:hover { border-color: #d1d5db; } QLineEdit#designation_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="placeholderText">
               <string>Designation</string>
@@ -574,7 +592,7 @@ QToolButton#btn_valider:disabled {
            <item>
             <widget class="QLabel" name="entryPuhtLabel">
              <property name="styleSheet">
-              <string notr="true">QLabel#entryPuhtLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#entryPuhtLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>P.U.H.T</string>
@@ -602,7 +620,7 @@ QToolButton#btn_valider:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#puht_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#puht_editline:hover { border-color: #d1d5db; } QLineEdit#puht_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#puht_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#puht_editline:hover { border-color: #d1d5db; } QLineEdit#puht_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -622,7 +640,7 @@ QToolButton#btn_valider:disabled {
            <item>
             <widget class="QLabel" name="entryPttcLabel">
              <property name="styleSheet">
-              <string notr="true">QLabel#entryPttcLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#entryPttcLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>P.T.T.C</string>
@@ -650,7 +668,7 @@ QToolButton#btn_valider:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#pttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#pttc_editline:hover { border-color: #d1d5db; } QLineEdit#pttc_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#pttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#pttc_editline:hover { border-color: #d1d5db; } QLineEdit#pttc_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -670,7 +688,7 @@ QToolButton#btn_valider:disabled {
            <item>
             <widget class="QLabel" name="entryQteLabel">
              <property name="styleSheet">
-              <string notr="true">QLabel#entryQteLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#entryQteLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Qte</string>
@@ -698,13 +716,13 @@ QToolButton#btn_valider:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#qte_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qte_editline:hover { border-color: #d1d5db; } QLineEdit#qte_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#qte_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qte_editline:hover { border-color: #d1d5db; } QLineEdit#qte_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="text">
               <string>1</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -718,7 +736,7 @@ QToolButton#btn_valider:disabled {
            <item>
             <widget class="QLabel" name="entryTaxeLabel">
              <property name="styleSheet">
-              <string notr="true">QLabel#entryTaxeLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#entryTaxeLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Taxe</string>
@@ -746,13 +764,13 @@ QToolButton#btn_valider:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#taxe_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 9pt &quot;Inter&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#taxe_editline:hover { border-color: #d1d5db; } QLineEdit#taxe_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#taxe_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#taxe_editline:hover { border-color: #d1d5db; } QLineEdit#taxe_editline:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="text">
               <string>1</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+              <set>Qt::AlignCenter</set>
              </property>
             </widget>
            </item>
@@ -766,7 +784,7 @@ QToolButton#btn_valider:disabled {
            <item>
             <widget class="QLabel" name="entryTotalLabel">
              <property name="styleSheet">
-              <string notr="true">QLabel#entryTotalLabel { color: #6b7280; font: 500 8pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#entryTotalLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Total TTC</string>
@@ -797,13 +815,13 @@ QToolButton#btn_valider:disabled {
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#total_ttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 9pt &quot;Inter&quot;; color: #000000  } QLineEdit#total_ttc_editline:hover { border-color: #d1d5db; } QLineEdit#total_ttc_editline:focus { border-color: #1d7ae2; }
+              <string notr="true">QLineEdit#total_ttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #000000  } QLineEdit#total_ttc_editline:hover { border-color: #d1d5db; } QLineEdit#total_ttc_editline:focus { border-color: #1d7ae2; }
 
 /* --- Added Read-Only State --- */
 QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;] {
     background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
     color: #000000;               /* Lighter grey text */
-    border: 1px solid #rgb(143, 144, 145);    /* Very faint border */
+    border: 1px solid rgb(143, 144, 145);    /* Very faint border */
 }
 
 /* Prevents the hover/focus colors from appearing when read-only */
@@ -852,19 +870,19 @@ QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:focus {
           <widget class="QPushButton" name="annule">
            <property name="minimumSize">
             <size>
-             <width>100</width>
-             <height>30</height>
+             <width>110</width>
+             <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
-             <height>30</height>
+             <width>110</width>
+             <height>35</height>
             </size>
            </property>
            <property name="font">
             <font>
-             <family>Inter</family>
+             <family>Overpass</family>
              <pointsize>10</pointsize>
              <weight>50</weight>
              <italic>false</italic>
@@ -875,10 +893,36 @@ QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:focus {
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#annule { background-color: transparent; border: none; color: #4b5563; font: 400 10pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 4px; }
+            <string notr="true">QPushButton#annule {
+    background-color: transparent;
+    border: none;
+    color: #4b5563; /* Muted gray-blue */
+    font: 400 10pt &quot;Overpass&quot;;
+    padding: 5px 12px;
+    border-radius: 15px; /* Slightly smoother corners */
+    outline: none;
+}
 
+/* Hover State: Subtle lift */
+QPushButton#annule:hover {
+    color: #111827; /* Near black for contrast */
+	border: 1px solid #999999;
+    background-color: #f3f4f6; /* Soft gray wash */
+}
 
- QPushButton#annule:hover { color: #111827; background-color: #f3f4f6; }</string>
+/* Pressed State: Provides a physical &quot;click&quot; feedback */
+QPushButton#annule:pressed {
+    background-color: rgb(205, 207, 211); /* Slightly darker gray */
+    padding-top: 6px; /* Moves text down 1px to simulate a press */
+	border: 1px solid #999999;
+    padding-bottom: 4px;
+}
+
+/* Disabled State: Fades out when the action is unavailable */
+QPushButton#annule:disabled {
+    color: #d1d5db; /* Light gray &quot;ghost&quot; text */
+    background-color: transparent;
+}</string>
            </property>
            <property name="text">
             <string>Annuler</string>
@@ -889,21 +933,51 @@ QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:focus {
           <widget class="QPushButton" name="suprimer">
            <property name="minimumSize">
             <size>
-             <width>100</width>
-             <height>30</height>
+             <width>110</width>
+             <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
-             <height>30</height>
+             <width>110</width>
+             <height>35</height>
             </size>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#suprimer { background-color: transparent; border: 1px solid transparent; color: #ef4444; font: 500 8pt &quot;Inter&quot;; padding: 5px 12px; border-radius: 6px; } QPushButton#suprimer:hover { color: #dc2626; background-color: #fef2f2; border-color: #fecaca; }</string>
+            <string notr="true">QPushButton#suprimer {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #ef4444; /* Standard Red */
+    font: 600 10pt &quot;Overpass&quot;; /* Slightly bolder for &quot;Danger&quot; actions */
+    padding: 5px 15px;
+    border-radius: 16px;
+    outline: none;
+}
+
+/* Hover State: Becomes a &quot;Soft Red&quot; button */
+QPushButton#suprimer:hover {
+    color: #dc2626; /* Deeper red */
+    background-color: #fef2f2; /* Very light rose wash */
+    border: 1px solid #fecaca; /* Soft pink border */
+}
+
+/* Pressed State: Feels like the button is being pushed into the page */
+QPushButton#suprimer:pressed {
+    background-color: #fee2e2; /* Darker rose wash */
+    border-color: #fca5a5;
+    padding-top: 6px; /* Tactile &quot;click&quot; effect */
+    padding-bottom: 4px;
+}
+
+/* Disabled State: Prevents accidental clicks when action is locked */
+QPushButton#suprimer:disabled {
+    background-color: transparent;
+    color: #e5e7eb; /* Faded grey */
+    border: 1px solid transparent;
+}</string>
            </property>
            <property name="text">
             <string>Supprimer</string>
@@ -914,21 +988,30 @@ QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:focus {
           <widget class="QPushButton" name="enrgistrer">
            <property name="minimumSize">
             <size>
-             <width>100</width>
-             <height>30</height>
+             <width>110</width>
+             <height>35</height>
             </size>
            </property>
            <property name="maximumSize">
             <size>
-             <width>100</width>
-             <height>30</height>
+             <width>110</width>
+             <height>35</height>
             </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Overpass</family>
+             <pointsize>10</pointsize>
+             <weight>75</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+            </font>
            </property>
            <property name="cursor">
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#enrgistrer { background-color: #1d7ae2; border: none; border-radius: 14px; color: #ffffff; font: 600 8pt &quot;Inter&quot;; padding: 6px 20px; } QPushButton#enrgistrer:hover { background-color: #1a6fcb; } QPushButton#enrgistrer:pressed { background-color: #155bbf; }</string>
+            <string notr="true">QPushButton#enrgistrer { background-color: #1d7ae2; border: none; border-radius: 16px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 6px 20px; } QPushButton#enrgistrer:hover { background-color: #1a6fcb; } QPushButton#enrgistrer:pressed { background-color: #155bbf; }</string>
            </property>
            <property name="text">
             <string>Enregistrer</string>
@@ -967,7 +1050,7 @@ QTableWidget#tableWidget {
     background-color: #ffffff;
     border: none;
     gridline-color: #e5e7eb;
-    font: 400 9pt &quot;Inter&quot;;
+    font: 400 10pt &quot;Overpass&quot;;
     color: #374151;
     selection-background-color: rgba(29,122,226,0.08);
     selection-color: #111827;
@@ -990,7 +1073,7 @@ QTableWidget#tableWidget::item:hover {
 QHeaderView::section {
     background-color: #f9fafb;
     color: #374151;
-    font: 600 9pt &quot;Inter&quot;;
+    font: 600 10pt &quot;Overpass&quot;;
     padding: 10px 12px;
     border: none;
     border-right: 1px solid #e5e7eb;
@@ -1126,7 +1209,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLabel#totalTaxLabel { color: #374151; font: 600 11pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#label_5 { color: #374151; font: 650 12pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Total Tax</string>
@@ -1148,7 +1231,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#total_tax_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#total_tax_label:read-only { background-color: #ffffff; }</string>
+              <string notr="true">QLineEdit#total_tax_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Overpass&quot;; color: #374151; min-width: 110px; } QLineEdit#total_tax_label:read-only { background-color: #ffffff; }</string>
              </property>
              <property name="text">
               <string>0.00</string>
@@ -1184,15 +1267,15 @@ QHeaderView::section:last {
              </property>
              <property name="font">
               <font>
-               <family>Inter</family>
-               <pointsize>11</pointsize>
-               <weight>75</weight>
+               <family>Overpass</family>
+               <pointsize>12</pointsize>
+               <weight>81</weight>
                <italic>false</italic>
                <bold>true</bold>
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLabel#totalUTLabel { color: #374151; font: 600 11pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#label_10 { color: #374151; font: 650 12pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Total U.T</string>
@@ -1214,7 +1297,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#total_UT_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 9pt &quot;Inter&quot;; color: #374151; min-width: 110px; } QLineEdit#total_UT_label:read-only { background-color: #ffffff; }</string>
+              <string notr="true">QLineEdit#total_UT_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Overpass&quot;; color: #374151; min-width: 110px; } QLineEdit#total_UT_label:read-only { background-color: #ffffff; }</string>
              </property>
              <property name="text">
               <string>0.00</string>
@@ -1249,7 +1332,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLabel#totalTTCLabel { color: #111827; font: 700 12pt &quot;Inter&quot;; background-color: transparent; }</string>
+              <string notr="true">QLabel#label_7 { color: #111827; font: 650 12pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
               <string>Total TTC</string>
@@ -1271,7 +1354,7 @@ QHeaderView::section:last {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#total_ttc_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Inter&quot;; color: #1d7ae2; min-width: 130px; } QLineEdit#total_ttc_label:read-only { background-color: #ffffff; }</string>
+              <string notr="true">QLineEdit#total_ttc_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Overpass&quot;; color: #1d7ae2; min-width: 130px; } QLineEdit#total_ttc_label:read-only { background-color: #ffffff; }</string>
              </property>
              <property name="text">
               <string>0.00</string>
@@ -1305,52 +1388,79 @@ QHeaderView::section:last {
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_imprimer">
+        <widget class="QToolButton" name="btn_imprimer">
          <property name="minimumSize">
           <size>
            <width>116</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>116</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#btn_imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_imprimer:hover { background-color: #1a6fcb; } QPushButton#btn_imprimer:pressed { background-color: #155bbf; }</string>
+          <string notr="true">QToolButton#btn_imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 8px 20px;text-align: center; } QToolButton#btn_imprimer:hover { background-color: #1a6fcb; } QToolButton#btn_imprimer:pressed { background-color: #155bbf; }</string>
          </property>
          <property name="text">
-          <string>🖨  Imprimer</string>
+          <string>Imprimer</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="btn_nouveau">
+        <widget class="QToolButton" name="btn_nouveau">
          <property name="minimumSize">
           <size>
            <width>116</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>116</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#btn_nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 9pt &quot;Inter&quot;; padding: 8px 20px; } QPushButton#btn_nouveau:hover { background-color: #1a6fcb; } QPushButton#btn_nouveau:pressed { background-color: #155bbf; }</string>
+          <string notr="true">QToolButton#btn_nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 8px 20px; } QToolButton#btn_nouveau:hover { background-color: #1a6fcb; } QToolButton#btn_nouveau:pressed { background-color: #155bbf; }</string>
          </property>
          <property name="text">
-          <string>+  Nouveau</string>
+          <string>Nouveau</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
          </property>
         </widget>
        </item>
@@ -1359,20 +1469,20 @@ QHeaderView::section:last {
          <property name="minimumSize">
           <size>
            <width>116</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
            <width>116</width>
-           <height>30</height>
+           <height>35</height>
           </size>
          </property>
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="styleSheet">
-          <string notr="true">QPushButton#btn_fermer { background-color: transparent; border: none; color: #6b7280; font: 600 8pt &quot;Inter&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#btn_fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
+          <string notr="true">QPushButton#btn_fermer { background-color: transparent; border: none; color: #6b7280; font: 600 10pt &quot;Overpass&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#btn_fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
          </property>
          <property name="text">
           <string>FERMER</string>

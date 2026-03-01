@@ -1,7 +1,7 @@
 import sys
 import os
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QHeaderView
+from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QHeaderView, QWidget
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.uic import loadUi
 
@@ -17,7 +17,7 @@ def resource_path(relative_path: str) -> str:
     return os.path.join(base_path, relative_path)
 
 
-class SalesDocumentsWindow(QMainWindow):
+class SalesDocumentsWindow(QWidget):
     """
     Main window controller for the sales documents list (liste_ventes.ui).
     """

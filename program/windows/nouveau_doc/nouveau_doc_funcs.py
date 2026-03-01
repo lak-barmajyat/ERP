@@ -136,7 +136,7 @@ def nouveau_doc_setup(nouveau_doc_window):
     nouveau_doc_window.n_piece_editline.setReadOnly(True)
     nouveau_doc_window.n_piece_editline.setStyleSheet("color: gray;")
 
-    nouveau_doc_window.valider.clicked.connect(lambda: valider_doc(nouveau_doc_window))
+    nouveau_doc_window.btn_valider.clicked.connect(lambda: valider_doc(nouveau_doc_window))
 
 
     # you have to link database documents to their tables after creating them, so we load the articles for the new document (which will be empty)
