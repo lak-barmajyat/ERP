@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>350</height>
+    <height>250</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -109,30 +109,9 @@ QPushButton#cancelButton:hover {
     </widget>
    </item>
    <item>
-    <widget class="QRadioButton" name="radioPrepLivraison">
-     <property name="text">
-      <string>Préparation de livraison</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QRadioButton" name="radioBonLivraison">
      <property name="text">
       <string>Bon de livraison</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QRadioButton" name="radioBonRetour">
-     <property name="text">
-      <string>Bon de retour</string>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QRadioButton" name="radioBonAvoirFinancier">
-     <property name="text">
-      <string>Bon d'avoir financier</string>
      </property>
     </widget>
    </item>
@@ -144,16 +123,9 @@ QPushButton#cancelButton:hover {
     </widget>
    </item>
    <item>
-    <widget class="QRadioButton" name="radioFactureRetour">
-     <property name="text">
-      <string>Facture de retour</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QRadioButton" name="radioFactureAvoir">
      <property name="text">
-      <string>Facture d'avoir</string>
+      <string>Avoir</string>
      </property>
     </widget>
    </item>

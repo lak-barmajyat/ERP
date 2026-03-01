@@ -801,7 +801,7 @@ QCalendarWidget QSpinBox {
            </widget>
           </item>
           <item row="1" column="3">
-           <widget class="QPushButton" name="valider">
+           <widget class="QPushButton" name="valider_button">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -906,13 +906,7 @@ QPushButton::pressed{
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QComboBox" name="clients_combobox">
-            <property name="editable">
-             <bool>true</bool>
-            </property>
-            <property name="insertPolicy">
-             <enum>QComboBox::NoInsert</enum>
-            </property>
+           <widget class="QLineEdit" name="clients_lineedit">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
               <horstretch>0</horstretch>
@@ -931,45 +925,8 @@ QPushButton::pressed{
               <height>30</height>
              </size>
             </property>
-            <property name="styleSheet">
-             <string notr="true">/* 1. The Main ComboBox */
-QComboBox {
-    border-radius: 8px;
-    padding: 5px 15px;
-    font-size: 14px;
-}
-
-QComboBox:on { /* When the list is open */
-    border-bottom-left-radius: 0px;
-    border-bottom-right-radius: 0px;
-}
-
-/* 3. The Arrow Button Area */
-QComboBox::drop-down {
-    subcontrol-origin: padding;
-    subcontrol-position: top right;
-    border-left: none; /* Removes the vertical line before the arrow */
-}
-
-/* 4. The Arrow Icon (Blue chevron) */
-QComboBox::down-arrow {
-    image: url(&quot;program/assets/global/down_blue_arrow.svg&quot;);
-    width: 14px;
-padding-right: 15px;
-    height: 14px;
-}
-
-/* 5. Styling the Popup List (The part that drops down) */
-QAbstractItemView {
-    outline: 0;
-    border-radius: 0px;
-}</string>
-            </property>
-            <property name="currentText">
-             <string/>
-            </property>
             <property name="placeholderText">
-             <string/>
+             <string>Client</string>
             </property>
            </widget>
           </item>

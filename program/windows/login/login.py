@@ -1,10 +1,10 @@
 from PyQt5.QtWidgets import QMainWindow, QLineEdit, QAction
-from PyQt5.QtGui import QIcon, QColor
-from PyQt5.QtCore import QPropertyAnimation, QRect, QEvent, Qt
+from PyQt5.QtGui import QIcon, QColor, QGuiApplication
+from PyQt5.QtCore import QPropertyAnimation, QRect, QEvent, Qt, QTimer
 from PyQt5.uic import loadUi
 import os
 from  tools import get_colored_icon
-from paths import ASSETS_LOGIN
+from program.services.paths import ASSETS_LOGIN
 from program.windows.login.login_funcs import check_user
 
 def resource_path(relative_path):
@@ -44,7 +44,23 @@ class LoginWindow(QMainWindow):
         self.mot_de_pass_lineedit.setEchoMode(QLineEdit.Password)
 
         self.connection_error_label.hide()
+
+        self.show()
+        QTimer.singleShot(0, self.center_on_screen)  # center after show
     
+    def center_on_screen(self):
+        screen = QGuiApplication.primaryScreen()
+        if not screen:
+            return
+
+        screen_geometry = screen.availableGeometry()
+        window_geometry = self.frameGeometry()
+
+        x = screen_geometry.x() + (screen_geometry.width() - window_geometry.width()) // 2
+        y = screen_geometry.y() + (screen_geometry.height() - window_geometry.height()) // 2
+
+        self.move(x, y)
+
     def toggle_password_visibility(self):
         if self.is_password_hidden:
             self.mot_de_pass_lineedit.setEchoMode(QLineEdit.Normal)

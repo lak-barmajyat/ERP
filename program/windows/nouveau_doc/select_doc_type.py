@@ -23,20 +23,26 @@ class SelectDocTypeDialog(QDialog):
         self.doc_type_map = {
             self.radioDevis: "Devis",
             self.radioBonCommande: "Bon de commande",
-            self.radioPrepLivraison: "Préparation de livraison",
             self.radioBonLivraison: "Bon de livraison",
-            self.radioBonRetour: "Bon de retour",
-            self.radioBonAvoirFinancier: "Bon d'avoir financier",
             self.radioFacture: "Facture",
-            self.radioFactureRetour: "Facture de retour",
-            self.radioFactureAvoir: "Facture d'avoir"
+            self.radioFactureAvoir: "Avoir"
         }
     
     def get_selected_doc_type(self):
         """Returns the selected document type"""
         for radio, doc_type in self.doc_type_map.items():
             if radio.isChecked():
-                return doc_type
+                if doc_type == "Devis":
+                    return "DV"
+                elif doc_type == "Bon de commande":
+                    return "BC"
+                elif doc_type == "Bon de livraison":
+                    return "BL"
+                elif doc_type == "Facture":
+                    return "FA"
+                elif doc_type == "Avoir":
+                    return "AV"
+
         return None
 
 
