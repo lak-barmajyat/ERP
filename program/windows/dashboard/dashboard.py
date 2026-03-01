@@ -1,14 +1,48 @@
-from PyQt5.QtGui import QGuiApplication, QIcon, QPixmap
+from PyQt5.QtGui import QGuiApplication, QIcon, QPixmap, QPainter, QColor
 from PyQt5.QtCore import QSize, Qt
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5.uic import loadUi
 import os
+from ..liste_ventes.liste_ventes import SalesDocumentsWindow
+from .dash_widget import DashboardWidget
+
+
+# Icon configuration constants
+ICON_SIZE = 20
+ICON_COLOR_SELECTED = "#1d7ae2"  # Blue for active
+ICON_COLOR_UNSELECTED = "#6b7280"  # Gray for inactive
+
+ICON_PATHS = {
+    'btn_dashboard': '../../assets/global/nav_dashboard.svg',
+    'btn_ventes': '../../assets/global/nav_ventes.svg',
+    'btn_achats': '../../assets/global/nav_achats.svg',
+    'btn_produits': '../../assets/global/nav_produits.svg',
+    'btn_clients': '../../assets/global/nav_clients.svg',
+    'btn_fournisseurs': '../../assets/global/nav_fournisseurs.svg',
+    'btn_stock': '../../assets/global/nav_stock.svg',
+    'btn_paiements': '../../assets/global/nav_paiements.svg',
+    'btn_rapports': '../../assets/global/nav_rapports.svg',
+    'btn_admin': '../../assets/global/nav_admin.svg',
+}
 
 
 def resource_path(relative_path):
     base_path = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_path, relative_path)
+
+
+def get_colored_icon(icon_path: str, color_name: str) -> QIcon:
+    """Return a QIcon with all opaque pixels recolored to *color_name*."""
+    full_path = resource_path(icon_path)
+    pixmap = QPixmap(full_path)
+    if pixmap.isNull():
+        return QIcon()
+    painter = QPainter(pixmap)
+    painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
+    painter.fillRect(pixmap.rect(), QColor(color_name))
+    painter.end()
+    return QIcon(pixmap)
 
 
 class DashboardWindow(QMainWindow):
@@ -27,56 +61,11 @@ class DashboardWindow(QMainWindow):
             'footerRoleIconLabel': {'icon': '../../assets/global/badge_icon.svg', 'icon_w': 14, 'icon_h': 14},
         }
 
-        # Stat icon sizes:
-        #   container_size — diameter of the colored circle background (px)
-        #   icon_w / icon_h — inner SVG icon size (should be smaller than container for padding)
-        self.stat_icon_configs = {
-            'statIcon1': {'icon': '../../assets/dashboard/stat_clients.svg', 'container_size': 48, 'icon_w': 26, 'icon_h': 26},
-            'statIcon2': {'icon': '../../assets/dashboard/stat_ventes.svg',  'container_size': 48, 'icon_w': 26, 'icon_h': 26},
-            'statIcon3': {'icon': '../../assets/dashboard/stat_stock.svg',   'container_size': 48, 'icon_w': 26, 'icon_h': 26},
-        }
-
-        # Store button configurations
-        self.button_configs = {
-            'btn_ajouter_client':   {'icon': '../../assets/dashboard/ajouter_client.svg',  'text': '  Ajouter Client',   'icon_w': 70, 'icon_h': 60},
-            'btn_liste_clients':    {'icon': '../../assets/dashboard/liste_clients.svg',   'text': '  Liste Clients',    'icon_w': 70, 'icon_h': 40},
-            'btn_fiche_client':     {'icon': '../../assets/dashboard/fiche_client.svg',    'text': '  Fiche Client',     'icon_w': 65, 'icon_h': 40},
-            'btn_nouveau_doc':      {'icon': '../../assets/dashboard/nouveau_doc.svg',     'text': '  Nouveau Doc',      'icon_w': 45, 'icon_h': 70},
-            'btn_liste_ventes_doc': {'icon': '../../assets/dashboard/liste_ventes.svg',    'text': '  Liste Ventes',     'icon_w': 65, 'icon_h': 60},
-            'btn_ajouter_produit':  {'icon': '../../assets/dashboard/ajouter_produit.svg', 'text': '  Ajouter Produit',  'icon_w': 60, 'icon_h': 40},
-            'btn_liste_produits':   {'icon': '../../assets/dashboard/liste_produits.svg',  'text': '  Liste Produits',   'icon_w': 60, 'icon_h': 50},
-            'btn_nouveau_pay':      {'icon': '../../assets/dashboard/nouveau_pay.svg',     'text': '  Nouveau Pay',      'icon_w': 65, 'icon_h': 45},
-            'btn_liste_pay':        {'icon': '../../assets/dashboard/liste_pay.svg',       'text': '  Liste Paiements',  'icon_w': 65, 'icon_h': 45},
-        }
-
         # Initialize buttons with fixed sizes
-        self._setup_buttons()
         self._setup_logo()
-        self._setup_stat_icons()
         self._setup_footer_icons()
-
-    def _apply_default_window_geometry_from_screen(self):
-        """Maximize the window on the current screen (keeps title bar)."""
-        screen = self.screen() or QGuiApplication.primaryScreen()
-        if screen is None:
-            return
-
-        # Ensure the window is on the target screen before maximizing.
-        available = screen.availableGeometry()
-        if available.isValid():
-            self.move(available.topLeft())
-
-        # Use normal maximized state (not fullscreen) so the OS title bar
-        # with close/minimize buttons remains visible.
-        self.setWindowState(self.windowState() | Qt.WindowMaximized)
-
-    def showEvent(self, event):
-        super().showEvent(event)
-
-        # Apply once: make the default window size fit the current PC screen.
-        if not self._did_apply_default_screen_geometry:
-            self._apply_default_window_geometry_from_screen()
-            self._did_apply_default_screen_geometry = True
+        self._setup_stacked_widget()
+        self._wire_sidebar()
 
     def _setup_footer_icons(self):
         """Set pixmap and size for footer icon labels (user_icon and badge_icon)."""
@@ -92,24 +81,6 @@ class DashboardWindow(QMainWindow):
                 )
                 label.setPixmap(pixmap)
 
-    def _setup_stat_icons(self):
-        """Configure stat icon labels: fix container size, center the inner SVG with padding."""
-        for label_name, config in self.stat_icon_configs.items():
-            label = getattr(self, label_name, None)
-            if label:
-                cs = config['container_size']
-                # Fix the label (circle background) to the container size
-                label.setFixedSize(QSize(cs, cs))
-                # Disable stretch so the pixmap sits centered with padding
-                label.setScaledContents(False)
-                label.setAlignment(Qt.AlignCenter)
-                # Scale SVG to the inner icon size (smaller = more padding inside circle)
-                pixmap = QPixmap(resource_path(config['icon'])).scaled(
-                    config['icon_w'], config['icon_h'],
-                    Qt.KeepAspectRatio, Qt.SmoothTransformation
-                )
-                label.setPixmap(pixmap)
-
     def _setup_logo(self):
         """Resize the sidebar logo icon (logoIconLabel)."""
         label = getattr(self, 'logoIconLabel', None)
@@ -118,15 +89,81 @@ class DashboardWindow(QMainWindow):
             h = self.logo_config['icon_h']
             label.setFixedSize(QSize(w, h))
 
-    def _setup_buttons(self):
-        """Setup all tool buttons with icons and text"""
-        for button_name, config in self.button_configs.items():
-            button = getattr(self, button_name, None)
-            if button:
-                button.setIcon(QIcon(resource_path(config['icon'])))
-                button.setIconSize(QSize(config['icon_w'], config['icon_h']))
-                button.setText(config['text'])
-                button.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+    def _setup_stacked_widget(self):
+        """Set default page and connect navigation buttons"""
+        # Create dashboard widget instance and add it to stacked widget
+        self.dashboard_widget = DashboardWidget()
+        self.contentStackedWidget.addWidget(self.dashboard_widget)
+        
+        # Create liste ventes widget and add to stacked widget
+        self.list_ventes = SalesDocumentsWindow()
+        self.contentStackedWidget.addWidget(self.list_ventes)
+        
+        # Set dashboard widget as the default page (index 1, since mainScrollArea is index 0)
+        self.contentStackedWidget.setCurrentIndex(1)
+        
+        # Connect dashboard widget buttons
+        self.dashboard_widget.btn_liste_ventes_doc.clicked.connect(lambda: self._show_page(2))
+
+    def _wire_sidebar(self) -> None:
+        """Wire sidebar navigation buttons to pages and manage their states."""
+        self._sidebar_buttons: list[QPushButton] = [
+            self.btn_dashboard,
+            self.btn_ventes,
+            self.btn_achats,
+            self.btn_produits,
+            self.btn_clients,
+            self.btn_fournisseurs,
+            self.btn_stock,
+            self.btn_paiements,
+            self.btn_rapports,
+            self.btn_admin,
+        ]
+        
+        # Connect buttons to pages
+        self.btn_dashboard.clicked.connect(lambda: self._show_page(1))
+        self.btn_ventes.clicked.connect(lambda: self._show_page(2))
+        # Add more connections as needed for other buttons
+        
+        # Apply icons and set initial state
+        self._apply_sidebar_icons()
+        self._update_sidebar_state(1)  # Dashboard is index 1
+
+    def _show_page(self, index: int) -> None:
+        """Switch to a specific page in the stacked widget."""
+        self.contentStackedWidget.setCurrentIndex(index)
+        self._update_sidebar_state(index)
+
+    def _update_sidebar_state(self, active_index: int) -> None:
+        """Update sidebar button states based on active page."""
+        # Map page index to button index
+        page_to_button = {
+            1: 0,  # Dashboard -> btn_dashboard
+            2: 1,  # Liste ventes -> btn_ventes
+        }
+        
+        active_button_index = page_to_button.get(active_index, 0)
+        
+        for i, btn in enumerate(self._sidebar_buttons):
+            btn.setChecked(i == active_button_index)
+        self._update_icon_colors()
+
+    def _apply_sidebar_icons(self) -> None:
+        """Attach icons from assets/ to sidebar buttons using get_colored_icon."""
+        size = QSize(ICON_SIZE, ICON_SIZE)
+        for btn in self._sidebar_buttons:
+            btn.setIconSize(size)
+            btn.setCheckable(True)
+        self._update_icon_colors()
+
+    def _update_icon_colors(self) -> None:
+        """Set icon color per button: selected = darker, unselected = muted."""
+        for btn in self._sidebar_buttons:
+            btn_name = btn.objectName()
+            if btn_name in ICON_PATHS:
+                path = ICON_PATHS[btn_name]
+                color = ICON_COLOR_SELECTED if btn.isChecked() else ICON_COLOR_UNSELECTED
+                btn.setIcon(get_colored_icon(path, color))
 
 
 def main():

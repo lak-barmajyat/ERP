@@ -12,6 +12,6 @@ def dashboard_setup(dashboard_window):
 
     dashboard_window.nouveau_doc_window = NouveauDocWindow()
 
-    dashboard_window.btn_nouveau_doc.clicked.connect(lambda: nouveau_doc_setup(dashboard_window.nouveau_doc_window))
+    dashboard_window.dashboard_widget.btn_nouveau_doc.clicked.connect(lambda: nouveau_doc_setup(dashboard_window.nouveau_doc_window))
 
     dashboard_window.btn_logout.clicked.connect(lambda: logout(dashboard_window))
