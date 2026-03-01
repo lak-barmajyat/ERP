@@ -84,7 +84,8 @@ def _valider(self, session=None):
         id_type_document=id_type_document,
         numero_document=self.n_piece_editline.text().strip(),
         id_tiers=session.execute(select(Tiers.id_tiers).where(and_(Tiers.nom_tiers == self.clients_lineedit.text().strip(), Tiers.type_tiers == "CLIENT"))).scalar_one_or_none(),
-        date_livraison=None,
+        date_document=self.dateEdit.date().toPyDate(),
+        date_livraison=datetime.now().date(),
         mode_prix="HT",
         total_ht=0,
         total_tva=0,
@@ -115,7 +116,6 @@ def nouveau_doc_setup(nouveau_doc_window):
     nouveau_doc_window.setWindowTitle(f"Nouveau document - {nouveau_doc_window.selected_doc_type}")
     nouveau_doc_window.n_piece_editline.setText(generate_document_number(nouveau_doc_window.selected_doc_type))
     nouveau_doc_window.n_piece_editline.setReadOnly(True)
-    nouveau_doc_window.n_piece_editline.setStyleSheet("color: gray;")
 
     nouveau_doc_window.btn_valider.clicked.connect(lambda: _valider(nouveau_doc_window))
 
