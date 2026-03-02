@@ -26,6 +26,7 @@ class LineEditAutoComplete(QtCore.QObject):
     def __init__(self, line_edit: QLineEdit, parent=None):
         super().__init__(parent)
         self.line_edit = line_edit
+        self._enabled = True
 
         self._model = QStringListModel(self.line_edit)
         self._completer = QCompleter(self._model, self.line_edit)
@@ -124,16 +125,34 @@ class LineEditAutoComplete(QtCore.QObject):
         cleaned = self._normalize(list(items))
         self._model.setStringList(cleaned)
 
+    def set_enabled(self, enabled: bool) -> None:
+        """Enable/disable BOTH the line edit interaction and the completer popup."""
+        self._enabled = enabled
+        self.line_edit.setReadOnly(not enabled)
+
+        # Close popup if disabling
+        if not enabled and self._completer:
+            popup = self._completer.popup()
+            if popup:
+                popup.hide()
+
     def refresh_from(self, fetch_items_fn: Callable[[], Iterable[str]]) -> None:
         self.set_items(fetch_items_fn())
 
     def eventFilter(self, obj, event):
-        if obj is self.line_edit and event.type() == QtCore.QEvent.MouseButtonPress:
-            QtCore.QTimer.singleShot(0, self.open_popup)
+        if obj is self.line_edit:
+            if not self._enabled or not self.line_edit.isEnabled():
+                return False
+
+            if event.type() in (QtCore.QEvent.FocusIn, QtCore.QEvent.MouseButtonPress):
+                QtCore.QTimer.singleShot(0, self.open_popup)
+
         return super().eventFilter(obj, event)
 
     def open_popup(self) -> None:
-        if self.line_edit is None:
+        if not self._enabled or not self.line_edit.isEnabled():
+            return
+        if not self._completer:
             return
         self._completer.setCompletionPrefix("")
         self._completer.complete()

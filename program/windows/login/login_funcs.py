@@ -49,5 +49,6 @@ def check_user(login, session):
     login.close()
 
     app = QApplication.instance()          # get the running app
-    app._dashboard_window = DashboardWindow()   # keep reference alive on app
+    app._dashboard_window = DashboardWindow()
+    app._dashboard_window.current_username = username
     dashboard_setup(app._dashboard_window)

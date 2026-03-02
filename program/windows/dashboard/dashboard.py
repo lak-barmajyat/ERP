@@ -1,12 +1,16 @@
+import os
+import sys
+
 from PyQt5.QtGui import QGuiApplication, QIcon, QPixmap, QPainter, QColor
 from PyQt5.QtCore import QSize, Qt
-import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton
 from PyQt5.uic import loadUi
-import os
+from PyQt5.QtWidgets import (QApplication, QMainWindow,
+                             QDialog, QLabel, QPushButton,
+                             QVBoxLayout, QHBoxLayout,
+                             QGraphicsDropShadowEffect)
+
 from ..liste_ventes.liste_ventes import SalesDocumentsWindow
 from .dash_widget import DashboardWidget
-
 
 # Icon configuration constants
 ICON_SIZE = 20
@@ -66,6 +70,8 @@ class DashboardWindow(QMainWindow):
         self._setup_footer_icons()
         self._setup_stacked_widget()
         self._wire_sidebar()
+        self.btn_logout.clicked.connect(self.show_logout_dialog)
+        self.showMaximized()
 
     def _setup_footer_icons(self):
         """Set pixmap and size for footer icon labels (user_icon and badge_icon)."""
@@ -164,7 +170,151 @@ class DashboardWindow(QMainWindow):
                 path = ICON_PATHS[btn_name]
                 color = ICON_COLOR_SELECTED if btn.isChecked() else ICON_COLOR_UNSELECTED
                 btn.setIcon(get_colored_icon(path, color))
+    
+    def show_logout_dialog(self):
+        from program.windows.login import LoginWindow
+        dialog = LogoutDialog(self)
+        result = dialog.exec_()
 
+        if result == 1:  # Déconnexion
+            self.close()
+            self.login_window = LoginWindow()
+            self.login_window.show()
+
+
+class LogoutDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        # =============================
+        # Window Setup
+        # =============================
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Dialog)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setModal(True)
+        self.setFixedSize(360, 190)
+
+        # =============================
+        # Main Layout
+        # =============================
+        main_layout = QVBoxLayout(self)
+        main_layout.setContentsMargins(15, 15, 15, 15)
+
+        self.frame = QLabel()
+        self.frame.setObjectName("mainFrame")
+        self.frame.setStyleSheet("""
+            #mainFrame {
+                background-color: #fefefe;
+                border-radius: 15px;
+            }
+        """)
+
+        content_layout = QVBoxLayout(self.frame)
+        content_layout.setContentsMargins(25, 25, 25, 20)
+        content_layout.setSpacing(20)
+
+        # =============================
+        # Title
+        # =============================
+        self.title_label = QLabel("Voulez-vous vraiment quitter ?")
+        self.title_label.setAlignment(Qt.AlignCenter)
+        self.title_label.setStyleSheet("""
+            color: black;
+            font-size: 15px;
+            font-weight: 600;
+        """)
+
+        # =============================
+        # Buttons
+        # =============================
+        buttons_layout = QHBoxLayout()
+        buttons_layout.setSpacing(12)
+
+        self.deconnexion_button = QPushButton("Déconnexion")
+        self.exit_button = QPushButton("Exit")
+        self.annuler_button = QPushButton("Annuler")
+
+        for btn in [self.deconnexion_button, self.exit_button, self.annuler_button]:
+            btn.setCursor(Qt.PointingHandCursor)
+            btn.setFixedHeight(35)
+
+        # Déconnexion Style
+        self.deconnexion_button.setStyleSheet("""
+            QPushButton {
+                background-color: #3a86ff;
+                color: white;
+                border-radius: 8px;
+                font-weight: 600;
+            }
+            QPushButton:hover {
+                background-color: #2667cc;
+            }
+        """)
+
+        # Exit Style
+        self.exit_button.setStyleSheet("""
+            QPushButton {
+                background-color: #ef233c;
+                color: white;
+                border-radius: 8px;
+                font-weight: 600;
+            }
+            QPushButton:hover {
+                background-color: #c1121f;
+            }
+        """)
+
+        # Annuler Style
+        self.annuler_button.setStyleSheet("""
+            QPushButton {
+                background-color: #3a3d5c;
+                color: #ffffff;
+                border-radius: 8px;
+                font-weight: 500;
+            }
+            QPushButton:hover {
+                background-color: #2b2d42;
+                color: white;
+            }
+        """)
+
+        buttons_layout.addWidget(self.deconnexion_button)
+        buttons_layout.addWidget(self.exit_button)
+        buttons_layout.addWidget(self.annuler_button)
+
+        # =============================
+        # Add Widgets
+        # =============================
+        content_layout.addWidget(self.title_label)
+        content_layout.addLayout(buttons_layout)
+        main_layout.addWidget(self.frame)
+
+        # =============================
+        # Shadow
+        # =============================
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(25)
+        shadow.setYOffset(2)
+        shadow.setXOffset(2)
+        shadow.setColor(QColor(0, 0, 0, 110))
+        self.frame.setGraphicsEffect(shadow)
+
+        # =============================
+        # Connections
+        # =============================
+        self.deconnexion_button.clicked.connect(self.handle_deconnexion)
+        self.exit_button.clicked.connect(self.handle_exit)
+        self.annuler_button.clicked.connect(self.reject)
+
+    # ==================================
+    # Actions
+    # ==================================
+
+    def handle_deconnexion(self):
+        self.done(1)  # Custom result for logout
+
+    def handle_exit(self):
+        QApplication.quit()
 
 def main():
     app = QApplication(sys.argv)
