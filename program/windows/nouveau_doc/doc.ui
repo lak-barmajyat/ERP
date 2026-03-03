@@ -135,7 +135,7 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="clientidinput">
+          <widget class="QLineEdit" name="clientid_lineedit">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
              <horstretch>0</horstretch>
@@ -164,22 +164,22 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
             </font>
            </property>
            <property name="styleSheet">
-            <string notr="true">QLineEdit#clientidinput { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151;  } 
+            <string notr="true">QLineEdit#clientid_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151;  } 
 
-QLineEdit#clientidinput:hover { border-color: #d1d5db; }
+QLineEdit#clientid_lineedit:hover { border-color: #d1d5db; }
 
- QLineEdit#clientidinput:focus { border-color: #1d7ae2; }
+ QLineEdit#clientid_lineedit:focus { border-color: #1d7ae2; }
 
 /* --- Added Read-Only State --- */
-QLineEdit#clientidinput[readOnly=&quot;true&quot;] {
+QLineEdit#clientid_lineedit[readOnly=&quot;true&quot;] {
     background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
     color: #9ca3af;               /* Lighter grey text */
     border: 1px solid #f3f4f6;    /* Very faint border */
 }
 
 /* Prevents the hover/focus colors from appearing when read-only */
-QLineEdit#clientidinput[readOnly=&quot;true&quot;]:hover,
-QLineEdit#clientidinput[readOnly=&quot;true&quot;]:focus {
+QLineEdit#clientid_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#clientid_lineedit[readOnly=&quot;true&quot;]:focus {
     border-color: #f3f4f6;
 }</string>
            </property>
@@ -274,7 +274,7 @@ QLineEdit#clients_lineedit[readOnly=&quot;true&quot;]:focus {
           </widget>
          </item>
          <item>
-          <widget class="QDateEdit" name="dateEdit">
+          <widget class="QDateEdit" name="date_dateedit">
            <property name="enabled">
             <bool>true</bool>
            </property>
@@ -297,23 +297,23 @@ QLineEdit#clients_lineedit[readOnly=&quot;true&quot;]:focus {
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QDateEdit#dateEdit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QDateEdit#dateEdit:hover { border-color: #d1d5db; } QDateEdit#dateEdit:focus { border-color: #1d7ae2; } QDateEdit#dateEdit::drop-down { border: none; width: 20px; } QDateEdit#dateEdit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
+            <string notr="true">QDateEdit#date_dateedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QDateEdit#date_dateedit:hover { border-color: #d1d5db; } QDateEdit#date_dateedit:focus { border-color: #1d7ae2; } QDateEdit#date_dateedit::drop-down { border: none; width: 20px; } QDateEdit#date_dateedit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
 
 /* Disabled State for the entire widget */
-QDateEdit#dateEdit:disabled {
+QDateEdit#date_dateedit:disabled {
     background-color: #f1f5f9;    /* Muted grey-blue background */
     color: #94a3b8;               /* Muted &quot;ghost&quot; text color */
     border: 1px solid #e2e8f0;    /* Very faint, flat border */
 }
 
 /* Styling the Dropdown Button when disabled */
-QDateEdit#dateEdit::drop-down:disabled {
+QDateEdit#date_dateedit::drop-down:disabled {
     background-color: #f1f5f9;
     border-left: 1px solid #e2e8f0;
 }
 
 /* Styling the Arrow Icon when disabled */
-QDateEdit#dateEdit::down-arrow:disabled {
+QDateEdit#date_dateedit::down-arrow:disabled {
     /* You can use a different, lighter icon or lower the opacity */
     opacity: 150; 
 }</string>
@@ -349,7 +349,7 @@ QDateEdit#dateEdit::down-arrow:disabled {
             <number>8</number>
            </property>
            <item>
-            <widget class="QLineEdit" name="n_piece_editline">
+            <widget class="QLineEdit" name="ndocument_lineedit">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                <horstretch>0</horstretch>
@@ -402,7 +402,7 @@ QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:focus {
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="btn_valider">
+            <widget class="QPushButton" name="valider_button">
              <property name="enabled">
               <bool>true</bool>
              </property>
@@ -416,17 +416,17 @@ QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:focus {
               <cursorShape>PointingHandCursor</cursorShape>
              </property>
              <property name="styleSheet">
-              <string notr="true">QPushButton#btn_valider { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 7px 18px; } QPushButton#btn_valider:hover { background-color: #1a6fcb; } QPushButton#btn_valider:pressed { background-color: #155bbf; }
+              <string notr="true">QPushButton#valider_button { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 7px 18px; } QPushButton#valider_button:hover { background-color: #1a6fcb; } QPushButton#valider_button:pressed { background-color: #155bbf; }
 
 /* Disabled State: Triggered when setEnabled(False) is called */
-QPushButton#btn_valider:disabled {
+QPushButton#valider_button:disabled {
     background-color: #e2e8f0;    /* Muted grey-blue background */
     color: #94a3b8;               /* Muted &quot;ghost&quot; text color */
     border: 1px solid #cbd5e1;    /* Subtle flat border */
 }
 
 /* Optional: Specific styling for ToolButtons in disabled state */
-QToolButton#btn_valider:disabled {
+QToolButton#valider_button:disabled {
     background-color: #f1f5f9;
     color: #cbd5e1;
     border: none;
@@ -696,7 +696,7 @@ QToolButton#btn_valider:disabled {
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="qte_editline">
+            <widget class="QLineEdit" name="qte_lineedit">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -716,7 +716,7 @@ QToolButton#btn_valider:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#qte_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qte_editline:hover { border-color: #d1d5db; } QLineEdit#qte_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QLineEdit#qte_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qte_lineedit:hover { border-color: #d1d5db; } QLineEdit#qte_lineedit:focus { border-color: #1d7ae2; }</string>
              </property>
              <property name="text">
               <string>1</string>
@@ -792,7 +792,7 @@ QToolButton#btn_valider:disabled {
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="total_ttc_editline">
+            <widget class="QLineEdit" name="ttc_lineedit">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -815,18 +815,18 @@ QToolButton#btn_valider:disabled {
               <enum>Qt::LeftToRight</enum>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#total_ttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #000000  } QLineEdit#total_ttc_editline:hover { border-color: #d1d5db; } QLineEdit#total_ttc_editline:focus { border-color: #1d7ae2; }
+              <string notr="true">QLineEdit#ttc_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #000000  } QLineEdit#ttc_lineedit:hover { border-color: #d1d5db; } QLineEdit#ttc_lineedit:focus { border-color: #1d7ae2; }
 
 /* --- Added Read-Only State --- */
-QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;] {
+QLineEdit#ttc_lineedit[readOnly=&quot;true&quot;] {
     background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
     color: #000000;               /* Lighter grey text */
     border: 1px solid rgb(143, 144, 145);    /* Very faint border */
 }
 
 /* Prevents the hover/focus colors from appearing when read-only */
-QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:hover,
-QLineEdit#total_ttc_editline[readOnly=&quot;true&quot;]:focus {
+QLineEdit#ttc_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#ttc_lineedit[readOnly=&quot;true&quot;]:focus {
     border-color: #f3f4f6;
 }</string>
              </property>

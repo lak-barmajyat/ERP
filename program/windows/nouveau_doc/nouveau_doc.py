@@ -5,7 +5,8 @@ from PyQt5.QtWidgets import (QDialog,
                              QApplication, QMainWindow,
                              QTableWidgetItem,
                              QHeaderView,
-                             QLineEdit)
+                             QLineEdit,
+                             QComboBox)
 from PyQt5.QtCore import Qt, QDate, QSize
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QIcon, QPixmap, QPainter, QColor
@@ -15,9 +16,12 @@ from program.services import (generate_document_number,
                               select,
                               insert,
                               Tiers,
+                              Article,
                               and_,
-                              Document)
-from program.widgetstyles.lineedit_combo_style import LineEditAutoComplete
+                              Document,
+                              replace_combobox_with_lineedit,
+                              get_colored_icon,
+                              LineEditAutoComplete)
 from .select_doc_type import SelectDocTypeDialog
 
 
@@ -25,19 +29,6 @@ def resource_path(relative_path):
     """Get absolute path to resource, works for dev and for PyInstaller"""
     base_path = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(base_path, relative_path)
-
-
-def get_colored_icon(icon_path: str, color_name: str) -> QIcon:
-    """Return a QIcon with all opaque pixels recolored to *color_name*."""
-    full_path = resource_path(icon_path)
-    pixmap = QPixmap(full_path)
-    if pixmap.isNull():
-        return QIcon()
-    painter = QPainter(pixmap)
-    painter.setCompositionMode(QPainter.CompositionMode_SourceIn)
-    painter.fillRect(pixmap.rect(), QColor(color_name))
-    painter.end()
-    return QIcon(pixmap)
 
 
 class NouveauDocWindow(QMainWindow):
@@ -70,20 +61,42 @@ class NouveauDocWindow(QMainWindow):
         self.doc_type_window = SelectDocTypeDialog()
         self.selected_doc_type = self.doc_type_window.get_selected_doc_type()
         self.setWindowTitle(f"Nouveau document - {self.selected_doc_type}")
-        self.n_piece_editline.setText(generate_document_number(self.selected_doc_type))
-        self.n_piece_editline.setReadOnly(True)
+        self.ndocument_lineedit.setText(generate_document_number(self.selected_doc_type))
+        self.ndocument_lineedit.setReadOnly(True)
 
         # Clients LineEdit with autocomplete
         self._setup_clients_lineedit()
 
     def _setup_defaults(self):
         """Set sensible default values for form fields."""
-        self.dateEdit.setDate(QDate.currentDate())
-        self.qte_editline.setText("1")
-        self.total_ttc_editline.setReadOnly(True)
+        self.date_dateedit.setDate(QDate.currentDate())
+        self.qte_lineedit.setText("1")
+        self.ttc_lineedit.setReadOnly(True)
         self.total_tax_label.setReadOnly(True)
         self.total_UT_label.setReadOnly(True)
         self.total_ttc_label.setReadOnly(True)
+
+        # Lock entry fields until document is validated
+        self._set_entry_fields_enabled(False)
+
+    def _set_entry_fields_enabled(self, enabled: bool) -> None:
+        """Enable or disable all article entry fields and their action buttons."""
+        for widget_name in (
+            'articles_combobox',
+            'designation_editline',
+            'puht_editline',
+            'pttc_editline',
+            'qte_lineedit',
+            'taxe_editline',
+        ):
+            w = getattr(self, widget_name, None)
+            if w:
+                w.setEnabled(enabled)
+
+        for btn_name in ('annule', 'enrgistrer', 'suprimer'):
+            btn = getattr(self, btn_name, None)
+            if btn:
+                btn.setEnabled(enabled)
 
 
     def _setup_icons(self):
@@ -121,13 +134,13 @@ class NouveauDocWindow(QMainWindow):
         clients = self._normalize_client_names(clients)
         self._clients_autocomplete.set_items(clients)
         self.clients_lineedit.textChanged.connect(lambda: _on_client_name_text_changed(self.clients_lineedit.text()))
-        self.clientidinput.textChanged.connect(lambda: _on_client_id_text_changed(self.clientidinput.text()))
+        self.clientid_lineedit.textChanged.connect(lambda: _on_client_id_text_changed(self.clientid_lineedit.text()))
 
 
         def _on_client_name_text_changed(lineedit_text):
             if self.clients_lineedit.hasFocus():
                 if lineedit_text.strip() == "":
-                    self.clientidinput.clear()
+                    self.clientid_lineedit.clear()
                 else:
                     stmt = (select(Tiers.code_tiers)
                             .where(and_(Tiers.type_tiers == "CLIENT",
@@ -135,10 +148,10 @@ class NouveauDocWindow(QMainWindow):
                             .order_by(Tiers.nom_tiers).limit(1))
                     
                     result = session.execute(stmt).scalar_one_or_none()
-                    self.clientidinput.setText(result if result else "")
+                    self.clientid_lineedit.setText(result if result else "")
         
         def _on_client_id_text_changed(id_input_text):
-            if self.clientidinput.hasFocus():
+            if self.clientid_lineedit.hasFocus():
                 if id_input_text.strip() == "":
                     self.clients_lineedit.clear()
                 else:

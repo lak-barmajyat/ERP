@@ -39,7 +39,9 @@ from sqlalchemy import (
 )
 
 from .sql.db_connection import with_db_session
-from .document_num_generator import generate_document_number, reset_document_counter
+from .ndoc_generator import generate_document_number, reset_document_counter
+from .tools import get_colored_icon
+from .widgetstyles.lineedit_combo_style import LineEditAutoComplete, replace_combobox_with_lineedit
 
 __all__ = [
     "Base",
