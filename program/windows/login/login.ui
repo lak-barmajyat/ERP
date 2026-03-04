@@ -207,7 +207,7 @@ QLineEdit:focus {
 
 /* Placeholder color is handled specially in QSS */
 QLineEdit {
-    qproperty-placeholderText: &quot;Mot de pass&quot;;
+    qproperty-placeholderText: &quot;Mot de passe&quot;;
 }
 font: 57 13pt &quot;Inter Tight&quot;;
 </string>
@@ -238,7 +238,7 @@ font: 57 13pt &quot;Inter Tight&quot;;
         <string notr="true">font: 57 16pt &quot;Inter Tight&quot;;</string>
        </property>
        <property name="text">
-        <string>Mot do pass</string>
+        <string>Mot de passe</string>
        </property>
       </widget>
       <widget class="QPushButton" name="se_connecter_button">
@@ -305,15 +305,15 @@ font: 57 14pt &quot;Inter Tight&quot;;</string>
 
 QPushButton:hover {
     /* We create a hard-stop gradient that looks like a solid fill */
-    background-color: #1769B4;
+    background-color: #EF233C;
     color: #ffffff;
-    border: 2px solid #1D7FD8;
+    border: 2px solid #EF233C;
 }
 
 QPushButton:pressed {
-    background-color: #0E5891;
-	color: #ffffff;
-    border-color: #1D7FD8;
+    background-color: #b50021;
+    color: #ffffff;
+    border: 2px solid #b50021;
 }
 font: 57 16pt &quot;Inter Tight&quot;;</string>
        </property>

@@ -59,7 +59,7 @@ class NouveauDocWindow(QMainWindow):
         self.tableWidget.setRowCount(0)
 
         self.doc_type_window = SelectDocTypeDialog()
-        self.selected_doc_type = self.doc_type_window.get_selected_doc_type()
+        self.selected_doc_type = self.doc_type_window.get_current_doc_type()
         self.setWindowTitle(f"Nouveau document - {self.selected_doc_type}")
         self.ndocument_lineedit.setText(generate_document_number(self.selected_doc_type))
         self.ndocument_lineedit.setReadOnly(True)

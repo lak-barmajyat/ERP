@@ -28,7 +28,7 @@ class SelectDocTypeDialog(QDialog):
             self.radioFactureAvoir: "Avoir"
         }
     
-    def get_selected_doc_type(self):
+    def get_current_doc_type(self):
         """Returns the selected document type"""
         for radio, doc_type in self.doc_type_map.items():
             if radio.isChecked():
@@ -54,7 +54,7 @@ def main():
     result = dialog.exec_()
     
     if result == QDialog.Accepted:
-        selected_type = dialog.get_selected_doc_type()
+        selected_type = dialog.get_current_doc_type()
         print(f"Selected document type: {selected_type}")
     else:
         print("Dialog cancelled")
