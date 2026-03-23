@@ -378,18 +378,18 @@ QDateEdit#date_dateedit::down-arrow:disabled {
               </font>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#n_piece_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: rgb(132, 132, 132); min-width: 120px; } QLineEdit#n_piece_editline:hover { border-color: #d1d5db; } QLineEdit#n_piece_editline:focus { border-color: #1d7ae2; }
+              <string notr="true">QLineEdit#ndocument_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: rgb(132, 132, 132); min-width: 120px; } QLineEdit#ndocument_lineedit:hover { border-color: #d1d5db; } QLineEdit#ndocument_lineedit:focus { border-color: #1d7ae2; }
 
 /* --- Added Read-Only State --- */
-QLineEdit#n_piece_editline[readOnly=&quot;true&quot;] {
+QLineEdit#ndocument_lineedit[readOnly=&quot;true&quot;] {
     background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
     color: rgb(132, 132, 132);               /* Lighter grey text */
     border: 1px solid #f3f4f6;    /* Very faint border */
 }
 
 /* Prevents the hover/focus colors from appearing when read-only */
-QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:hover,
-QLineEdit#n_piece_editline[readOnly=&quot;true&quot;]:focus {
+QLineEdit#ndocument_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#ndocument_lineedit[readOnly=&quot;true&quot;]:focus {
     border-color: #f3f4f6;
 }</string>
              </property>
@@ -1140,6 +1140,75 @@ QHeaderView::section:last {
         <string>Totale TTC</string>
        </property>
       </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="tableStatsFrame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>34</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#tableStatsFrame { background-color: #f9fafb; border: none; border-top: 1px solid #eef2f7; border-bottom: 1px solid #eef2f7; } QLabel#tableStatsTitleLabel { color: #6b7280; font: 600 9pt &quot;Overpass&quot;; letter-spacing: 0.4px; } QLabel#tableStatsRowsLabel, QLabel#tableStatsSelectedLabel { color: #374151; font: 500 9pt &quot;Overpass&quot;; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QHBoxLayout" name="tableStatsLayout">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <property name="leftMargin">
+        <number>24</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>24</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="tableStatsRowsLabel">
+         <property name="text">
+          <string>Rows: 0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="tableStatsSelectedLabel">
+         <property name="text">
+          <string>Selected: 0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="tableStatsSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
      </widget>
     </item>
     <item>

@@ -66,6 +66,7 @@ class NouveauDocWindow(QMainWindow):
 
         # Clients LineEdit with autocomplete
         self._setup_clients_lineedit()
+        self._setup_articles_combobox()
 
     def _setup_defaults(self):
         """Set sensible default values for form fields."""
@@ -137,6 +138,7 @@ class NouveauDocWindow(QMainWindow):
         self.clientid_lineedit.textChanged.connect(lambda: _on_client_id_text_changed(self.clientid_lineedit.text()))
 
 
+
         def _on_client_name_text_changed(lineedit_text):
             if self.clients_lineedit.hasFocus():
                 if lineedit_text.strip() == "":
@@ -163,7 +165,26 @@ class NouveauDocWindow(QMainWindow):
                     result = session.execute(stmt).scalar_one_or_none()
                     self.clients_lineedit.setText(result if result else "")
 
-    
+    @with_db_session
+    def _setup_articles_combobox(self, session=None):
+        line_edit: QLineEdit = self.designation_editline
+        # Store the original stylesheet from the UI file
+        original_stylesheet = line_edit.styleSheet()
+        # Create the autocomplete functionality
+        self._designation_autocomplete = LineEditAutoComplete(line_edit, self)
+        # Ensure the original stylesheet is preserved
+        if original_stylesheet:
+            line_edit.setStyleSheet(original_stylesheet)
+        stmt = (
+            select(Article.description)
+            .where(Article.description.isnot(None))
+            .order_by(Article.id_article)
+        )
+        # scalars() => list[str]
+        names = session.execute(stmt).scalars().all()
+        designations = [n for n in names if n]
+        designations = self._normalize_client_names(designations)
+        self._designation_autocomplete.set_items(designations)
 
     @staticmethod
     def _normalize_client_names(client_names):

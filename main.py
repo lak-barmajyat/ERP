@@ -11,8 +11,9 @@ from PyQt5.QtGui import QFontDatabase
 
 def main():
     app = QApplication(sys.argv)
-    window = LoginWindow()
-    # nouveau_doc_setup(window)
+    window = DashboardWindow()
+    window.current_username = "karim"
+    dashboard_setup(window)
 
     sys.exit(app.exec_())
 
