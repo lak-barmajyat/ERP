@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1142</width>
+    <width>1291</width>
     <height>669</height>
    </rect>
   </property>
@@ -50,7 +50,8 @@ QFrame#toolbarFrame {
     border-bottom: 1px solid #e2e8f0;
 }
 QToolButton#tbNew, QToolButton#tbEdit, QToolButton#tbDelete,QToolButton#tbFermer,
-QToolButton#tbPrint, QToolButton#tbExportExcel {
+QToolButton#tbPrint, QToolButton#tbExportExcel, QToolButton#tbTransform,
+QToolButton#tbDuplicate{
     background-color: transparent;
     border: none;
     padding: 4px 12px;
@@ -66,6 +67,8 @@ QToolButton#tbEdit:hover,
 QToolButton#tbDelete:hover,
 QToolButton#tbPrint:hover,
 QToolButton#tbFermer:hover,
+QToolButton#tbTransform:hover,
+QToolButton#tbDuplicate:hover,
 QToolButton#tbExportExcel:hover {
     background-color: #f9fafb;
 }
@@ -89,6 +92,12 @@ QToolButton#tbExportExcel {
 }
 QToolButton#tbFermer {
     qproperty-icon: url(program/assets/documents/quit.svg);
+}
+QToolButton#tbTransform {
+    qproperty-icon: url(program/assets/documents/transform.svg);
+}
+QToolButton#tbDuplicate {
+    qproperty-icon: url(program/assets/documents/duplicate.svg);
 }
        </string>
      </property>
@@ -226,6 +235,55 @@ QFrame#toolbarDivider2 {
        </widget>
       </item>
       <item>
+       <widget class="QFrame" name="toolbarDivider2_2">
+        <property name="styleSheet">
+         <string notr="true">
+QFrame#toolbarDivider2_2 {
+    color: #e2e8f0;
+}
+          </string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::VLine</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Plain</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="tbDuplicate">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>46</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Duplicate</string>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QToolButton" name="tbTransform">
+        <property name="minimumSize">
+         <size>
+          <width>80</width>
+          <height>46</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Transform</string>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextUnderIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="toolbarSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -265,13 +323,13 @@ QFrame#filterFrame {
     border-bottom: 1px solid #e2e8f0;
 }
 
-QLabel#labelClient, QLabel#labelDocNumber, QLabel#labelPeriod, QLabel#labelStatus {
+QLabel#labelClient, QLabel#labelDocNumber, QLabel#labelPeriod, QLabel#labelStatus, QLabel#labelcodeclient {
     color: #6b7280;
     font: 600 8pt &quot;Overpass&quot;;
     text-transform: uppercase;
 }
 
-QLineEdit#editClient, QLineEdit#editDocNumber {
+QLineEdit#editClient, QLineEdit#editDocNumber, QLineEdit#editcodeclient {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
@@ -279,7 +337,7 @@ QLineEdit#editClient, QLineEdit#editDocNumber {
     font: 400 9pt &quot;Overpass&quot;;
     color: #374151;
 }
-QLineEdit#editClient:focus, QLineEdit#editDocNumber:focus {
+QLineEdit#editClient:focus, QLineEdit#editDocNumber:focus, QLineEdit#editcodeclient:focus {
     border-color: #135bec;
 }
 
@@ -354,6 +412,39 @@ QPushButton#btnFilter:hover {
       <property name="bottomMargin">
        <number>12</number>
       </property>
+      <item>
+       <layout class="QVBoxLayout" name="docFilterLayout_2">
+        <property name="spacing">
+         <number>4</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="labelcodeclient">
+          <property name="text">
+           <string>Code Client</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="editcodeclient">
+          <property name="minimumSize">
+           <size>
+            <width>140</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="placeholderText">
+           <string>ex: CL00122</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
       <item>
        <layout class="QVBoxLayout" name="clientFilterLayout">
         <property name="spacing">
