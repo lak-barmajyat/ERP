@@ -1,0 +1,737 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>TransfertDocumentDialog</class>
+ <widget class="QDialog" name="TransfertDocumentDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1000</width>
+    <height>750</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Transfert de Document</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog#TransfertDocumentDialog { background-color: #f7f9fb; font-family: &quot;Overpass&quot;; color: #191c1e; }</string>
+  </property>
+  <layout class="QVBoxLayout" name="dialogOuterLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="QFrame" name="dialogContainer">
+     <property name="styleSheet">
+      <string notr="true">QFrame#dialogContainer { background-color: #f2f4f6; border: 1px solid rgba(196,197,215,0.35); border-radius: 10px; }</string>
+     </property>
+     <layout class="QVBoxLayout" name="dialogMainLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QFrame" name="titleBar">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>56</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame#titleBar { background-color: #f8fafc; border-bottom: 1px solid rgba(196,197,215,0.35); }</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <layout class="QHBoxLayout" name="titleBarLayout">
+         <property name="leftMargin">
+          <number>16</number>
+         </property>
+         <property name="topMargin">
+          <number>8</number>
+         </property>
+         <property name="rightMargin">
+          <number>12</number>
+         </property>
+         <property name="bottomMargin">
+          <number>8</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelTitleIcon">
+           <property name="styleSheet">
+            <string notr="true">QLabel#labelTitleIcon { color: #0037b0; font: 700 13pt &quot;Overpass&quot;; }</string>
+           </property>
+           <property name="text">
+            <string>↔</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelTitlePrefix">
+           <property name="font">
+            <font>
+             <family>Overpass</family>
+             <pointsize>12</pointsize>
+             <weight>87</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel#labelTitlePrefix { color: #191c1e; font: 700 12pt &quot;Overpass&quot;; }</string>
+           </property>
+           <property name="text">
+            <string>Transfert de Document:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelDocCode">
+           <property name="styleSheet">
+            <string notr="true">QLabel#labelDocCode { color: #0037b0; font: 700 12pt &quot;Overpass&quot;; }</string>
+           </property>
+           <property name="text">
+            <string>DV-2023-0012</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="titleBarSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnClose">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>30</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#btnClose { border: none; border-radius: 4px; background: transparent; color: #434655; font: 600 12pt &quot;Overpass&quot;; padding: 2px 8px; } QPushButton#btnClose:hover { color: #ba1a1a; background-color: rgba(186,26,26,0.08); }</string>
+           </property>
+           <property name="text">
+            <string>×</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QScrollArea" name="scrollContent">
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <property name="widgetResizable">
+         <bool>true</bool>
+        </property>
+        <widget class="QWidget" name="scrollContentWidget">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>998</width>
+           <height>627</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="contentLayout">
+          <property name="spacing">
+           <number>18</number>
+          </property>
+          <property name="leftMargin">
+           <number>16</number>
+          </property>
+          <property name="topMargin">
+           <number>16</number>
+          </property>
+          <property name="rightMargin">
+           <number>16</number>
+          </property>
+          <property name="bottomMargin">
+           <number>16</number>
+          </property>
+          <item>
+           <widget class="QFrame" name="sourceCard">
+            <property name="styleSheet">
+             <string notr="true">QFrame#sourceCard { background-color: #ffffff; border: 1px solid rgba(196,197,215,0.35); border-radius: 8px; }</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <layout class="QGridLayout" name="sourceCardGrid">
+             <property name="leftMargin">
+              <number>14</number>
+             </property>
+             <property name="topMargin">
+              <number>14</number>
+             </property>
+             <property name="rightMargin">
+              <number>14</number>
+             </property>
+             <property name="bottomMargin">
+              <number>14</number>
+             </property>
+             <item row="2" column="1">
+              <widget class="QLabel" name="labelSourceDocValue">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceDocValue { color: #191c1e; font: 700 11pt &quot;Overpass&quot;; }</string>
+               </property>
+               <property name="text">
+                <string>DV-2023-0012</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="3">
+              <widget class="QLabel" name="labelSourceTotalValue">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceTotalValue { color: #0037b0; font: 800 15pt &quot;Overpass&quot;; }</string>
+               </property>
+               <property name="text">
+                <string>0.00 MAD</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="labelSourceTypeTitle">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceTypeTitle { color: #434655; font: 700 8pt &quot;Overpass&quot;; letter-spacing: 0.8px; }</string>
+               </property>
+               <property name="text">
+                <string>TYPE</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0">
+              <widget class="QLabel" name="labelSourceTypeValue">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceTypeValue { color: #191c1e; font: 700 11pt &quot;Overpass&quot;; }</string>
+               </property>
+               <property name="text">
+                <string>Devis</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QLabel" name="labelSourceClientValue">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceClientValue { color: #191c1e; font: 700 11pt &quot;Overpass&quot;; }</string>
+               </property>
+               <property name="text">
+                <string>TechSolutions SARL</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="2">
+              <widget class="QLabel" name="labelSourceClientTitle">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceClientTitle { color: #434655; font: 700 8pt &quot;Overpass&quot;; letter-spacing: 0.8px; }</string>
+               </property>
+               <property name="text">
+                <string>CLIENT</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QLabel" name="labelSourceDocTitle">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceDocTitle { color: #434655; font: 700 8pt &quot;Overpass&quot;; letter-spacing: 0.8px; }</string>
+               </property>
+               <property name="text">
+                <string>NO DOCUMENT</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="3">
+              <widget class="QLabel" name="labelSourceTotalTitle">
+               <property name="styleSheet">
+                <string notr="true">QLabel#labelSourceTotalTitle { color: #434655; font: 700 8pt &quot;Overpass&quot;; letter-spacing: 0.8px; }</string>
+               </property>
+               <property name="text">
+                <string>TOTAL TTC</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="workflowLayout">
+            <property name="spacing">
+             <number>8</number>
+            </property>
+            <item>
+             <widget class="QFrame" name="lineLeft">
+              <property name="styleSheet">
+               <string notr="true">QFrame#lineLeft { color: rgba(116,118,134,0.35); }</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelWorkflow">
+              <property name="styleSheet">
+               <string notr="true">QLabel#labelWorkflow { background-color: #e6e8ea; border: 1px solid rgba(196,197,215,0.35); border-radius: 14px; color: #1d4ed8; font: 700 8pt &quot;Overpass&quot;; letter-spacing: 1px; padding: 7px 16px; }</string>
+              </property>
+              <property name="text">
+               <string>CONVERSION WORKFLOW  →</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QFrame" name="lineRight">
+              <property name="styleSheet">
+               <string notr="true">QFrame#lineRight { color: rgba(116,118,134,0.35); }</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::HLine</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Plain</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="spacing">
+             <number>10</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item alignment="Qt::AlignLeft">
+             <widget class="QLabel" name="labelTransferTo">
+              <property name="styleSheet">
+               <string notr="true">QLabel#labelTransferTo { color: #191c1e; font: 800 12pt &quot;Overpass&quot;; }</string>
+              </property>
+              <property name="text">
+               <string>Transférer vers :</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboToType">
+              <property name="minimumSize">
+               <size>
+                <width>160</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QComboBox#comboToType {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+}
+QComboBox#comboToType::drop-down {
+    border: none;
+    width: 18px;
+}
+QComboBox#comboToType::down-arrow {
+    image: url(program/assets/global/down_blue_arrow.svg);
+    width: 10px;
+    height: 10px;
+}</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelCode">
+              <property name="styleSheet">
+               <string notr="true">QLabel#labelCode { color: #191c1e; font: 800 12pt &quot;Overpass&quot;; }</string>
+              </property>
+              <property name="text">
+               <string>Code</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="CodeEditLine">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>1367777</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit#CodeEditLine { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151; } 
+
+QLineEdit#CodeEditLine:hover { border-color: #d1d5db; }
+
+ QLineEdit#CodeEditLine:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#CodeEditLine[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #9ca3af;               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#CodeEditLine[readOnly=&quot;true&quot;]:hover,
+QLineEdit#CodeEditLine[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QFrame" name="detailsFrame">
+            <property name="styleSheet">
+             <string notr="true">QFrame#detailsFrame { background-color: #eceef0; border: 1px solid rgba(196,197,215,0.35); border-radius: 8px; }</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <layout class="QVBoxLayout" name="detailsLayout">
+             <property name="leftMargin">
+              <number>10</number>
+             </property>
+             <property name="topMargin">
+              <number>10</number>
+             </property>
+             <property name="rightMargin">
+              <number>10</number>
+             </property>
+             <property name="bottomMargin">
+              <number>10</number>
+             </property>
+             <item>
+              <widget class="QFrame" name="detailsHeader">
+               <property name="styleSheet">
+                <string notr="true">QFrame#detailsHeader { background-color: transparent; border: none; }</string>
+               </property>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
+               </property>
+               <layout class="QHBoxLayout" name="detailsHeaderLayout">
+                <property name="leftMargin">
+                 <number>4</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>4</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="labelDetailsIcon">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#labelDetailsIcon { color: #434655; font: 700 10pt &quot;Overpass&quot;; }</string>
+                  </property>
+                  <property name="text">
+                   <string>☷</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelDetailsTitle">
+                  <property name="styleSheet">
+                   <string notr="true">QLabel#labelDetailsTitle { color: #191c1e; font: 700 11pt &quot;Overpass&quot;; }</string>
+                  </property>
+                  <property name="text">
+                   <string>Détails du transfert</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="detailsHeaderSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkSelectAll">
+                  <property name="styleSheet">
+                   <string notr="true">QCheckBox#checkSelectAll { color: #434655; font: 600 9pt &quot;Overpass&quot;; } QCheckBox#checkSelectAll::indicator { width: 14px; height: 14px; }</string>
+                  </property>
+                  <property name="text">
+                   <string>Sélectionner tout</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QTableWidget" name="tableTransferDetails">
+               <property name="styleSheet">
+                <string notr="true">QTableWidget#tableTransferDetails { background-color: #ffffff; border: 1px solid rgba(196,197,215,0.35); border-radius: 6px; gridline-color: #e7eaec; color: #191c1e; font: 400 9pt &quot;Overpass&quot;; outline: none; } QTableWidget#tableTransferDetails::item { padding: 8px; border-bottom: 1px solid #f0f2f4; } QTableWidget#tableTransferDetails::item:selected { background-color: rgba(0,55,176,0.08); color: #191c1e; } QHeaderView::section { background-color: #e0e3e5; color: #434655; font: 700 8pt &quot;Overpass&quot;; border: none; border-bottom: 1px solid rgba(196,197,215,0.35); padding: 8px 10px; }</string>
+               </property>
+               <property name="editTriggers">
+                <set>QAbstractItemView::NoEditTriggers</set>
+               </property>
+               <property name="alternatingRowColors">
+                <bool>true</bool>
+               </property>
+               <property name="selectionBehavior">
+                <enum>QAbstractItemView::SelectRows</enum>
+               </property>
+               <property name="showGrid">
+                <bool>false</bool>
+               </property>
+               <property name="rowCount">
+                <number>0</number>
+               </property>
+               <property name="columnCount">
+                <number>6</number>
+               </property>
+               <attribute name="verticalHeaderVisible">
+                <bool>false</bool>
+               </attribute>
+               <column>
+                <property name="text">
+                 <string/>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Référence</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Désignation</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Qté</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Prix unitaire</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Total HT</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+      <item>
+       <widget class="QFrame" name="footerBar">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>90</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QFrame#footerBar { background-color: #e0e3e5; border-top: 1px solid rgba(196,197,215,0.35); }</string>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
+        <layout class="QHBoxLayout" name="footerLayout">
+         <property name="leftMargin">
+          <number>16</number>
+         </property>
+         <property name="topMargin">
+          <number>12</number>
+         </property>
+         <property name="rightMargin">
+          <number>16</number>
+         </property>
+         <property name="bottomMargin">
+          <number>12</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelFooterInfoIcon">
+           <property name="styleSheet">
+            <string notr="true">QLabel#labelFooterInfoIcon { color: #434655; font: 700 9pt &quot;Overpass&quot;; }</string>
+           </property>
+           <property name="text">
+            <string>ⓘ</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="labelFooterInfoText">
+           <property name="styleSheet">
+            <string notr="true">QLabel#labelFooterInfoText { color: #434655; font: 500 8pt &quot;Overpass&quot;; }</string>
+           </property>
+           <property name="text">
+            <string>Cette action créera un nouveau document cible. Le devis source restera archivé avec un lien de traçabilité direct.</string>
+           </property>
+           <property name="wordWrap">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="footerSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnCancel">
+           <property name="minimumSize">
+            <size>
+             <width>100</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#btnCancel { border: none; border-radius: 4px; background: transparent; color: #57657a; font: 700 9pt &quot;Overpass&quot;; padding: 8px 14px; } QPushButton#btnCancel:hover { background-color: #d5e3fc; }</string>
+           </property>
+           <property name="text">
+            <string>Annuler</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnLaunchTransfer">
+           <property name="minimumSize">
+            <size>
+             <width>150</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#btnLaunchTransfer { border: none; border-radius: 4px; color: #ffffff; font: 700 9pt &quot;Overpass&quot;; padding: 8px 18px; background-color: #1d4ed8; } QPushButton#btnLaunchTransfer:hover { background-color: #0037b0; }</string>
+           </property>
+           <property name="text">
+            <string>Transfer</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
