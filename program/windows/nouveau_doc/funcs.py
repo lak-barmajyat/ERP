@@ -241,7 +241,7 @@ def nouveau_doc_setup(self):
         return
     self.show()
 
-    self.current_doc_type = self.doc_type_window.get_current_doc_type()
+    self.current_doc_type = self.doc_type_window.get_selected_doc_type()
     self.setWindowTitle(f"Nouveau document - {self.current_doc_type}")
     self.ndocument_lineedit.setText(generate_document_number(self.current_doc_type))
     self.ndocument_lineedit.setReadOnly(True)
