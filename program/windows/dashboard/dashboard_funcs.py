@@ -3,6 +3,7 @@ from program.services import select, with_db_session, Utilisateur
 from program.windows.dashboard import LogoutDialog
 
 from PyQt5.QtWidgets import QDialog
+from PyQt5.QtCore import Qt
 
 
 # def logout(dashboard_window):
@@ -17,7 +18,8 @@ from PyQt5.QtWidgets import QDialog
 def dashboard_setup(dashboard_window, session=None):
     dashboard_window.show()
 
-    dashboard_window.nouveau_doc_window = NouveauDocWindow()
+    dashboard_window.nouveau_doc_window = NouveauDocWindow(parent=dashboard_window)
+    dashboard_window.nouveau_doc_window.setWindowModality(Qt.WindowModal)
 
     dashboard_window.dashboard_widget.btn_nouveau_doc.clicked.connect(lambda: nouveau_doc_setup(dashboard_window.nouveau_doc_window))
 

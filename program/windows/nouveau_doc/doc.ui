@@ -299,6 +299,27 @@ QLineEdit#clients_lineedit[readOnly=&quot;true&quot;]:focus {
            <property name="styleSheet">
             <string notr="true">QDateEdit#date_dateedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QDateEdit#date_dateedit:hover { border-color: #d1d5db; } QDateEdit#date_dateedit:focus { border-color: #1d7ae2; } QDateEdit#date_dateedit::drop-down { border: none; width: 20px; } QDateEdit#date_dateedit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
 
+/* Read-Only state (same visual style as clientid_lineedit readonly) */
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;
+    color: #9ca3af;
+    border: 1px solid #f3f4f6;
+}
+
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]:hover,
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}
+
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]::drop-down {
+    background-color: #f9fafb;
+    border-left: 1px solid #f3f4f6;
+}
+
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]::down-arrow {
+    opacity: 150;
+}
+
 /* Disabled State for the entire widget */
 QDateEdit#date_dateedit:disabled {
     background-color: #f1f5f9;    /* Muted grey-blue background */
@@ -1011,7 +1032,13 @@ QPushButton#suprimer:disabled {
             <cursorShape>PointingHandCursor</cursorShape>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#enrgistrer { background-color: #1d7ae2; border: none; border-radius: 16px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 6px 20px; } QPushButton#enrgistrer:hover { background-color: #1a6fcb; } QPushButton#enrgistrer:pressed { background-color: #155bbf; }</string>
+            <string notr="true">QPushButton#enrgistrer { background-color: #1d7ae2; border: none; border-radius: 16px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 6px 20px; } QPushButton#enrgistrer:hover { background-color: #1a6fcb; } QPushButton#enrgistrer:pressed { background-color: #155bbf; }
+
+QPushButton#enrgistrer:disabled {
+    background-color: #e2e8f0;
+    color: #94a3b8;
+    border: 1px solid #cbd5e1;
+}</string>
            </property>
            <property name="text">
             <string>Enregistrer</string>
@@ -1347,7 +1374,7 @@ QHeaderView::section:last {
               <string notr="true">QLabel#label_10 { color: #374151; font: 650 12pt &quot;Overpass&quot;; background-color: transparent; }</string>
              </property>
              <property name="text">
-              <string>Total U.T</string>
+              <string>Total H.T</string>
              </property>
             </widget>
            </item>

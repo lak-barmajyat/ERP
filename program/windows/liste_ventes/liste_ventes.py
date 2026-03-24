@@ -1,9 +1,45 @@
 import sys
 import os
+from dataclasses import dataclass
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QHeaderView, QWidget
+from PyQt5.QtWidgets import QMainWindow, QApplication, QTableWidgetItem, QHeaderView, QWidget, QAbstractItemView
 from PyQt5.QtCore import Qt, QDate
 from PyQt5.uic import loadUi
+
+from .funcs import liste_ventes_setup
+
+
+@dataclass(frozen=True)
+class DocumentsContext:
+    domain_id: int
+    domain_code: str
+    domain_label: str
+    tiers_type: str
+    tiers_label: str
+    tiers_code_prefix: str
+    article_price_field: str
+
+
+SALES_CONTEXT = DocumentsContext(
+    domain_id=1,
+    domain_code="VENTE",
+    domain_label="Ventes",
+    tiers_type="CLIENT",
+    tiers_label="Client",
+    tiers_code_prefix="CL",
+    article_price_field="prix_vente_ht",
+)
+
+
+PURCHASE_CONTEXT = DocumentsContext(
+    domain_id=2,
+    domain_code="ACHAT",
+    domain_label="Achats",
+    tiers_type="FOURNISSEUR",
+    tiers_label="Fournisseur",
+    tiers_code_prefix="FR",
+    article_price_field="prix_achat_ht",
+)
 
 
 def resource_path(relative_path: str) -> str:
@@ -22,14 +58,34 @@ class SalesDocumentsWindow(QWidget):
     Main window controller for the sales documents list (liste_ventes.ui).
     """
 
-    def __init__(self) -> None:
+    def __init__(self, context: DocumentsContext | None = None) -> None:
         super().__init__()
+        self.context = context or SALES_CONTEXT
         loadUi(resource_path("liste_ventes.ui"), self)
 
+        self.doc_domain_id = self.context.domain_id
+        self.doc_domain_code = self.context.domain_code
+        self.doc_domain_label = self.context.domain_label
+        self.tiers_type_filter = self.context.tiers_type
+        self.article_price_field = self.context.article_price_field
+
+        self._apply_context_to_ui()
         self._setup_table()
         self._setup_defaults()
         self._connect_signals()
         self._populate_demo_data()
+        liste_ventes_setup(self)
+
+    def _apply_context_to_ui(self) -> None:
+        """Update labels/placeholders to match sales vs purchases context."""
+        if hasattr(self, "labelClient"):
+            self.labelClient.setText(self.context.tiers_label)
+        if hasattr(self, "labelcodeclient"):
+            self.labelcodeclient.setText(f"Code {self.context.tiers_label}")
+        if hasattr(self, "editClient"):
+            self.editClient.setPlaceholderText(f"Rechercher un {self.context.tiers_label.lower()}...")
+        if hasattr(self, "editcodeclient"):
+            self.editcodeclient.setPlaceholderText(f"ex: {self.context.tiers_code_prefix}00122")
 
     # ------------------------------------------------------------------ #
     # UI helpers
@@ -52,6 +108,7 @@ class SalesDocumentsWindow(QWidget):
 
         # Hide row headers for a cleaner, grid-like look
         self.tableDocuments.verticalHeader().setVisible(False)
+        self.tableDocuments.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
     def _setup_defaults(self) -> None:
         """
