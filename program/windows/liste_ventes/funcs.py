@@ -12,6 +12,7 @@ from program.services import (with_db_session,
                               LineEditAutoComplete,
                               MessageBox)
 from program.windows.nouveau_doc import nouveau_doc_setup, NouveauDocWindow
+from program.windows.transfer_window import TransfertDocumentDialog
 
 
 def _create_nouveau_window(self):
@@ -31,36 +32,11 @@ def _connect_signals(self):
     except TypeError:
         pass
     self.tableDocuments.customContextMenuRequested.connect(lambda pos: _on_table_context_menu(self, pos))
-    if hasattr(self, "tbNew"):
-        try:
-            self.tbNew.clicked.disconnect()
-        except TypeError:
-            pass
-        self.tbNew.clicked.connect(lambda: _on_nouveau_clicked(self))
-    if hasattr(self, "tbEdit"):
-        try:
-            self.tbEdit.clicked.disconnect()
-        except TypeError:
-            pass
-        self.tbEdit.clicked.connect(lambda: _on_modifier_clicked(self))
-    if hasattr(self, "tbDelete"):
-        try:
-            self.tbDelete.clicked.disconnect()
-        except TypeError:
-            pass
-        self.tbDelete.clicked.connect(lambda: _on_supprimer_clicked(self))
-    if hasattr(self, "tbDuplicate"):
-        try:
-            self.tbDuplicate.clicked.disconnect()
-        except TypeError:
-            pass
-        self.tbDuplicate.clicked.connect(lambda: _on_dupliquer_clicked(self))
-    if hasattr(self, "tbTransform"):
-        try:
-            self.tbTransform.clicked.disconnect()
-        except TypeError:
-            pass
-        self.tbTransform.clicked.connect(lambda: _on_transformer_clicked(self))
+    self.tbNew.clicked.connect(lambda: _on_nouveau_clicked(self))
+    self.tbEdit.clicked.connect(lambda: _on_modifier_clicked(self))
+    self.tbDelete.clicked.connect(lambda: _on_supprimer_clicked(self))
+    self.tbDuplicate.clicked.connect(lambda: _on_dupliquer_clicked(self))
+    self.tbTransform.clicked.connect(lambda: _on_transformer_clicked(self))
 
 
 @with_db_session
@@ -234,9 +210,9 @@ def _on_dupliquer_clicked(self):
 
 
 def _on_transformer_clicked(self):
-    """Placeholder transform action until workflow rules are finalized."""
-    document_id = _get_selected_document_id(self)
-    if not document_id:
+    """Open transfer dialog for the currently selected document."""
+    documents = _get_selected_documents(self)
+    if not documents:
         MessageBox(
             variant="info",
             title="Transformer",
@@ -245,12 +221,14 @@ def _on_transformer_clicked(self):
         ).exec_()
         return
 
-    MessageBox(
-        variant="attention",
-        title="Transformer",
-        message="La transformation du document sera disponible dans la prochaine version.",
-        parent=self,
-    ).exec_()
+    source_doc = documents[0]
+    parent_window = self.window() if hasattr(self, "window") else None
+    dialog = TransfertDocumentDialog(
+        parent=parent_window,
+        source_doc_id=source_doc["id"],
+        source_doc_number=source_doc["number"],
+    )
+    dialog.exec_()
 
 def _start_auto_refresh(self):
     """Auto-refresh documents list every 5 seconds."""
