@@ -27,7 +27,7 @@ class SelectDocTypeDialog(QDialog):
             self.radioFacture: "Facture",
             self.radioFactureAvoir: "Avoir"
         }
-    
+
     def get_current_doc_type(self):
         """Returns the selected document type"""
         for radio, doc_type in self.doc_type_map.items():

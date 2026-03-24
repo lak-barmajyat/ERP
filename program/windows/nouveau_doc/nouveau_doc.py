@@ -32,9 +32,12 @@ def resource_path(relative_path):
 
 
 class NouveauDocWindow(QMainWindow):
-    def __init__(self):
-        super(NouveauDocWindow, self).__init__()
+    def __init__(self, parent=None):
+        super(NouveauDocWindow, self).__init__(parent)
         loadUi(resource_path("doc.ui"), self)
+
+        # Keep this as a top-level owned window so parent lifetime controls it.
+        self.setWindowFlag(Qt.Window, True)
 
         self._setup_table()
         self._setup_defaults()

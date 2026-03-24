@@ -10,10 +10,11 @@ from program.services import (Tiers,
                             Article,
                             DetailDocument,
                             and_,
-                            RefTypeDocument)
+                            RefTypeDocument,
+                            MessageBox)
 
 from PyQt5.QtWidgets import (QDialog, QCompleter, QComboBox,
-                             QMessageBox, QTableWidgetItem)
+                             QTableWidgetItem)
 from PyQt5.QtCore import QStringListModel, Qt, QSortFilterProxyModel, QDate
 from PyQt5.QtGui import QPalette, QColor
 
@@ -22,13 +23,13 @@ import os
 
 
 def show_error_message(message_text=None):
-    msg = QMessageBox()
-    msg.setIcon(QMessageBox.Critical)  # أيقونة الخطأ الحمراء
-    msg.setWindowTitle("Erreur")
-    msg.setText(message_text)
-    msg.setInformativeText("Veuillez vérifier les informations et réessayer.")
-    msg.setStandardButtons(QMessageBox.Ok)
-    msg.exec_()
+    details = "Veuillez vérifier les informations et réessayer."
+    full_message = f"{message_text}\n\n{details}" if message_text else details
+    MessageBox(
+        variant="error",
+        title="Erreur",
+        message=full_message,
+    ).exec_()
 
 @with_db_session
 def _valider(self, session=None):
@@ -156,15 +157,20 @@ def _on_annuler(self):
 @with_db_session
 def _on_supprimer(self, session=None):
     """Remove the currently selected row from the table."""
-    selected = self.tableWidget.selectedItems()
-    # get id_article from the first column of the selected row
-    if selected:
-        id_detail_item = self.tableWidget.item(selected[0].row(), 7)  # Hidden ID Detail column
+    selected_rows = self.tableWidget.selectionModel().selectedRows() if self.tableWidget.selectionModel() else []
+    if selected_rows:
+        row = selected_rows[0].row()
+        id_detail_item = self.tableWidget.item(row, 7)  # Hidden ID Detail column
         if id_detail_item:
-            id_detail = id_detail_item.text()
-            session.execute(delete(DetailDocument).where(DetailDocument.id_detail == id_detail))
+            id_detail = (id_detail_item.text() or "").strip()
+            session.execute(
+                delete(DetailDocument).where(
+                    (DetailDocument.id_detail == id_detail) &
+                    (DetailDocument.id_document == self.current_document_id)
+                )
+            )
             session.commit()
-            self.tableWidget.removeRow(selected[0].row())
+            self.tableWidget.removeRow(row)
             _recalculate_totals(self)
     _on_annuler(self)
         
@@ -235,6 +241,7 @@ def _on_enregistrer(self, session=None):
     session.commit()
     _reload_table(self)
 
+
 @with_db_session
 def _reload_table(self, session=None):
     self.tableWidget.setRowCount(0)  # Clear and reload to show the new line with its ID
@@ -292,7 +299,8 @@ def _on_nouveau(self):
     self.ndocument_lineedit.setText(generate_document_number(self.current_doc_type))
     self.ndocument_lineedit.setReadOnly(True)
 
-def _recalculate_totals(self):
+@with_db_session
+def _recalculate_totals(self, session=None):
     """Recompute footer totals from the table rows."""
     total_ht = 0.0
     total_tax = 0.0
@@ -314,6 +322,16 @@ def _recalculate_totals(self):
     self.total_tax_label.setText(f"{total_tax:.2f}")
     self.total_ttc_label.setText(f"{total_ttc:.2f}")
     _update_table_stats(self)
+
+    query = update(Document).where(Document.id_document == self.current_document_id).values(
+        total_ht=float(total_ht),
+        total_tva=float(total_tax),
+        total_ttc=float(total_ttc),
+        solde=float(total_ttc)
+    )
+    session.execute(query)
+    session.commit()
+
 
 def _update_table_stats(self):
     """Refresh small stats shown under the lines table."""
@@ -361,25 +379,47 @@ def _on_table_row_selected(self):
 @with_db_session
 def _connect_signals(self, session=None):
     """Wire up button signals."""
-    self.annule.clicked.connect(lambda: _on_annuler(self))
-    self.suprimer.clicked.connect(lambda: _on_supprimer(self))
-    self.enrgistrer.clicked.connect(lambda: _on_enregistrer(self))
-    self.btn_fermer.clicked.connect(self.close)
-    self.btn_nouveau.clicked.connect(lambda: _on_nouveau(self))
-    self.tableWidget.itemSelectionChanged.connect(lambda: _on_table_row_selected(self))
+    for signal, handler in (
+        (self.annule.clicked, lambda: _on_annuler(self)),
+        (self.suprimer.clicked, lambda: _on_supprimer(self)),
+        (self.enrgistrer.clicked, lambda: _on_enregistrer(self)),
+        (self.btn_fermer.clicked, self.close),
+        (self.btn_nouveau.clicked, lambda: _on_nouveau(self)),
+        (self.tableWidget.itemSelectionChanged, lambda: _on_table_row_selected(self)),
+    ):
+        try:
+            signal.disconnect()
+        except TypeError:
+            pass
+        signal.connect(handler)
 
     # Auto-calculate Total TTC entry field when inputs change
-    self.puht_editline.textChanged.connect(lambda: _recalculate_entry(self))
-    self.qte_lineedit.textChanged.connect(lambda: _recalculate_entry(self))
-    self.taxe_editline.textChanged.connect(lambda: _recalculate_entry(self))
+    for signal in (self.puht_editline.textChanged, self.qte_lineedit.textChanged, self.taxe_editline.textChanged):
+        try:
+            signal.disconnect()
+        except TypeError:
+            pass
+        signal.connect(lambda: _recalculate_entry(self))
 
     # Article reference field is a QLineEdit in the UI.
     # Use editing signals so Enter and focus change (including Tab) refresh line data.
     if hasattr(self.articles_combobox, "returnPressed"):
+        try:
+            self.articles_combobox.returnPressed.disconnect()
+        except TypeError:
+            pass
         self.articles_combobox.returnPressed.connect(lambda: ref_tab_func(self))
     if hasattr(self.designation_editline, "returnPressed"):
+        try:
+            self.designation_editline.returnPressed.disconnect()
+        except TypeError:
+            pass
         self.designation_editline.returnPressed.connect(lambda: _on_designation_return_pressed(self))
     if hasattr(self.articles_combobox, "editingFinished"):
+        try:
+            self.articles_combobox.editingFinished.disconnect()
+        except TypeError:
+            pass
         self.articles_combobox.editingFinished.connect(lambda: ref_tab_func(self))
 
     _update_table_stats(self)
@@ -422,24 +462,36 @@ def ref_tab_func(self, session=None):
     _recalculate_totals(self)
     _recalculate_entry(self)
 
-def nouveau_doc_setup(self):
-    result = self.doc_type_window.exec_()
-    if result != QDialog.Accepted:
-        return
+def nouveau_doc_setup(self,document_id=None):
+    is_existing_document = bool(document_id)
+
+    if not is_existing_document:
+        result = self.doc_type_window.exec_()
+        if result != QDialog.Accepted:
+            return
+    parent_widget = self.parentWidget()
+    self.setWindowModality(Qt.WindowModal if parent_widget else Qt.ApplicationModal)
     self.show()
 
     self.tableWidget.setColumnCount(8)  # Adjust column count to include the hidden ID column
     self.tableWidget.setHorizontalHeaderLabels(["Ref", "Désignation", "PU HT", "PU TTC", "Qte", "Taxe", "Total TTC", "ID Detail"])
     self.tableWidget.setColumnHidden(7, True)  # Hide the ID Detail column
-    self.current_doc_type = self.doc_type_window.get_current_doc_type()
-    self.setWindowTitle(f"Nouveau document - {self.current_doc_type}")
-    self.ndocument_lineedit.setText(generate_document_number(self.current_doc_type))
-    self.ndocument_lineedit.setReadOnly(False)
-
-    self.valider_button.clicked.connect(lambda: _valider(self))
-    self._editing_detail_id = None
-
     _connect_signals(self)
+
+    if not is_existing_document:
+        self.current_doc_type = self.doc_type_window.get_current_doc_type()
+        self.setWindowTitle(f"Nouveau document - {self.current_doc_type}")
+        self.ndocument_lineedit.setText(generate_document_number(self.current_doc_type))
+        self.ndocument_lineedit.setReadOnly(True)
+        try:
+            self.valider_button.clicked.disconnect()
+        except TypeError:
+            pass
+        self.valider_button.clicked.connect(lambda: _valider(self))
+    else:
+        ouvrir_old_doc_setup(self, document_id=document_id)
+
+    self._editing_detail_id = None
 
     # when focus on ref article combo and I press tab it should fill the designation and the price and the tax of the article and recalculate the total ttc of the line
     
@@ -449,3 +501,40 @@ def nouveau_doc_setup(self):
     # and unlink id type tiers and link type tiers only
 
     # id_type_tiers will be the id to define the clients or the founissers by (CL001 , FR001)
+
+@with_db_session
+def ouvrir_old_doc_setup(self, document_id=None, session=None):
+    query = select(Document).where(Document.id_document == document_id)
+    document = session.execute(query).scalar_one_or_none()
+    if not document:
+        show_error_message("Document introuvable.")
+        self.close()
+        return
+    self.current_document_id = document_id
+    self.current_doc_type = session.execute(select(RefTypeDocument.libelle_type).where(RefTypeDocument.id_type_document == document.id_type_document)).scalar_one_or_none() or "N/A"
+    self.setWindowTitle(f"Document - {self.current_doc_type} - {document.numero_document}")
+    
+    self.clientid_lineedit.setText(session.execute(select(Tiers.code_tiers).where(Tiers.id_tiers == document.id_tiers)).scalar_one_or_none() or "")
+    self.clients_lineedit.setText(session.execute(select(Tiers.nom_tiers).where(Tiers.id_tiers == document.id_tiers)).scalar_one_or_none() or "")
+    self.ndocument_lineedit.setText(document.numero_document)
+    self.date_dateedit.setDate(document.date_document)
+    
+    self.ndocument_lineedit.setReadOnly(True)
+    self.date_dateedit.setReadOnly(True)
+    self.clientid_lineedit.setReadOnly(True)
+    self.clients_lineedit.setReadOnly(True)
+    self.valider_button.setEnabled(False)
+    
+    self.articles_combobox.setEnabled(True)
+    self.designation_editline.setEnabled(True)
+    self.puht_editline.setEnabled(True)
+    self.pttc_editline.setEnabled(True)
+    self.qte_lineedit.setEnabled(True)
+    self.taxe_editline.setEnabled(True)
+
+    self.annule.setEnabled(True)
+    self.enrgistrer.setEnabled(True)
+    self.suprimer.setEnabled(True)
+
+
+    _reload_table(self)
