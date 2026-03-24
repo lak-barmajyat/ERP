@@ -1,0 +1,714 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>450</width>
+    <height>630</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Overpass</family>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QHBoxLayout" name="dialogHLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="dialogFrame">
+       <property name="minimumSize">
+        <size>
+         <width>448</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>448</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string>
+               #dialogFrame {
+                   background-color: #ffffff;
+                   border-radius: 8px;
+                   border: 1px solid #e2e8f0;
+               }
+               /* We will do nested frames for borders */
+              </string>
+       </property>
+       <layout class="QVBoxLayout" name="dialogLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QFrame" name="dlgHeader">
+          <property name="styleSheet">
+           <string>#dlgHeader { background-color: #f8fafc; border-bottom: 1px solid #f1f5f9; border-top-left-radius: 8px; border-top-right-radius: 8px; }</string>
+          </property>
+          <layout class="QHBoxLayout" name="_2">
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>16</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>16</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label">
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string>font-size: 14px; font-weight: bold; color: #1e293b;</string>
+             </property>
+             <property name="text">
+              <string>Opération de transfert</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer>
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>0</width>
+               <height>0</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnDlgClose">
+             <property name="styleSheet">
+              <string>border: none; background: transparent;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>assect/close.png</normaloff>assect/close.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="dlgSource">
+          <property name="styleSheet">
+           <string>#dlgSource { background-color: #ffffff; border-bottom: 1px solid #f1f5f9; }</string>
+          </property>
+          <layout class="QVBoxLayout" name="_3">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>16</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>16</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_2">
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string>font-size: 10px; font-weight: bold; color: #94a3b8; letter-spacing: 1px;</string>
+             </property>
+             <property name="text">
+              <string>DOCUMENT SOURCE</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="_4">
+             <item>
+              <widget class="QLabel" name="label_3">
+               <property name="font">
+                <font>
+                 <family>Overpass</family>
+                 <pointsize>-1</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">font-size: 12px; font-weight: bold; color: #1d7ae2;</string>
+               </property>
+               <property name="text">
+                <string>DV-2023-0012</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_4">
+               <property name="font">
+                <font>
+                 <family>Overpass</family>
+                 <pointsize>-1</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string>font-size: 12px; font-weight: 600; color: #334155;</string>
+               </property>
+               <property name="text">
+                <string>TechSolutions SARL</string>
+               </property>
+               <property name="alignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <layout class="QHBoxLayout" name="_5">
+             <item>
+              <widget class="QLabel" name="label_5">
+               <property name="font">
+                <font>
+                 <family>Overpass</family>
+                 <pointsize>-1</pointsize>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string>font-size: 11px; color: #64748b;</string>
+               </property>
+               <property name="text">
+                <string>Émis le 12 oct. 2023</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>0</width>
+                 <height>0</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_6">
+               <property name="font">
+                <font>
+                 <family>Overpass</family>
+                 <pointsize>-1</pointsize>
+                 <weight>75</weight>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string>background-color: #f1f5f9; border-radius: 4px; font-size: 9px; font-weight: bold; color: #475569; padding: 2px 6px;</string>
+               </property>
+               <property name="text">
+                <string> DEVIS </string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="_6">
+          <property name="spacing">
+           <number>24</number>
+          </property>
+          <property name="leftMargin">
+           <number>20</number>
+          </property>
+          <property name="topMargin">
+           <number>20</number>
+          </property>
+          <property name="rightMargin">
+           <number>20</number>
+          </property>
+          <property name="bottomMargin">
+           <number>20</number>
+          </property>
+          <item>
+           <layout class="QVBoxLayout" name="_7">
+            <property name="spacing">
+             <number>12</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_7">
+              <property name="font">
+               <font>
+                <family>Overpass</family>
+                <pointsize>-1</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 10px; font-weight: bold; color: #94a3b8; letter-spacing: 1px;</string>
+              </property>
+              <property name="text">
+               <string>MODE D'OPÉRATION</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_8">
+              <property name="spacing">
+               <number>8</number>
+              </property>
+              <item>
+               <widget class="QPushButton" name="btnModeDupliquer">
+                <property name="font">
+                 <font>
+                  <family>Overpass</family>
+                  <pointsize>-1</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QPushButton { background-color: #eff6ff; border: 2px solid #1d7ae2; color: #1d7ae2; border-radius: 4px; padding: 12px; font-size: 12px; font-weight: bold; }</string>
+                </property>
+                <property name="text">
+                 <string> Dupliquer</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>assect/content_copy.png</normaloff>assect/content_copy.png</iconset>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btnModeRemplacer">
+                <property name="font">
+                 <font>
+                  <family>Overpass</family>
+                  <pointsize>-1</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string>QPushButton { background-color: transparent; border: 1px solid #e2e8f0; color: #64748b; border-radius: 4px; padding: 12px; font-size: 12px; font-weight: bold; }</string>
+                </property>
+                <property name="text">
+                 <string> Remplacer</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>assect/sync_alt.png</normaloff>assect/sync_alt.png</iconset>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="_9">
+            <property name="spacing">
+             <number>16</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_8">
+              <property name="font">
+               <font>
+                <family>Overpass</family>
+                <pointsize>-1</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 10px; font-weight: bold; color: #94a3b8; letter-spacing: 1px;</string>
+              </property>
+              <property name="text">
+               <string>PARAMÈTRES DE DESTINATION</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="_10">
+              <property name="spacing">
+               <number>6</number>
+              </property>
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="font">
+                 <font>
+                  <family>Overpass</family>
+                  <pointsize>-1</pointsize>
+                  <weight>75</weight>
+                  <bold>true</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string>font-size: 10px; font-weight: bold; color: #64748b;</string>
+                </property>
+                <property name="text">
+                 <string>CLIENT DESTINATAIRE</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="comboClient">
+                <property name="font">
+                 <font>
+                  <family>Overpass</family>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <italic>false</italic>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">QComboBox {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+}
+QComboBox::drop-down {
+    border: none;
+    width: 18px;
+}
+QComboBox::down-arrow {
+    image: url(program/assets/global/down_blue_arrow.svg);
+    width: 10px;
+    height: 10px;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>TechSolutions SARL (Identique)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Global Logistics Corp</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Innovatech Systems</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="_11">
+              <property name="spacing">
+               <number>12</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="_12">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_10">
+                  <property name="font">
+                   <font>
+                    <family>Overpass</family>
+                    <pointsize>-1</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string>font-size: 10px; font-weight: bold; color: #64748b;</string>
+                  </property>
+                  <property name="text">
+                   <string>TYPE DE DOCUMENT</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="_13">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="label_11">
+                  <property name="font">
+                   <font>
+                    <family>Overpass</family>
+                    <pointsize>-1</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string>font-size: 10px; font-weight: bold; color: #64748b;</string>
+                  </property>
+                  <property name="text">
+                   <string>DATE CIBLE</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDateEdit" name="dateTarget">
+                  <property name="font">
+                   <font>
+                    <family>Overpass</family>
+                    <pointsize>9</pointsize>
+                    <weight>50</weight>
+                    <italic>false</italic>
+                    <bold>false</bold>
+                   </font>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QDateEdit, QDateEdit#dateTo {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+}
+QDateEdit:focus, QDateEdit#dateTo:focus {
+    border-color: #135bec;
+}
+QDateEdit::drop-down, QDateEdit#dateTo::drop-down {
+    border: none;
+    width: 18px;
+}
+QDateEdit::down-arrow, QDateEdit#dateTo::down-arrow {
+    image: url(program/assets/global/down_blue_arrow.svg);
+    width: 10px;
+    height: 10px;
+}</string>
+                  </property>
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="_15">
+            <property name="spacing">
+             <number>6</number>
+            </property>
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="font">
+               <font>
+                <family>Overpass</family>
+                <pointsize>-1</pointsize>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string>font-size: 10px; font-weight: bold; color: #64748b;</string>
+              </property>
+              <property name="text">
+               <string>REFERENCE</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="CodeEditLine">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>30</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>1367777</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLineEdit#CodeEditLine { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151; } 
+
+QLineEdit#CodeEditLine:hover { border-color: #d1d5db; }
+
+ QLineEdit#CodeEditLine:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#CodeEditLine[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #9ca3af;               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#CodeEditLine[readOnly=&quot;true&quot;]:hover,
+QLineEdit#CodeEditLine[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
+              </property>
+              <property name="placeholderText">
+               <string>REFERENCE</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QFrame" name="dlgFooter">
+          <property name="styleSheet">
+           <string>#dlgFooter { background-color: #f8fafc; border-top: 1px solid #f1f5f9; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }</string>
+          </property>
+          <layout class="QHBoxLayout" name="_14">
+           <property name="spacing">
+            <number>12</number>
+           </property>
+           <property name="leftMargin">
+            <number>20</number>
+           </property>
+           <property name="topMargin">
+            <number>16</number>
+           </property>
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
+           <property name="bottomMargin">
+            <number>16</number>
+           </property>
+           <item>
+            <widget class="QPushButton" name="btnAnnuler">
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string>QPushButton { background-color: transparent; border: none; color: #64748b; font-size: 12px; font-weight: bold; padding: 8px; } QPushButton:hover { background-color: #f1f5f9; border-radius: 4px; }</string>
+             </property>
+             <property name="text">
+              <string>Annuler</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="btnConfirmer">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>1</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>-1</pointsize>
+               <weight>75</weight>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton { background-color: #1d7ae2; border: none; color: #ffffff; font-size: 12px; font-weight: bold; border-radius: 4px; padding: 10px; } QPushButton:hover { background-color: #1e40af; }</string>
+             </property>
+             <property name="text">
+              <string> Confirmer</string>
+             </property>
+             <property name="icon">
+              <iconset>
+               <normaloff>assect/check_circle.png</normaloff>assect/check_circle.png</iconset>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

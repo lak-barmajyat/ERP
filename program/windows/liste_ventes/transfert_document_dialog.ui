@@ -118,7 +118,7 @@
          <item>
           <widget class="QLabel" name="labelDocCode">
            <property name="styleSheet">
-            <string notr="true">QLabel#labelDocCode { color: #0037b0; font: 700 12pt &quot;Overpass&quot;; }</string>
+            <string notr="true">QLabel#labelDocCode { color: #1d7ae2; font: 700 12pt &quot;Overpass&quot;; }</string>
            </property>
            <property name="text">
             <string>DV-2023-0012</string>
@@ -230,7 +230,7 @@
              <item row="2" column="3">
               <widget class="QLabel" name="labelSourceTotalValue">
                <property name="styleSheet">
-                <string notr="true">QLabel#labelSourceTotalValue { color: #0037b0; font: 800 15pt &quot;Overpass&quot;; }</string>
+                <string notr="true">QLabel#labelSourceTotalValue { color: #1d7ae2; font: 800 15pt &quot;Overpass&quot;; }</string>
                </property>
                <property name="text">
                 <string>0.00 MAD</string>
@@ -321,7 +321,7 @@
             <item>
              <widget class="QLabel" name="labelWorkflow">
               <property name="styleSheet">
-               <string notr="true">QLabel#labelWorkflow { background-color: #e6e8ea; border: 1px solid rgba(196,197,215,0.35); border-radius: 14px; color: #1d4ed8; font: 700 8pt &quot;Overpass&quot;; letter-spacing: 1px; padding: 7px 16px; }</string>
+               <string notr="true">QLabel#labelWorkflow { background-color: #e6e8ea; border: 1px solid rgba(196,197,215,0.35); border-radius: 14px; color: #1d7ae2; font: 700 8pt &quot;Overpass&quot;; letter-spacing: 1px; padding: 7px 16px; }</string>
               </property>
               <property name="text">
                <string>CONVERSION WORKFLOW  →</string>
@@ -449,6 +449,60 @@ QLineEdit#CodeEditLine[readOnly=&quot;true&quot;]:hover,
 QLineEdit#CodeEditLine[readOnly=&quot;true&quot;]:focus {
     border-color: #f3f4f6;
 }</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="labelDate">
+              <property name="styleSheet">
+               <string notr="true">QLabel#labelDate { color: #191c1e; font: 800 12pt &quot;Overpass&quot;; }</string>
+              </property>
+              <property name="text">
+               <string>Date</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDateEdit" name="dateTarget">
+              <property name="minimumSize">
+               <size>
+                <width>110</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="font">
+               <font>
+                <family>Overpass</family>
+                <pointsize>9</pointsize>
+                <weight>50</weight>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QDateEdit, QDateEdit#dateTo {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+}
+QDateEdit:focus, QDateEdit#dateTo:focus {
+    border-color: #135bec;
+}
+QDateEdit::drop-down, QDateEdit#dateTo::drop-down {
+    border: none;
+    width: 18px;
+}
+QDateEdit::down-arrow, QDateEdit#dateTo::down-arrow {
+    image: url(program/assets/global/down_blue_arrow.svg);
+    width: 10px;
+    height: 10px;
+}</string>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -717,7 +771,7 @@ QLineEdit#CodeEditLine[readOnly=&quot;true&quot;]:focus {
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">QPushButton#btnLaunchTransfer { border: none; border-radius: 4px; color: #ffffff; font: 700 9pt &quot;Overpass&quot;; padding: 8px 18px; background-color: #1d4ed8; } QPushButton#btnLaunchTransfer:hover { background-color: #0037b0; }</string>
+            <string notr="true">QPushButton#btnLaunchTransfer { border: none; border-radius: 4px; color: #ffffff; font: 700 9pt &quot;Overpass&quot;; padding: 8px 18px; background-color: #1d7ae2; } QPushButton#btnLaunchTransfer:hover { background-color: #0037b0; }</string>
            </property>
            <property name="text">
             <string>Transfer</string>

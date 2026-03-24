@@ -276,7 +276,7 @@ QFrame#toolbarDivider2_2 {
          </size>
         </property>
         <property name="text">
-         <string>Transform</string>
+         <string>Transformer</string>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -323,7 +323,7 @@ QFrame#filterFrame {
     border-bottom: 1px solid #e2e8f0;
 }
 
-QLabel#labelClient, QLabel#labelDocNumber, QLabel#labelPeriod, QLabel#labelStatus, QLabel#labelcodeclient {
+QLabel#labelClient, QLabel#labelDocNumber, QLabel#labelPeriod, QLabel#labelStatus, QLabel#labelcodeclient, QLabel#labelDocType {
     color: #6b7280;
     font: 600 8pt &quot;Overpass&quot;;
     text-transform: uppercase;
@@ -362,7 +362,7 @@ QDateEdit#dateFrom::down-arrow, QDateEdit#dateTo::down-arrow {
     height: 10px;
 }
 
-QComboBox#comboStatus {
+QComboBox#comboStatus, QComboBox#comboDocType {
     background-color: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
@@ -370,11 +370,11 @@ QComboBox#comboStatus {
     font: 400 9pt &quot;Overpass&quot;;
     color: #374151;
 }
-QComboBox#comboStatus::drop-down {
+QComboBox#comboStatus::drop-down, QComboBox#comboDocType::drop-down {
     border: none;
     width: 18px;
 }
-QComboBox#comboStatus::down-arrow {
+QComboBox#comboStatus::down-arrow, QComboBox#comboDocType::down-arrow {
     image: url(program/assets/global/down_blue_arrow.svg);
     width: 10px;
     height: 10px;
@@ -461,7 +461,7 @@ QPushButton#btnFilter:hover {
          <widget class="QLineEdit" name="editClient">
           <property name="minimumSize">
            <size>
-            <width>300</width>
+            <width>240</width>
             <height>40</height>
            </size>
           </property>
@@ -505,7 +505,7 @@ QPushButton#btnFilter:hover {
            </size>
           </property>
           <property name="placeholderText">
-           <string>ex: FAC-2023-...</string>
+           <string>EX: FAC-2023-...</string>
           </property>
          </widget>
         </item>
@@ -591,6 +591,66 @@ QLabel#labelPeriodDash {
        </layout>
       </item>
       <item>
+        <layout class="QVBoxLayout" name="docTypeFilterLayout">
+         <property name="spacing">
+          <number>4</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="labelDocType">
+           <property name="text">
+            <string>Type document</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboDocType">
+           <property name="minimumSize">
+            <size>
+             <width>170</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <item>
+            <property name="text">
+             <string>Tous les types</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Devis</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Bon de commande</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Bon de livraison</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Facture</string>
+            </property>
+           </item>
+           <item>
+            <property name="text">
+             <string>Avoir</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+        </layout>
+          </item>
+          <item>
        <layout class="QVBoxLayout" name="statusFilterLayout">
         <property name="spacing">
          <number>4</number>
@@ -606,7 +666,7 @@ QLabel#labelPeriodDash {
          <widget class="QComboBox" name="comboStatus">
           <property name="minimumSize">
            <size>
-            <width>200</width>
+                <width>170</width>
             <height>40</height>
            </size>
           </property>
@@ -623,17 +683,27 @@ QLabel#labelPeriodDash {
           </item>
           <item>
            <property name="text">
-            <string>Payé</string>
+            <string>Brouillon</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Impayé</string>
+            <string>Valide</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Annuler</string>
            </property>
           </item>
           <item>
            <property name="text">
             <string>Partiel</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Payé</string>
            </property>
           </item>
          </widget>
@@ -937,7 +1007,7 @@ QLabel#labelTotalBalanceValue {
         <item>
          <widget class="QLabel" name="labelTotalHtValue">
           <property name="text">
-           <string>0,00 €</string>
+           <string>0.00</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -964,7 +1034,7 @@ QLabel#labelTotalBalanceValue {
         <item>
          <widget class="QLabel" name="labelTotalTtcValue">
           <property name="text">
-           <string>0,00 €</string>
+           <string>0.00</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -1001,7 +1071,7 @@ QLabel#labelTotalBalanceValue {
          <item>
           <widget class="QLabel" name="labelTotalBalanceValue">
            <property name="text">
-            <string>0,00 €</string>
+            <string>0.00</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
