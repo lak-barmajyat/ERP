@@ -1,0 +1,842 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1015</width>
+    <height>563</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="mainContentLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="toolbarFrame">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>65</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>72</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+QFrame#toolbarFrame {
+    background-color: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+}
+QToolButton#tbNew, QToolButton#tbEdit, QToolButton#tbDelete,QToolButton#tbFermer,
+QToolButton#tbPrint, QToolButton#tbExportExcel, QToolButton#tbTransform,
+QToolButton#tbDuplicate{
+    background-color: transparent;
+    border: none;
+    padding: 4px 12px;
+    margin: 0px;
+    color: #374151;
+    font: 400 10pt &quot;Overpass&quot;;
+}
+QToolButton#tbNew {
+    color: #111827;
+}
+QToolButton#tbNew:hover,
+QToolButton#tbEdit:hover,
+QToolButton#tbDelete:hover,
+QToolButton#tbPrint:hover,
+QToolButton#tbFermer:hover,
+QToolButton#tbTransform:hover,
+QToolButton#tbDuplicate:hover,
+QToolButton#tbExportExcel:hover {
+    background-color: #f9fafb;
+}
+QToolButton#tbDelete:hover {
+    color: #ef4444;
+}
+QToolButton#tbNew {
+    qproperty-icon: url(program/assets/documents/add_document.svg);
+}
+QToolButton#tbEdit {
+    qproperty-icon: url(program/assets/documents/edit_document.svg);
+}
+QToolButton#tbDelete {
+    qproperty-icon: url(program/assets/documents/delete_document.svg);
+}
+QToolButton#tbPrint {
+    qproperty-icon: url(program/assets/documents/print_document.svg);
+}
+QToolButton#tbExportExcel {
+    qproperty-icon: url(program/assets/documents/excel_document.svg);
+}
+QToolButton#tbFermer {
+    qproperty-icon: url(program/assets/documents/quit.svg);
+}
+QToolButton#tbTransform {
+    qproperty-icon: url(program/assets/documents/transform.svg);
+}
+QToolButton#tbDuplicate {
+    qproperty-icon: url(program/assets/documents/duplicate.svg);
+}
+       </string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::NoFrame</enum>
+       </property>
+       <layout class="QHBoxLayout" name="toolbarLayout">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <property name="leftMargin">
+         <number>24</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>24</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QToolButton" name="tbNew">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>46</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Nouveau</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>../../assets/documents/add_document.svg</normaloff>../../assets/documents/add_document.svg</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="toolbarDivider1">
+          <property name="styleSheet">
+           <string notr="true">
+QFrame#toolbarDivider1 {
+    color: #e2e8f0;
+}
+          </string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::VLine</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="tbEdit">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>46</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Modifier</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>../../assets/documents/edit_document.svg</normaloff>../../assets/documents/edit_document.svg</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="tbDelete">
+          <property name="minimumSize">
+           <size>
+            <width>80</width>
+            <height>46</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Supprimer</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>../../assets/documents/delete_document.svg</normaloff>../../assets/documents/delete_document.svg</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QFrame" name="toolbarDivider2">
+          <property name="styleSheet">
+           <string notr="true">
+QFrame#toolbarDivider2 {
+    color: #e2e8f0;
+}
+          </string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::VLine</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Plain</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="tbDuplicate">
+          <property name="minimumSize">
+           <size>
+            <width>90</width>
+            <height>46</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Interroger</string>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextUnderIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="toolbarSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Expanding</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="filtersFrame">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>100</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+QFrame {
+    background-color: #f6f6f8;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+QLabel, QLabel#labelDocNumber, QLabel#labelPeriod, QLabel#labelStatus, QLabel#labelcodeclient {
+    color: #6b7280;
+    font: 600 8pt &quot;Overpass&quot;;
+    text-transform: uppercase;
+}
+
+QLineEdit, QLineEdit#editDocNumber, QLineEdit#editcodeclient {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+}
+QLineEdit:focus, QLineEdit#editDocNumber:focus, QLineEdit#editcodeclient:focus {
+    border-color: #135bec;
+}
+
+QDateEdit, QDateEdit#dateTo {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+}
+QDateEdit:focus, QDateEdit#dateTo:focus {
+    border-color: #135bec;
+}
+QDateEdit::drop-down, QDateEdit#dateTo::drop-down {
+    border: none;
+    width: 18px;
+}
+QDateEdit::down-arrow, QDateEdit#dateTo::down-arrow {
+    image: url(program/assets/global/down_blue_arrow.svg);
+    width: 10px;
+    height: 10px;
+}
+
+QComboBox {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+}
+QComboBox::drop-down {
+    border: none;
+    width: 18px;
+}
+QComboBox::down-arrow {
+    image: url(program/assets/global/down_blue_arrow.svg);
+    width: 10px;
+    height: 10px;
+}
+
+QPushButton {
+    background-color: #135bec;
+    border-radius: 8px;
+    border: none;
+    padding: 8px 18px;
+    color: #ffffff;
+    font: 600 9pt &quot;Overpass&quot;;
+}
+QPushButton:hover {
+    background-color: #0f4bc4;
+}
+       </string>
+       </property>
+       <layout class="QHBoxLayout" name="filtersLayout">
+        <property name="spacing">
+         <number>16</number>
+        </property>
+        <property name="leftMargin">
+         <number>24</number>
+        </property>
+        <property name="topMargin">
+         <number>16</number>
+        </property>
+        <property name="rightMargin">
+         <number>24</number>
+        </property>
+        <property name="bottomMargin">
+         <number>16</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="_3">
+          <item>
+           <widget class="QLabel" name="lblFilter1">
+            <property name="text">
+             <string>RECHERCHE</string>
+            </property>
+            <property name="cssClass" stdset="0">
+             <string>filterLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="editSearch">
+            <property name="placeholderText">
+             <string>Nom, ICE, ou Code...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="_4">
+          <item>
+           <widget class="QLabel" name="lblFilter2">
+            <property name="text">
+             <string>TYPE DE CLIENT</string>
+            </property>
+            <property name="cssClass" stdset="0">
+             <string>filterLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboType">
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>0</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>Tous</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Entreprise</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Particulier</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="_5">
+          <item>
+           <widget class="QLabel" name="lblFilter3">
+            <property name="text">
+             <string>STATUT</string>
+            </property>
+            <property name="cssClass" stdset="0">
+             <string>filterLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboStatus">
+            <property name="minimumSize">
+             <size>
+              <width>90</width>
+              <height>0</height>
+             </size>
+            </property>
+            <item>
+             <property name="text">
+              <string>Tous</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Actif</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Inactif</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="_6">
+          <item>
+           <widget class="QLabel" name="lblFilter4">
+            <property name="text">
+             <string>DATE DE CRÉATION</string>
+            </property>
+            <property name="cssClass" stdset="0">
+             <string>filterLabel</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="_7">
+            <item>
+             <widget class="QDateEdit" name="dateStart">
+              <property name="minimumSize">
+               <size>
+                <width>115</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>-</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QDateEdit" name="dateEnd">
+              <property name="minimumSize">
+               <size>
+                <width>115</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="_8">
+          <item>
+           <spacer>
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnFilter">
+            <property name="text">
+             <string>FILTRER</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>assect/filter_list.png</normaloff>assect/filter_list.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QTableWidget" name="tableClients">
+       <property name="focusPolicy">
+        <enum>Qt::NoFocus</enum>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">
+QTableWidget#tableClients {
+    background-color: #ffffff;
+    border: none;
+    gridline-color: #e2e8f0;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+    selection-background-color: rgba(19,91,236,0.08);
+    selection-color: #111827;
+    outline: 0;
+}
+QTableWidget#tableClients::item {
+    padding: 6px 10px;
+    border-bottom: 1px solid #f3f4f6;
+}
+QTableWidget#tableClients::item:alternate {
+    background-color: #f9fafb;
+}
+QTableWidget#tableClients::item:selected {
+    background-color: rgba(19,91,236,0.08);
+    color: #111827;
+}
+QTableWidget#tableClients::item:hover {
+    background-color: #f9fafb;
+}
+QHeaderView::section {
+    background-color: #f9fafb;
+    color: #374151;
+    font: 600 9pt &quot;Overpass&quot;;
+    padding: 8px 10px;
+    border: none;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 2px solid #e2e8f0;
+}
+QHeaderView::section:last {
+    border-right: none;
+}
+       </string>
+       </property>
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectRows</enum>
+       </property>
+       <property name="verticalScrollMode">
+        <enum>QAbstractItemView::ScrollPerPixel</enum>
+       </property>
+       <property name="horizontalScrollMode">
+        <enum>QAbstractItemView::ScrollPerPixel</enum>
+       </property>
+       <column>
+        <property name="text">
+         <string/>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Code</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Nom / Raison Sociale</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>ICE</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Téléphone</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Email</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Ville</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Plafond Crédit</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Solde</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Statut</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="footerFrame">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>70</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string>
+           #footerFrame {
+               background-color: #ffffff;
+               border-top: 1px solid #e2e8f0;
+           }
+           QLabel[cssClass=&quot;footerTitle&quot;] {
+               font-size: 10px; font-weight: bold; color: #64748b; letter-spacing: 1px;
+           }
+           #lblSelection { font-size: 16px; font-weight: bold; color: #135bec; }
+           #lblTotalClients { font-size: 18px; font-weight: bold; color: #0f172a; }
+           #lblTotalSolde { font-size: 18px; font-weight: bold; color: #135bec; font-family: Overpass; }
+          </string>
+       </property>
+       <layout class="QHBoxLayout" name="footerLayout">
+        <property name="leftMargin">
+         <number>24</number>
+        </property>
+        <property name="rightMargin">
+         <number>24</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="_9">
+          <item>
+           <widget class="QLabel" name="lblSelTitle">
+            <property name="font">
+             <font>
+              <family>Overpass</family>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>SÉLECTION</string>
+            </property>
+            <property name="cssClass" stdset="0">
+             <string>footerTitle</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblSelection">
+            <property name="font">
+             <font>
+              <family>Overpass</family>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>1 client sélectionné</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="_10">
+          <item>
+           <widget class="QLabel" name="lblTotalTitle">
+            <property name="font">
+             <font>
+              <family>Overpass</family>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>TOTAL CLIENTS</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <property name="cssClass" stdset="0">
+             <string>footerTitle</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblTotalClients">
+            <property name="font">
+             <font>
+              <family>Overpass</family>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>1 240</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="line_3">
+          <property name="styleSheet">
+           <string>margin-left: 16px; margin-right: 16px; color: #e2e8f0;</string>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="_11">
+          <item>
+           <widget class="QLabel" name="lblSoldeTitle">
+            <property name="font">
+             <font>
+              <family>Overpass</family>
+              <pointsize>-1</pointsize>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string>font-size: 10px; font-weight: bold; color: #135bec; letter-spacing: 1px;</string>
+            </property>
+            <property name="text">
+             <string>TOTAL SOLDE GLOBAL</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="lblTotalSolde">
+            <property name="text">
+             <string>450 230,00 MAD</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
