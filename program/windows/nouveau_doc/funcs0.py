@@ -13,12 +13,13 @@ from program.services import (Tiers,
                             and_,
                             RefTypeDocument,
                             MessageBox)
-from PyQt5.QtWidgets import (
-    QDialog,
-    QTableWidgetItem,
-    QLineEdit,
-)
-from PyQt5.QtCore import Qt, QDate
+from program.services.widgetstyles.lineedit_combo_style import LineEditAutoComplete
+
+from PyQt5.QtWidgets import (QDialog, QCompleter, QComboBox,
+                             QTableWidgetItem,
+                             QLineEdit)
+from PyQt5.QtCore import QStringListModel, Qt, QSortFilterProxyModel, QDate
+from PyQt5.QtGui import QPalette, QColor
 
 from datetime import datetime
 import os
@@ -37,35 +38,6 @@ def show_error_message(message_text=None):
         title="Erreur",
         message=full_message,
     ).exec_()
-
-
-def _get_ref_text(self):
-    if hasattr(self, "productSelector"):
-        return self.productSelector.code_edit.text().strip()
-    return self.articles_combobox.text().strip()
-
-
-def _get_designation_text(self):
-    if hasattr(self, "productSelector"):
-        return self.productSelector.desc_edit.text().strip()
-    return self.designation_editline.text().strip()
-
-
-def _set_product_fields(self, ref="", designation=""):
-    if hasattr(self, "productSelector"):
-        self.productSelector.code_edit.setText(ref or "")
-        self.productSelector.desc_edit.setText(designation or "")
-    else:
-        self.articles_combobox.setText(ref or "")
-        self.designation_editline.setText(designation or "")
-
-
-def _clear_product_fields(self):
-    if hasattr(self, "productSelector"):
-        self.productSelector.clear_selection()
-    else:
-        self.articles_combobox.clear()
-        self.designation_editline.clear()
 
 @with_db_session
 def _valider(self, session=None):
@@ -181,18 +153,14 @@ def _recalculate_entry(self):
 
 def _on_annuler(self):
     """Clear the article entry fields."""
-    _clear_product_fields(self)
+    self.articles_combobox.clear()
+    self.designation_editline.clear()
     self.puht_editline.clear()
     self.pttc_editline.clear()
     self.qte_lineedit.setText("1")
-    self.taxe_editline.clear()
     self.ttc_lineedit.clear()
     self._editing_detail_id = None
-
-    if hasattr(self, "productSelector"):
-        self.productSelector.setEnabled(True)
-    else:
-        self.articles_combobox.setReadOnly(False)
+    self.articles_combobox.setReadOnly(False)
 
 @with_db_session
 def _on_supprimer(self, session=None):
@@ -221,8 +189,8 @@ def _on_enregistrer(self, session=None):
         show_error_message("Veuillez valider le document avant d'ajouter des lignes.")
         return
 
-    ref_text = _get_ref_text(self)
-    desig = _get_designation_text(self)
+    ref_text = self.articles_combobox.text().strip()
+    desig = self.designation_editline.text().strip()
 
     try:
         ref = ref_text
@@ -403,7 +371,8 @@ def _on_table_row_selected(self):
     total = (self.tableWidget.item(row, 6) or QTableWidgetItem("")).text()
     id_detail = (self.tableWidget.item(row, 7) or QTableWidgetItem("")).text().strip()
 
-    _set_product_fields(self, ref, designation)
+    self.articles_combobox.setText(ref)
+    self.designation_editline.setText(designation)
     self.puht_editline.setText(puht)
     self.pttc_editline.setText(pttc)
     self.qte_lineedit.setText(qte)
@@ -411,10 +380,7 @@ def _on_table_row_selected(self):
     self.ttc_lineedit.setText(total)
     self._editing_detail_id = id_detail or None
 
-    if hasattr(self, "productSelector"):
-        self.productSelector.setEnabled(True)
-    else:
-        self.articles_combobox.setReadOnly(True)
+    self.articles_combobox.setReadOnly(True)
     _update_table_stats(self)
 
 
@@ -435,6 +401,7 @@ def _connect_signals(self, session=None):
             pass
         signal.connect(handler)
 
+    # Auto-calculate Total TTC entry field when inputs change
     for signal in (self.puht_editline.textChanged, self.qte_lineedit.textChanged, self.taxe_editline.textChanged):
         try:
             signal.disconnect()
@@ -442,36 +409,10 @@ def _connect_signals(self, session=None):
             pass
         signal.connect(lambda: _recalculate_entry(self))
 
-    if hasattr(self, "productSelector"):
-        try:
-            self.productSelector.productSelected.disconnect()
-        except TypeError:
-            pass
-        self.productSelector.productSelected.connect(lambda product: _on_product_selected_from_selector(self, product))
-
-        for line_widget in (self.productSelector.code_edit, self.productSelector.desc_edit):
-            try:
-                line_widget.returnPressed.disconnect()
-            except TypeError:
-                pass
-            line_widget.returnPressed.connect(lambda: _commit_current_line_from_keyboard(self))
-    else:
-        try:
-            self.articles_combobox.returnPressed.disconnect()
-        except TypeError:
-            pass
         self.articles_combobox.returnPressed.connect(lambda: _commit_current_line_from_keyboard(self))
-
-        try:
-            self.designation_editline.returnPressed.disconnect()
-        except TypeError:
-            pass
+    
         self.designation_editline.returnPressed.connect(lambda: _commit_current_line_from_keyboard(self))
-
-        try:
-            self.articles_combobox.editingFinished.disconnect()
-        except TypeError:
-            pass
+    
         self.articles_combobox.editingFinished.connect(lambda: ref_tab_func(self))
 
     for line_name in ("puht_editline", "pttc_editline", "qte_lineedit", "taxe_editline"):
@@ -484,58 +425,87 @@ def _connect_signals(self, session=None):
             pass
         line_widget.returnPressed.connect(lambda: _commit_current_line_from_keyboard(self))
 
+    designation_completer = self.designation_editline.completer() if hasattr(self, "designation_editline") else None
+    if designation_completer:
+        try:
+            designation_completer.activated.disconnect()
+        except TypeError:
+            pass
+        designation_completer.activated.connect(
+            lambda text: _on_designation_suggestion_selected(self, text)
+        )
+
     _update_table_stats(self)
 
-def _on_product_selected_from_selector(self, product):
-    self.puht_editline.setText(f'{float(product.get("price", 0)):.2f}')
-    self.pttc_editline.setText(f'{float(product.get("price_ttc", 0)):.2f}')
-    self.taxe_editline.setText(f'{float(product.get("tax", 0)):.2f}')
-    if not self.qte_lineedit.text().strip():
-        self.qte_lineedit.setText("1")
-    _recalculate_entry(self)
-
-
 @with_db_session
-def _on_designation_return_pressed(self, selected_text=None, session=None):
+def _on_designation_return_pressed(self, selected_text, session=None):
+    """Resolve designation to an article reference and refresh linked fields."""
+    # it has use the text of the selected option instead of the text in the line edit
+    designation_text = selected_text
+    print(selected_text)
+    if not designation_text:
+        return False
+
+    # Prefer exact match; fallback to first partial match.
+    article_ref = session.execute(
+        select(Article.reference_interne)
+        .where(Article.description == designation_text)
+        .limit(1)
+    ).scalar_one_or_none()
+
+    if not article_ref:
+        article_ref = session.execute(
+            select(Article.reference_interne)
+            .where(Article.description.like(f"%{designation_text}%"))
+            .order_by(Article.id_article)
+            .limit(1)
+        ).scalar_one_or_none()
+
+    if article_ref:
+        self.articles_combobox.setText(article_ref)
+        ref_tab_func(self)
+        return True
+
     return False
 
 
 def _on_designation_suggestion_selected(self, selected_text):
-    return
+    """When user picks a designation from popup, fill linked article fields immediately."""
+    self.designation_editline.setText((selected_text or "").strip())
+    _on_designation_return_pressed(self)
 
 
 def _commit_current_line_from_keyboard(self, selected_text=None):
-    """Keyboard-first flow: save line."""
-    _recalculate_entry(self)
+    """Keyboard-first flow: resolve designation/reference then save line."""
+    _on_designation_return_pressed(self, selected_text)
     _on_enregistrer(self)
-
 
 @with_db_session
 def ref_tab_func(self, session=None):
-    """Fill linked article fields automatically from selected reference."""
-    ref_value = _get_ref_text(self)
-
-    query = select(Article).where(Article.reference_interne == ref_value)
+    """fill designation automatically when we select an article reference"""
+    query = select(Article).where(Article.reference_interne == self.articles_combobox.text().strip())
     article = session.execute(query).scalar_one_or_none()
 
-    if article:
-        designation = article.nom_article or ""
-        if article.description and article.description.strip():
-            designation = f"{designation} - {article.description}"
-
-        _set_product_fields(self, ref_value, designation)
-        self.puht_editline.setText(f"{float(article.prix_vente_ht or 0):.2f}")
-        self.taxe_editline.setText(f"{float(article.taux_tva or 0):.2f}")
-    else:
-        self.puht_editline.clear()
-        self.taxe_editline.clear()
-
+    self.designation_editline.setText(article.description if article else "")
+    self.puht_editline.setText(f"{article.prix_vente_ht:.2f}" if article else "")
+    self.taxe_editline.setText(f"{article.taux_tva:.2f}" if article else "")
+    _recalculate_totals(self)
     _recalculate_entry(self)
-
 
 @with_db_session
 def _set_designation_completer(self, session=None):
-    return
+    """Setup the autocomplete for the designation field."""
+    if not hasattr(self, "designation_editline"):
+        return
+
+    query = select(Article.description).order_by(Article.description)
+    descriptions = [row[0] for row in session.execute(query).all()]
+    self.designation_completer = QCompleter(descriptions, parent=self.designation_editline)
+    self.designation_completer.setFilterMode(Qt.MatchContains)
+    self.designation_completer.setCaseSensitivity(Qt.CaseInsensitive)
+    self.designation_completer.activated[str].connect(lambda selected_text: _commit_current_line_from_keyboard(self, selected_text))
+    self.designation_editline.setCompleter(self.designation_completer)
+
 
 
 @with_db_session
@@ -605,11 +575,8 @@ def ouvrir_old_doc_setup(self, document_id=None, session=None):
     self.clients_lineedit.setReadOnly(True)
     self.valider_button.setEnabled(False)
     
-    if hasattr(self, "productSelector"):
-        self.productSelector.setEnabled(True)
-    else:
-        self.articles_combobox.setEnabled(True)
-        self.designation_editline.setEnabled(True)
+    self.articles_combobox.setEnabled(True)
+    self.designation_editline.setEnabled(True)
     self.puht_editline.setEnabled(True)
     self.pttc_editline.setEnabled(True)
     self.qte_lineedit.setEnabled(True)

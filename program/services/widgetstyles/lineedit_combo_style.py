@@ -32,7 +32,7 @@ class LineEditAutoComplete(QtCore.QObject):
     - No style changes (keeps your existing QLineEdit and popup styles)
     """
 
-    def __init__(self, line_edit: QLineEdit, parent=None):
+    def __init__(self, line_edit: QLineEdit, func: callable=None, parent=None):
         super().__init__(parent)
         self.line_edit = line_edit
         self._enabled = True
@@ -49,10 +49,13 @@ class LineEditAutoComplete(QtCore.QObject):
         self._completer.setCompletionMode(QCompleter.PopupCompletion)
         self._completer.setCaseSensitivity(QtCore.Qt.CaseInsensitive)
         self._completer.setFilterMode(QtCore.Qt.MatchContains)
+        if func:
+            func
 
         ROW_HEIGHT = 36
 
         class _PopupDelegate(QStyledItemDelegate):
+            
             def sizeHint(self, option, index):
                 size = super().sizeHint(option, index)
                 size.setHeight(ROW_HEIGHT)

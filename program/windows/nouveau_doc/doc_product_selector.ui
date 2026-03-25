@@ -1,0 +1,1580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>DocWindow</class>
+ <widget class="QMainWindow" name="DocWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1236</width>
+    <height>659</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>New Invoice - ERP System</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+QMainWindow, QWidget#centralwidget {
+    background-color: #f3f4f6;
+    font-family: &quot;Overpass&quot;;
+}
+QScrollBar:vertical {
+    border: none;
+    background: transparent;
+    width: 8px;
+    margin: 0px;
+}
+QScrollBar::handle:vertical {
+    background: #cbd5e1;
+    min-height: 30px;
+    border-radius: 4px;
+    margin: 2px;
+}
+QScrollBar::handle:vertical:hover {
+    background: #94a3b8;
+}
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: none; background: none; height: 0px;
+}
+QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {
+    background: none;
+}
+   </string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="mainLayout">
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="headerFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>107</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>107</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#headerFrame { background-color: #ffffff; border: none; border-bottom: 1px solid #e5e7eb; border-radius: 0px; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QHBoxLayout" name="headerFormLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="leftMargin">
+        <number>24</number>
+       </property>
+       <property name="topMargin">
+        <number>18</number>
+       </property>
+       <property name="rightMargin">
+        <number>24</number>
+       </property>
+       <property name="bottomMargin">
+        <number>18</number>
+       </property>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="clientidLabel">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>200</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel#clientidLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>Client id</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="clientid_lineedit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>142</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Overpass</family>
+             <pointsize>10</pointsize>
+             <weight>62</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLineEdit#clientid_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151;  } 
+
+QLineEdit#clientid_lineedit:hover { border-color: #d1d5db; }
+
+ QLineEdit#clientid_lineedit:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#clientid_lineedit[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #9ca3af;               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#clientid_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#clientid_lineedit[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="placeholderText">
+            <string>Client ID</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="clientGroupLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="clientLabel">
+           <property name="styleSheet">
+            <string notr="true">QLabel#clientLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>CLIENT</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="clients_lineedit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>142</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QLineEdit#clients_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151; min-width: 120px; } 
+
+QLineEdit#clients_lineedit:hover { border-color: #d1d5db; }
+
+ QLineEdit#clients_lineedit:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#clients_lineedit[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #9ca3af;               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#clients_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#clients_lineedit[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+           </property>
+           <property name="placeholderText">
+            <string>Client</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="dateGroupLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="dateLabel">
+           <property name="styleSheet">
+            <string notr="true">QLabel#dateLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>DATE</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QDateEdit" name="date_dateedit">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>250</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QDateEdit#date_dateedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QDateEdit#date_dateedit:hover { border-color: #d1d5db; } QDateEdit#date_dateedit:focus { border-color: #1d7ae2; } QDateEdit#date_dateedit::drop-down { border: none; width: 20px; } QDateEdit#date_dateedit::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
+
+/* Read-Only state (same visual style as clientid_lineedit readonly) */
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;
+    color: #9ca3af;
+    border: 1px solid #f3f4f6;
+}
+
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]:hover,
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}
+
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]::drop-down {
+    background-color: #f9fafb;
+    border-left: 1px solid #f3f4f6;
+}
+
+QDateEdit#date_dateedit[readOnly=&quot;true&quot;]::down-arrow {
+    opacity: 150;
+}
+
+/* Disabled State for the entire widget */
+QDateEdit#date_dateedit:disabled {
+    background-color: #f1f5f9;    /* Muted grey-blue background */
+    color: #94a3b8;               /* Muted &quot;ghost&quot; text color */
+    border: 1px solid #e2e8f0;    /* Very faint, flat border */
+}
+
+/* Styling the Dropdown Button when disabled */
+QDateEdit#date_dateedit::drop-down:disabled {
+    background-color: #f1f5f9;
+    border-left: 1px solid #e2e8f0;
+}
+
+/* Styling the Arrow Icon when disabled */
+QDateEdit#date_dateedit::down-arrow:disabled {
+    /* You can use a different, lighter icon or lower the opacity */
+    opacity: 150; 
+}</string>
+           </property>
+           <property name="displayFormat">
+            <string>dd/MM/yyyy</string>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="pieceGroupLayout">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="pieceLabel">
+           <property name="styleSheet">
+            <string notr="true">QLabel#pieceLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+           </property>
+           <property name="text">
+            <string>N° document</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="pieceRowLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLineEdit" name="ndocument_lineedit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>142</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>10</pointsize>
+               <weight>62</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#ndocument_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: rgb(132, 132, 132); min-width: 120px; } QLineEdit#ndocument_lineedit:hover { border-color: #d1d5db; } QLineEdit#ndocument_lineedit:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#ndocument_lineedit[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: rgb(132, 132, 132);               /* Lighter grey text */
+    border: 1px solid #f3f4f6;    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#ndocument_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#ndocument_lineedit[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="placeholderText">
+              <string>N° document</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="valider_button">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>80</width>
+               <height>40</height>
+              </size>
+             </property>
+             <property name="cursor">
+              <cursorShape>PointingHandCursor</cursorShape>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QPushButton#valider_button { background-color: #1d7ae2; border: none; border-radius: 8px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 7px 18px; } QPushButton#valider_button:hover { background-color: #1a6fcb; } QPushButton#valider_button:pressed { background-color: #155bbf; }
+
+/* Disabled State: Triggered when setEnabled(False) is called */
+QPushButton#valider_button:disabled {
+    background-color: #e2e8f0;    /* Muted grey-blue background */
+    color: #94a3b8;               /* Muted &quot;ghost&quot; text color */
+    border: 1px solid #cbd5e1;    /* Subtle flat border */
+}
+
+/* Optional: Specific styling for ToolButtons in disabled state */
+QToolButton#valider_button:disabled {
+    background-color: #f1f5f9;
+    color: #cbd5e1;
+    border: none;
+}</string>
+             </property>
+             <property name="text">
+              <string>Valider</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="entryFrame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>135</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>135</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#entryFrame { background-color: #f3f4f6; border: none; border-bottom: 1px solid #e5e7eb; border-radius: 0px; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QVBoxLayout" name="entryMainLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="leftMargin">
+        <number>16</number>
+       </property>
+       <property name="topMargin">
+        <number>14</number>
+       </property>
+       <property name="rightMargin">
+        <number>16</number>
+       </property>
+       <property name="bottomMargin">
+        <number>10</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="entryFieldsLayout">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="entryProductGroupLayout">
+           <property name="spacing">
+            <number>4</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="entryProductLabelsLayout">
+             <property name="spacing">
+              <number>10</number>
+             </property>
+             <item>
+              <widget class="QLabel" name="entryRefLabel">
+               <property name="minimumSize">
+                <size>
+                 <width>150</width>
+                 <height>16</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>200</width>
+                 <height>16</height>
+                </size>
+               </property>
+               <property name="font">
+                <font>
+                 <family>Overpass</family>
+                 <pointsize>10</pointsize>
+                 <weight>62</weight>
+                 <italic>false</italic>
+                 <bold>true</bold>
+                </font>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel#entryRefLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
+               </property>
+               <property name="text">
+                <string>Reference</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="entryDesigLabel">
+               <property name="minimumSize">
+                <size>
+                 <width>390</width>
+                 <height>16</height>
+                </size>
+               </property>
+               <property name="styleSheet">
+                <string notr="true">QLabel#entryDesigLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
+               </property>
+               <property name="text">
+                <string>Designation</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="ProductSelectorWidget" name="productSelector">
+             <property name="minimumSize">
+              <size>
+               <width>550</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; } QLineEdit:hover { border-color: #d1d5db; } QLineEdit:focus { border-color: #1d7ae2; }</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryPuhtGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryPuhtLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryPuhtLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>P.U.H.T</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="puht_editline">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>118</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#puht_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#puht_editline:hover { border-color: #d1d5db; } QLineEdit#puht_editline:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="placeholderText">
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryPttcGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryPttcLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryPttcLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>P.T.T.C</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="pttc_editline">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>118</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#pttc_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 75px; max-width: 100px; } QLineEdit#pttc_editline:hover { border-color: #d1d5db; } QLineEdit#pttc_editline:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="placeholderText">
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryQteGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryQteLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryQteLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Qte</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="qte_lineedit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>73</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#qte_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#qte_lineedit:hover { border-color: #d1d5db; } QLineEdit#qte_lineedit:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="text">
+              <string>1</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryTaxeGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryTaxeLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryTaxeLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Taxe</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="taxe_editline">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>73</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>93</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#taxe_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#taxe_editline:hover { border-color: #d1d5db; } QLineEdit#taxe_editline:focus { border-color: #1d7ae2; }</string>
+             </property>
+             <property name="text">
+              <string>1</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="entryTotalGroupLayout">
+           <property name="spacing">
+            <number>3</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="entryTotalLabel">
+             <property name="styleSheet">
+              <string notr="true">QLabel#entryTotalLabel { color: #6b7280; font: 500 10pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total TTC</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="ttc_lineedit">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>35</height>
+              </size>
+             </property>
+             <property name="layoutDirection">
+              <enum>Qt::LeftToRight</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#ttc_lineedit { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 400 10pt &quot;Overpass&quot;; color: #000000  } QLineEdit#ttc_lineedit:hover { border-color: #d1d5db; } QLineEdit#ttc_lineedit:focus { border-color: #1d7ae2; }
+
+/* --- Added Read-Only State --- */
+QLineEdit#ttc_lineedit[readOnly=&quot;true&quot;] {
+    background-color: #f9fafb;    /* Light grey &quot;locked&quot; background */
+    color: #000000;               /* Lighter grey text */
+    border: 1px solid rgb(143, 144, 145);    /* Very faint border */
+}
+
+/* Prevents the hover/focus colors from appearing when read-only */
+QLineEdit#ttc_lineedit[readOnly=&quot;true&quot;]:hover,
+QLineEdit#ttc_lineedit[readOnly=&quot;true&quot;]:focus {
+    border-color: #f3f4f6;
+}</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+             <property name="placeholderText">
+              <string>0.00</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="entryActionsLayout">
+         <property name="spacing">
+          <number>8</number>
+         </property>
+         <item>
+          <spacer name="entryActionsSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Expanding</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="annule">
+           <property name="minimumSize">
+            <size>
+             <width>110</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>110</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Overpass</family>
+             <pointsize>10</pointsize>
+             <weight>50</weight>
+             <italic>false</italic>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#annule {
+    background-color: transparent;
+    border: none;
+    color: #4b5563; /* Muted gray-blue */
+    font: 400 10pt &quot;Overpass&quot;;
+    padding: 5px 12px;
+    border-radius: 15px; /* Slightly smoother corners */
+    outline: none;
+}
+
+/* Hover State: Subtle lift */
+QPushButton#annule:hover {
+    color: #111827; /* Near black for contrast */
+	border: 1px solid #999999;
+    background-color: #f3f4f6; /* Soft gray wash */
+}
+
+/* Pressed State: Provides a physical &quot;click&quot; feedback */
+QPushButton#annule:pressed {
+    background-color: rgb(205, 207, 211); /* Slightly darker gray */
+    padding-top: 6px; /* Moves text down 1px to simulate a press */
+	border: 1px solid #999999;
+    padding-bottom: 4px;
+}
+
+/* Disabled State: Fades out when the action is unavailable */
+QPushButton#annule:disabled {
+    color: #d1d5db; /* Light gray &quot;ghost&quot; text */
+    background-color: transparent;
+}</string>
+           </property>
+           <property name="text">
+            <string>Annuler</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="suprimer">
+           <property name="minimumSize">
+            <size>
+             <width>110</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>110</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#suprimer {
+    background-color: transparent;
+    border: 1px solid transparent;
+    color: #ef4444; /* Standard Red */
+    font: 600 10pt &quot;Overpass&quot;; /* Slightly bolder for &quot;Danger&quot; actions */
+    padding: 5px 15px;
+    border-radius: 16px;
+    outline: none;
+}
+
+/* Hover State: Becomes a &quot;Soft Red&quot; button */
+QPushButton#suprimer:hover {
+    color: #dc2626; /* Deeper red */
+    background-color: #fef2f2; /* Very light rose wash */
+    border: 1px solid #fecaca; /* Soft pink border */
+}
+
+/* Pressed State: Feels like the button is being pushed into the page */
+QPushButton#suprimer:pressed {
+    background-color: #fee2e2; /* Darker rose wash */
+    border-color: #fca5a5;
+    padding-top: 6px; /* Tactile &quot;click&quot; effect */
+    padding-bottom: 4px;
+}
+
+/* Disabled State: Prevents accidental clicks when action is locked */
+QPushButton#suprimer:disabled {
+    background-color: transparent;
+    color: #e5e7eb; /* Faded grey */
+    border: 1px solid transparent;
+}</string>
+           </property>
+           <property name="text">
+            <string>Supprimer</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="enrgistrer">
+           <property name="minimumSize">
+            <size>
+             <width>110</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>110</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="font">
+            <font>
+             <family>Overpass</family>
+             <pointsize>10</pointsize>
+             <weight>75</weight>
+             <italic>false</italic>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton#enrgistrer { background-color: #1d7ae2; border: none; border-radius: 16px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 6px 20px; } QPushButton#enrgistrer:hover { background-color: #1a6fcb; } QPushButton#enrgistrer:pressed { background-color: #155bbf; }
+
+QPushButton#enrgistrer:disabled {
+    background-color: #e2e8f0;
+    color: #94a3b8;
+    border: 1px solid #cbd5e1;
+}</string>
+           </property>
+           <property name="text">
+            <string>Enregistrer</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Fixed</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">
+QTableWidget#tableWidget {
+    background-color: #ffffff;
+    border: none;
+    gridline-color: #e5e7eb;
+    font: 400 10pt &quot;Overpass&quot;;
+    color: #374151;
+    selection-background-color: rgba(29,122,226,0.08);
+    selection-color: #111827;
+    outline: 0;
+}
+QTableWidget#tableWidget::item {
+    padding: 6px 12px;
+    border-bottom: 1px solid #f3f4f6;
+}
+QTableWidget#tableWidget::item:alternate {
+    background-color: #f9fafb;
+}
+QTableWidget#tableWidget::item:selected {
+    background-color: rgba(29,122,226,0.08);
+    color: #111827;
+}
+QTableWidget#tableWidget::item:hover {
+    background-color: #f9fafb;
+}
+QHeaderView::section {
+    background-color: #f9fafb;
+    color: #374151;
+    font: 600 10pt &quot;Overpass&quot;;
+    padding: 10px 12px;
+    border: none;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 2px solid #e5e7eb;
+}
+QHeaderView::section:last {
+    border-right: none;
+}
+       </string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="editTriggers">
+       <set>QAbstractItemView::NoEditTriggers</set>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
+      <property name="showGrid">
+       <bool>false</bool>
+      </property>
+      <column>
+       <property name="text">
+        <string>Reference Article</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Designation</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>P.U.H.T</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>P.T.T.C</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Qte</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Taxe</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Totale TTC</string>
+       </property>
+      </column>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="tableStatsFrame">
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>34</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#tableStatsFrame { background-color: #f9fafb; border: none; border-top: 1px solid #eef2f7; border-bottom: 1px solid #eef2f7; } QLabel#tableStatsTitleLabel { color: #6b7280; font: 600 9pt &quot;Overpass&quot;; letter-spacing: 0.4px; } QLabel#tableStatsRowsLabel, QLabel#tableStatsSelectedLabel { color: #374151; font: 500 9pt &quot;Overpass&quot;; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QHBoxLayout" name="tableStatsLayout">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <property name="leftMargin">
+        <number>24</number>
+       </property>
+       <property name="topMargin">
+        <number>6</number>
+       </property>
+       <property name="rightMargin">
+        <number>24</number>
+       </property>
+       <property name="bottomMargin">
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QLabel" name="tableStatsRowsLabel">
+         <property name="text">
+          <string>Rows: 0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="tableStatsSelectedLabel">
+         <property name="text">
+          <string>Selected: 0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="tableStatsSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="footerFrame">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>0</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>67</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QFrame#footerFrame { background-color: #ffffff; border: none; border-top: 1px solid #e5e7eb; border-radius: 0px; }</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <layout class="QHBoxLayout" name="footerLayout">
+       <property name="spacing">
+        <number>12</number>
+       </property>
+       <property name="leftMargin">
+        <number>24</number>
+       </property>
+       <property name="topMargin">
+        <number>16</number>
+       </property>
+       <property name="rightMargin">
+        <number>24</number>
+       </property>
+       <property name="bottomMargin">
+        <number>16</number>
+       </property>
+       <item>
+        <layout class="QHBoxLayout" name="footerTotalsLayout">
+         <property name="spacing">
+          <number>24</number>
+         </property>
+         <item>
+          <layout class="QHBoxLayout" name="totalTaxLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel#label_5 { color: #374151; font: 650 12pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total Tax</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="total_tax_label">
+             <property name="minimumSize">
+              <size>
+               <width>132</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#total_tax_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Overpass&quot;; color: #374151; min-width: 110px; } QLineEdit#total_tax_label:read-only { background-color: #ffffff; }</string>
+             </property>
+             <property name="text">
+              <string>0.00</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="totalUTLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_10">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="font">
+              <font>
+               <family>Overpass</family>
+               <pointsize>12</pointsize>
+               <weight>81</weight>
+               <italic>false</italic>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel#label_10 { color: #374151; font: 650 12pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total H.T</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="total_UT_label">
+             <property name="minimumSize">
+              <size>
+               <width>132</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#total_UT_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Overpass&quot;; color: #374151; min-width: 110px; } QLineEdit#total_UT_label:read-only { background-color: #ffffff; }</string>
+             </property>
+             <property name="text">
+              <string>0.00</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QHBoxLayout" name="totalTTCLayout">
+           <property name="spacing">
+            <number>8</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="label_7">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLabel#label_7 { color: #111827; font: 650 12pt &quot;Overpass&quot;; background-color: transparent; }</string>
+             </property>
+             <property name="text">
+              <string>Total TTC</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="total_ttc_label">
+             <property name="minimumSize">
+              <size>
+               <width>152</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>130</width>
+               <height>30</height>
+              </size>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">QLineEdit#total_ttc_label { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 700 11pt &quot;Overpass&quot;; color: #1d7ae2; min-width: 130px; } QLineEdit#total_ttc_label:read-only { background-color: #ffffff; }</string>
+             </property>
+             <property name="text">
+              <string>0.00</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="readOnly">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="footerSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QToolButton" name="btn_imprimer">
+         <property name="minimumSize">
+          <size>
+           <width>116</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>116</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton#btn_imprimer { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 8px 20px;text-align: center; } QToolButton#btn_imprimer:hover { background-color: #1a6fcb; } QToolButton#btn_imprimer:pressed { background-color: #155bbf; }</string>
+         </property>
+         <property name="text">
+          <string>Imprimer</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="btn_nouveau">
+         <property name="minimumSize">
+          <size>
+           <width>116</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>116</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton#btn_nouveau { background-color: #1d7ae2; border: none; border-radius: 15px; color: #ffffff; font: 600 10pt &quot;Overpass&quot;; padding: 8px 20px; } QToolButton#btn_nouveau:hover { background-color: #1a6fcb; } QToolButton#btn_nouveau:pressed { background-color: #155bbf; }</string>
+         </property>
+         <property name="text">
+          <string>Nouveau</string>
+         </property>
+         <property name="iconSize">
+          <size>
+           <width>16</width>
+           <height>16</height>
+          </size>
+         </property>
+         <property name="popupMode">
+          <enum>QToolButton::DelayedPopup</enum>
+         </property>
+         <property name="toolButtonStyle">
+          <enum>Qt::ToolButtonTextBesideIcon</enum>
+         </property>
+         <property name="autoRaise">
+          <bool>true</bool>
+         </property>
+         <property name="arrowType">
+          <enum>Qt::NoArrow</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btn_fermer">
+         <property name="minimumSize">
+          <size>
+           <width>116</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>116</width>
+           <height>35</height>
+          </size>
+         </property>
+         <property name="cursor">
+          <cursorShape>PointingHandCursor</cursorShape>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton#btn_fermer { background-color: transparent; border: none; color: #6b7280; font: 600 10pt &quot;Overpass&quot;; padding: 7px 14px; border-radius: 15px; text-transform: uppercase; } QPushButton#btn_fermer:hover { color: #111827; background-color: #f3f4f6; }</string>
+         </property>
+         <property name="text">
+          <string>FERMER</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+
+ <customwidgets>
+  <customwidget>
+   <class>ProductSelectorWidget</class>
+   <extends>QWidget</extends>
+   <header>program.windows.nouveau_doc.product_selector_widget</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
