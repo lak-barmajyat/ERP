@@ -300,6 +300,8 @@ CREATE TABLE IF NOT EXISTS documents (
   id_statut             INT NOT NULL,                 -- ref_statuts_documents
 
   commentaire           VARCHAR(255) NULL,
+  id_precedent_doc      BIGINT NULL,
+  doc_actif             TINYINT(1) NOT NULL DEFAULT 1,
   created_at            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
@@ -323,9 +325,14 @@ CREATE TABLE IF NOT EXISTS documents (
     FOREIGN KEY (id_statut) REFERENCES ref_statuts_documents(id_statut)
     ON UPDATE CASCADE ON DELETE RESTRICT,
 
+  CONSTRAINT fk_documents_precedent
+    FOREIGN KEY (id_precedent_doc) REFERENCES documents(id_document)
+    ON UPDATE CASCADE ON DELETE SET NULL,
+
   UNIQUE KEY uq_documents_numero (id_domaine, id_type_document, numero_document),
   INDEX idx_documents_date (date_document),
-  INDEX idx_documents_tiers (id_tiers)
+  INDEX idx_documents_tiers (id_tiers),
+  INDEX idx_documents_list_vente (id_domaine, doc_actif, id_type_document, date_document)
 ) ENGINE=InnoDB;
 
 -- =========================
@@ -353,6 +360,9 @@ CREATE TABLE IF NOT EXISTS details_documents (
   total_ligne_tva       DECIMAL(14,2) NOT NULL DEFAULT 0.00,
   total_ligne_ttc       DECIMAL(14,2) NOT NULL DEFAULT 0.00,
 
+  id_precedent_doc      BIGINT NULL,
+  doc_actif             TINYINT(1) NOT NULL DEFAULT 1,
+
   created_at            DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
   CONSTRAINT fk_details_documents_document
@@ -364,7 +374,8 @@ CREATE TABLE IF NOT EXISTS details_documents (
     ON UPDATE CASCADE ON DELETE RESTRICT,
 
   INDEX idx_details_doc (id_document),
-  INDEX idx_details_article (id_article)
+  INDEX idx_details_article (id_article),
+  INDEX idx_details_doc_actif (id_document, doc_actif)
 ) ENGINE=InnoDB;
 
 -- =========================

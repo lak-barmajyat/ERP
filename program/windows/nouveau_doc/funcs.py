@@ -12,6 +12,7 @@ from program.services import (Tiers,
                             DetailDocument,
                             and_,
                             RefTypeDocument,
+                            RefStatutDocument,
                             MessageBox)
 from PyQt5.QtWidgets import (
     QDialog,
@@ -22,6 +23,183 @@ from PyQt5.QtCore import Qt, QDate
 
 from datetime import datetime
 import os
+
+
+class _NumericSortTableWidgetItem(QTableWidgetItem):
+    """Sort numeric columns by hidden numeric value while preserving display text."""
+
+    def __lt__(self, other):
+        if isinstance(other, QTableWidgetItem):
+            left = self.data(Qt.UserRole)
+            right = other.data(Qt.UserRole)
+            if left is not None and right is not None:
+                return float(left) < float(right)
+        return super().__lt__(other)
+
+
+def _safe_float(value_text):
+    text = str(value_text or "").strip().replace(" ", "")
+    if text in ("", "-"):
+        return 0.0
+
+    # Support both "6,857.25" and "6857,25" formats.
+    if "," in text and "." in text:
+        text = text.replace(",", "")
+    elif "," in text:
+        if text.count(",") == 1 and len(text.split(",", 1)[1]) <= 2:
+            text = text.replace(",", ".")
+        else:
+            text = text.replace(",", "")
+
+    try:
+        return float(text)
+    except ValueError:
+        return 0.0
+
+
+def _format_amount(value):
+    """Format monetary values as #,###.##."""
+    return f"{_safe_float(value):,.2f}"
+
+
+def _format_qty(value):
+    """Format quantity as integer with thousands separators and no decimals."""
+    qty = int(round(_safe_float(value)))
+    return f"{qty:,d}"
+
+
+def _build_detail_item(value, align_right=False, numeric=False, quantity=False):
+    """Create a row item that keeps display text but sorts numeric values correctly."""
+    if numeric:
+        display_text = _format_qty(value) if quantity else _format_amount(value)
+        item = _NumericSortTableWidgetItem(display_text)
+        item.setData(Qt.UserRole, _safe_float(value))
+    else:
+        display_text = str(value if value is not None else "")
+        item = QTableWidgetItem(display_text)
+
+    item.setTextAlignment(Qt.AlignVCenter | (Qt.AlignRight if align_right else Qt.AlignLeft))
+    return item
+
+
+def _status_label_key(label):
+    return (label or "").strip().casefold().replace("é", "e").replace("è", "e").replace("ê", "e")
+
+
+@with_db_session
+def _setup_doc_status_combo(self, session=None):
+    """Populate status combobox from DB (ordered), with safe fallback values."""
+    if not hasattr(self, "status_combobox"):
+        return
+
+    self.status_combobox.blockSignals(True)
+    self.status_combobox.clear()
+
+    rows = session.execute(
+        select(RefStatutDocument.id_statut, RefStatutDocument.libelle_statut)
+        .order_by(RefStatutDocument.id_statut)
+    ).all()
+
+    if rows:
+        for status_id, label in rows:
+            self.status_combobox.addItem((label or "").strip(), int(status_id))
+    else:
+        fallback = [
+            (1, "Brouillon"),
+            (2, "Valide"),
+            (3, "Annule"),
+            (4, "Partiel"),
+            (5, "Paye"),
+        ]
+        for status_id, label in fallback:
+            self.status_combobox.addItem(label, status_id)
+
+    default_index = 0
+    for idx in range(self.status_combobox.count()):
+        if _status_label_key(self.status_combobox.itemText(idx)) in ("brouillon", "brouillan"):
+            default_index = idx
+            break
+    self.status_combobox.setCurrentIndex(default_index)
+    self.status_combobox.blockSignals(False)
+
+
+@with_db_session
+def _get_selected_status_id(self, session=None):
+    """Resolve selected status to a valid ref_statuts_documents id."""
+    if not hasattr(self, "status_combobox") or self.status_combobox.count() <= 0:
+        status_id = session.execute(
+            select(RefStatutDocument.id_statut)
+            .where(RefStatutDocument.libelle_statut.like("%Brouillon%"))
+            .limit(1)
+        ).scalar_one_or_none()
+        return int(status_id or 1)
+
+    selected_data = self.status_combobox.currentData()
+    if selected_data is not None:
+        try:
+            return int(selected_data)
+        except (TypeError, ValueError):
+            pass
+
+    selected_label = (self.status_combobox.currentText() or "").strip()
+    if selected_label:
+        rows = session.execute(
+            select(RefStatutDocument.id_statut, RefStatutDocument.libelle_statut)
+        ).all()
+        wanted = _status_label_key(selected_label)
+        for status_id, db_label in rows:
+            if _status_label_key(db_label) == wanted:
+                return int(status_id)
+
+    return 1
+
+
+@with_db_session
+def _cleanup_empty_new_document(self, session=None):
+    """Delete a newly-created document if it has no active detail lines."""
+    document_id = getattr(self, "current_document_id", None)
+    if not document_id:
+        return
+
+    # Do not auto-delete when user opened an existing document.
+    if bool(getattr(self, "_opened_existing_document", False)):
+        return
+
+    active_details_count = session.execute(
+        select(DetailDocument.id_detail)
+        .where(
+            and_(
+                DetailDocument.id_document == document_id,
+                DetailDocument.doc_actif == 1,
+            )
+        )
+    ).scalars().all()
+
+    if active_details_count:
+        return
+
+    session.execute(delete(Document).where(Document.id_document == document_id))
+    session.commit()
+
+    self.current_document_id = None
+
+
+def _install_close_cleanup(self):
+    """Install a one-time closeEvent hook to cleanup empty documents."""
+    if getattr(self, "_empty_doc_close_cleanup_installed", False):
+        return
+
+    original_close_event = getattr(self, "closeEvent", None)
+
+    def _wrapped_close_event(event):
+        _cleanup_empty_new_document(self)
+        if callable(original_close_event):
+            original_close_event(event)
+        else:
+            event.accept()
+
+    self.closeEvent = _wrapped_close_event
+    self._empty_doc_close_cleanup_installed = True
 
 
 
@@ -134,6 +312,8 @@ def _valider(self, session=None):
         show_error_message("Numéro de document invalide.")
         return
 
+    selected_status_id = _get_selected_status_id(self)
+
     document = Document(
         id_domaine=1,
         id_type_document=id_type_document,
@@ -147,7 +327,7 @@ def _valider(self, session=None):
         total_ttc=0,
         solde=0,
         id_vendeur=int(os.getenv("USER_ID", "6")),
-        id_statut=1,
+        id_statut=selected_status_id,
         commentaire=""
     )
 
@@ -158,6 +338,8 @@ def _valider(self, session=None):
     self._clients_autocomplete.set_enabled(False)
     self.clientid_lineedit.setReadOnly(True)
     self.date_dateedit.setReadOnly(True)
+    if hasattr(self, "status_combobox"):
+        self.status_combobox.setEnabled(False)
     self.valider_button.setEnabled(False)
 
     # Unlock article entry fields and action buttons
@@ -168,10 +350,10 @@ def _valider(self, session=None):
 def _recalculate_entry(self):
     """Recalculate the per-line Total TTC preview field."""
     try:
-        puht = float(self.puht_editline.text() or 0)
-        qte = float(self.qte_lineedit.text() or 1)
+        puht = _safe_float(self.puht_editline.text() or 0)
+        qte = _safe_float(self.qte_lineedit.text() or 1)
         taxe_text = self.taxe_editline.text().replace("%", "")
-        taxe = float(taxe_text) / 100
+        taxe = _safe_float(taxe_text) / 100
         pttc = puht * (1 + taxe)
         total = pttc * qte
         self.pttc_editline.setText(f"{pttc:.2f}")
@@ -226,11 +408,11 @@ def _on_enregistrer(self, session=None):
 
     try:
         ref = ref_text
-        puht = float(self.puht_editline.text() or 0)
-        pttc = float(self.pttc_editline.text() or 0)
-        qte = float(self.qte_lineedit.text() or 1)
-        taxe = float(self.taxe_editline.text().replace("%", "") or 0)
-        total = float(self.ttc_lineedit.text() or 0)
+        puht = _safe_float(self.puht_editline.text() or 0)
+        pttc = _safe_float(self.pttc_editline.text() or 0)
+        qte = _safe_float(self.qte_lineedit.text() or 1)
+        taxe = _safe_float(self.taxe_editline.text().replace("%", "") or 0)
+        total = _safe_float(self.ttc_lineedit.text() or 0)
     except ValueError:
         show_error_message("Ligne invalide. Vérifiez la référence article, les prix, la quantité et la taxe.")
         return
@@ -284,10 +466,20 @@ def _on_enregistrer(self, session=None):
 
 @with_db_session
 def _reload_table(self, session=None):
+    was_sorting_enabled = self.tableWidget.isSortingEnabled()
+    sort_section = self.tableWidget.horizontalHeader().sortIndicatorSection()
+    sort_order = self.tableWidget.horizontalHeader().sortIndicatorOrder()
+
+    if was_sorting_enabled:
+        self.tableWidget.setSortingEnabled(False)
+
     self.tableWidget.setRowCount(0)  # Clear and reload to show the new line with its ID
     query = (
         select(DetailDocument)
-        .where(DetailDocument.id_document == self.current_document_id)
+        .where(
+            (DetailDocument.id_document == self.current_document_id) &
+            (DetailDocument.doc_actif == 1)
+        )
         .order_by(DetailDocument.id_detail)
     )
     details = session.execute(query).scalars().all()
@@ -309,15 +501,27 @@ def _reload_table(self, session=None):
             detail.id_detail,
         ]
         for col, value in enumerate(row_values):
-            item = QTableWidgetItem(str(value if value is not None else ""))
-            item.setTextAlignment(Qt.AlignVCenter | (Qt.AlignRight if col not in (0, 1) else Qt.AlignLeft))
+            is_numeric = col in (2, 3, 4, 5, 6)
+            item = _build_detail_item(
+                value,
+                align_right=(col not in (0, 1)),
+                numeric=is_numeric,
+                quantity=(col == 4),
+            )
             self.tableWidget.setItem(row, col, item)
+
+    if was_sorting_enabled:
+        self.tableWidget.setSortingEnabled(True)
+        if sort_section is not None and int(sort_section) >= 0:
+            self.tableWidget.sortItems(int(sort_section), sort_order)
 
     _recalculate_totals(self)
     _on_annuler(self)  # clear entry fields after adding
 
 def _on_nouveau(self):
     """Reset the entire document form."""
+    _cleanup_empty_new_document(self)
+
     self.tableWidget.setRowCount(0)
     _on_annuler(self)
     self.date_dateedit.setDate(QDate.currentDate())
@@ -331,6 +535,12 @@ def _on_nouveau(self):
     self._clients_autocomplete.set_enabled(True)  # Re-enable for next document
     self.clientid_lineedit.setReadOnly(False)
     self.date_dateedit.setReadOnly(False)
+    if hasattr(self, "status_combobox"):
+        self.status_combobox.setEnabled(True)
+        for idx in range(self.status_combobox.count()):
+            if _status_label_key(self.status_combobox.itemText(idx)) in ("brouillon", "brouillan"):
+                self.status_combobox.setCurrentIndex(idx)
+                break
     self.valider_button.setEnabled(True)
     self._set_entry_fields_enabled(False)  # Lock article fields
     self.current_document_id = None
@@ -347,10 +557,10 @@ def _recalculate_totals(self, session=None):
     total_ttc = 0.0
     for row in range(self.tableWidget.rowCount()):
         try:
-            puht = float((self.tableWidget.item(row, 2) or QTableWidgetItem("0")).text() or 0)
-            qte = float((self.tableWidget.item(row, 4) or QTableWidgetItem("1")).text() or 1)
+            puht = _safe_float((self.tableWidget.item(row, 2) or QTableWidgetItem("0")).text() or 0)
+            qte = _safe_float((self.tableWidget.item(row, 4) or QTableWidgetItem("1")).text() or 1)
             taxe_text = (self.tableWidget.item(row, 5) or QTableWidgetItem("0%")).text().replace("%", "")
-            taxe = float(taxe_text) / 100
+            taxe = _safe_float(taxe_text) / 100
             ht = puht * qte
             tax = ht * taxe
             total_ht += ht
@@ -358,9 +568,9 @@ def _recalculate_totals(self, session=None):
             total_ttc += ht + tax
         except ValueError:
             continue
-    self.total_UT_label.setText(f"{total_ht:.2f}")
-    self.total_tax_label.setText(f"{total_tax:.2f}")
-    self.total_ttc_label.setText(f"{total_ttc:.2f}")
+    self.total_UT_label.setText(_format_amount(total_ht))
+    self.total_tax_label.setText(_format_amount(total_tax))
+    self.total_ttc_label.setText(_format_amount(total_ttc))
     _update_table_stats(self)
 
     query = update(Document).where(Document.id_document == self.current_document_id).values(
@@ -404,11 +614,12 @@ def _on_table_row_selected(self):
     id_detail = (self.tableWidget.item(row, 7) or QTableWidgetItem("")).text().strip()
 
     _set_product_fields(self, ref, designation)
-    self.puht_editline.setText(puht)
-    self.pttc_editline.setText(pttc)
-    self.qte_lineedit.setText(qte)
-    self.taxe_editline.setText(taxe)
-    self.ttc_lineedit.setText(total)
+    self.puht_editline.setText(f"{_safe_float(puht):.2f}")
+    self.pttc_editline.setText(f"{_safe_float(pttc):.2f}")
+    qte_value = _safe_float(qte)
+    self.qte_lineedit.setText(str(int(qte_value)) if qte_value.is_integer() else f"{qte_value:g}")
+    self.taxe_editline.setText(f"{_safe_float(taxe):.2f}")
+    self.ttc_lineedit.setText(f"{_safe_float(total):.2f}")
     self._editing_detail_id = id_detail or None
 
     if hasattr(self, "productSelector"):
@@ -554,9 +765,15 @@ def nouveau_doc_setup(self,document_id=None, session=None):
     self.tableWidget.setColumnCount(8)  # Adjust column count to include the hidden ID column
     self.tableWidget.setHorizontalHeaderLabels(["Ref", "Désignation", "PU HT", "PU TTC", "Qte", "Taxe", "Total TTC", "ID Detail"])
     self.tableWidget.setColumnHidden(7, True)  # Hide the ID Detail column\
+    self.tableWidget.setSortingEnabled(True)
+    self.tableWidget.horizontalHeader().setSortIndicatorShown(True)
 
+    _setup_doc_status_combo(self)
     _set_designation_completer(self)
     _connect_signals(self)
+    _install_close_cleanup(self)
+
+    self._opened_existing_document = is_existing_document
 
     if not is_existing_document:
         self.current_doc_type = self.doc_type_window.get_current_doc_type()
@@ -598,6 +815,18 @@ def ouvrir_old_doc_setup(self, document_id=None, session=None):
     self.clients_lineedit.setText(session.execute(select(Tiers.nom_tiers).where(Tiers.id_tiers == document.id_tiers)).scalar_one_or_none() or "")
     self.ndocument_lineedit.setText(document.numero_document)
     self.date_dateedit.setDate(document.date_document)
+    if hasattr(self, "status_combobox"):
+        idx_to_select = -1
+        for idx in range(self.status_combobox.count()):
+            try:
+                if int(self.status_combobox.itemData(idx)) == int(document.id_statut):
+                    idx_to_select = idx
+                    break
+            except (TypeError, ValueError):
+                continue
+        if idx_to_select >= 0:
+            self.status_combobox.setCurrentIndex(idx_to_select)
+        self.status_combobox.setEnabled(False)
     
     self.ndocument_lineedit.setReadOnly(True)
     self.date_dateedit.setReadOnly(True)

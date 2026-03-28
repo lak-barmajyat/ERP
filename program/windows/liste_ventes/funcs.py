@@ -1,10 +1,10 @@
 from PyQt5.QtWidgets import QTableWidgetItem, QCheckBox, QDialog, QMenu
-from PyQt5.QtCore import Qt, QTimer, QItemSelectionModel
+from PyQt5.QtCore import Qt, QTimer, QItemSelectionModel, QDate
 from datetime import datetime
 from program.services import (with_db_session,
                               select,
-                              delete,
                               and_,
+                              func,
                               RefTypeDocument,
                               Document,
                               Tiers,
@@ -13,6 +13,18 @@ from program.services import (with_db_session,
                               MessageBox)
 from program.windows.nouveau_doc import nouveau_doc_setup, NouveauDocWindow
 from program.windows.transfer_window import TransfertDocumentDialog
+
+
+class _NumericSortTableWidgetItem(QTableWidgetItem):
+    """Sort using hidden numeric value while keeping original display text."""
+
+    def __lt__(self, other):
+        if isinstance(other, QTableWidgetItem):
+            left = self.data(Qt.UserRole)
+            right = other.data(Qt.UserRole)
+            if left is not None and right is not None:
+                return float(left) < float(right)
+        return super().__lt__(other)
 
 
 def _create_nouveau_window(self):
@@ -24,8 +36,12 @@ def _create_nouveau_window(self):
 
 
 def _connect_signals(self):
-    self.btnFilter.clicked.connect(lambda: _filter_from_current_table(self))
+    self.btnFilter.clicked.connect(lambda: _reload_table_total_labels(self))
+    if hasattr(self, "btnClearFilters"):
+        self.btnClearFilters.clicked.connect(lambda: _clear_filters(self))
+    _connect_filter_enter_reload(self)
     self.tableDocuments.itemSelectionChanged.connect(lambda: _sync_checkboxes_from_selection(self))
+    _connect_sort_state_tracking(self)
     self.tableDocuments.setContextMenuPolicy(Qt.CustomContextMenu)
     try:
         self.tableDocuments.customContextMenuRequested.disconnect()
@@ -37,6 +53,67 @@ def _connect_signals(self):
     self.tbDelete.clicked.connect(lambda: _on_supprimer_clicked(self))
     self.tbDuplicate.clicked.connect(lambda: _on_dupliquer_clicked(self))
     self.tbTransform.clicked.connect(lambda: _on_transformer_clicked(self))
+    if hasattr(self, "tbReplace"):
+        self.tbReplace.clicked.connect(lambda: _on_remplacer_clicked(self))
+    _update_operation_actions_state(self)
+
+
+def _on_sort_indicator_changed(self, section, order):
+    """Remember user sort choice to restore it after auto-reload."""
+    self._table_sort_section = int(section)
+    self._table_sort_order = order
+
+
+def _connect_sort_state_tracking(self):
+    """Track sort indicator changes on documents table header."""
+    if not hasattr(self, "tableDocuments"):
+        return
+
+    header = self.tableDocuments.horizontalHeader()
+    try:
+        header.sortIndicatorChanged.disconnect()
+    except TypeError:
+        pass
+    header.sortIndicatorChanged.connect(lambda section, order: _on_sort_indicator_changed(self, section, order))
+
+    try:
+        header.sectionClicked.disconnect()
+    except TypeError:
+        pass
+
+
+
+def _connect_filter_enter_reload(self):
+    """Bind Enter/validate actions on filter inputs to trigger reload."""
+    for line_name in ("editcodeclient", "editClient", "editDocNumber"):
+        line = getattr(self, line_name, None)
+        if not line:
+            continue
+        try:
+            line.returnPressed.disconnect()
+        except TypeError:
+            pass
+        line.returnPressed.connect(lambda: _reload_table_total_labels(self))
+
+    for date_name in ("dateFrom", "dateTo"):
+        date_edit = getattr(self, date_name, None)
+        if not date_edit:
+            continue
+        try:
+            date_edit.editingFinished.disconnect()
+        except TypeError:
+            pass
+        date_edit.editingFinished.connect(lambda: _reload_table_total_labels(self))
+
+    for combo_name in ("comboDocType", "comboStatus"):
+        combo = getattr(self, combo_name, None)
+        if not combo:
+            continue
+        try:
+            combo.activated.disconnect()
+        except TypeError:
+            pass
+        combo.activated.connect(lambda _idx: _reload_table_total_labels(self))
 
 
 @with_db_session
@@ -82,7 +159,8 @@ def _sync_client_code_from_name(self, name_text, session=None):
         self.editcodeclient.blockSignals(False)
         return
 
-    code = session.execute(
+    # If several clients match the typed name, keep code empty to avoid narrowing to a single client.
+    matching_codes = session.execute(
         select(Tiers.code_tiers)
         .where(
             and_(
@@ -91,8 +169,10 @@ def _sync_client_code_from_name(self, name_text, session=None):
             )
         )
         .order_by(Tiers.nom_tiers)
-        .limit(1)
-    ).scalar_one_or_none() or ""
+        .limit(2)
+    ).scalars().all()
+
+    code = (matching_codes[0] or "") if len(matching_codes) == 1 else ""
 
     self.editcodeclient.blockSignals(True)
     self.editcodeclient.setText(code)
@@ -141,7 +221,9 @@ def _on_table_context_menu(self, pos):
     target_index = self.tableDocuments.model().index(row, 1)
     selection_model = self.tableDocuments.selectionModel()
     if selection_model and target_index.isValid():
-        selection_model.select(target_index, QItemSelectionModel.ClearAndSelect | QItemSelectionModel.Rows)
+        selected_rows = {idx.row() for idx in selection_model.selectedRows()}
+        if row not in selected_rows:
+            selection_model.select(target_index, QItemSelectionModel.ClearAndSelect | QItemSelectionModel.Rows)
         selection_model.setCurrentIndex(target_index, QItemSelectionModel.NoUpdate)
 
     menu = QMenu(self.tableDocuments)
@@ -176,7 +258,12 @@ def _on_table_context_menu(self, pos):
     action_supprimer = menu.addAction("Supprimer")
     menu.addSeparator()
     action_dupliquer = menu.addAction("Dupliquer")
-    action_transformer = menu.addAction("Transformer")
+    action_transferer = menu.addAction("Transférer")
+    action_remplacer = menu.addAction("Remplacer")
+
+    selected_docs_count = len(_get_selected_documents(self))
+    action_dupliquer.setEnabled(selected_docs_count == 1)
+    action_remplacer.setEnabled(selected_docs_count == 1)
 
     picked = menu.exec_(self.tableDocuments.viewport().mapToGlobal(pos))
     if picked == action_modifier:
@@ -185,14 +272,16 @@ def _on_table_context_menu(self, pos):
         _on_supprimer_clicked(self)
     elif picked == action_dupliquer:
         _on_dupliquer_clicked(self)
-    elif picked == action_transformer:
+    elif picked == action_transferer:
         _on_transformer_clicked(self)
+    elif picked == action_remplacer:
+        _on_remplacer_clicked(self)
 
 
 def _on_dupliquer_clicked(self):
-    """Placeholder duplicate action until business rules are finalized."""
-    document_id = _get_selected_document_id(self)
-    if not document_id:
+    """Open transfer window in duplicate mode for selected document."""
+    documents = _get_selected_documents(self)
+    if not documents:
         MessageBox(
             variant="info",
             title="Dupliquer",
@@ -201,22 +290,11 @@ def _on_dupliquer_clicked(self):
         ).exec_()
         return
 
-    MessageBox(
-        variant="attention",
-        title="Dupliquer",
-        message="La duplication du document sera disponible dans la prochaine version.",
-        parent=self,
-    ).exec_()
-
-
-def _on_transformer_clicked(self):
-    """Open transfer dialog for the currently selected document."""
-    documents = _get_selected_documents(self)
-    if not documents:
+    if len(documents) > 1:
         MessageBox(
             variant="info",
-            title="Transformer",
-            message="Veuillez sélectionner un document à transformer.",
+            title="Dupliquer",
+            message="Veuillez sélectionner un seul document pour la duplication.",
             parent=self,
         ).exec_()
         return
@@ -227,14 +305,113 @@ def _on_transformer_clicked(self):
         parent=parent_window,
         source_doc_id=source_doc["id"],
         source_doc_number=source_doc["number"],
+        default_operation="duplicate",
     )
     dialog.exec_()
+    _reload_table_total_labels(self)
+
+
+def _on_transformer_clicked(self):
+    """Open transfer dialog for the currently selected document."""
+    documents = _get_selected_documents(self)
+    if not documents:
+        MessageBox(
+            variant="info",
+            title="Transférer",
+            message="Veuillez sélectionner un document à transférer.",
+            parent=self,
+        ).exec_()
+        return
+
+    selected_doc_ids = {doc["id"] for doc in documents}
+    selected_type_labels = []
+    for row in range(self.tableDocuments.rowCount()):
+        id_item = self.tableDocuments.item(row, 9)
+        type_item = self.tableDocuments.item(row, 1)
+        if not id_item or not type_item:
+            continue
+        try:
+            row_doc_id = int((id_item.text() or "").strip())
+        except ValueError:
+            continue
+        if row_doc_id in selected_doc_ids:
+            selected_type_labels.append((type_item.text() or "").strip().casefold())
+
+    if any("avoir" in label for label in selected_type_labels):
+        MessageBox(
+            variant="info",
+            title="Transférer",
+            message="Aucun type de destination disponible pour un document Avoir.",
+            parent=self,
+        ).exec_()
+        return
+
+    unique_types = {label for label in selected_type_labels if label}
+    if len(unique_types) > 1:
+        MessageBox(
+            variant="info",
+            title="Transférer",
+            message="Les documents sélectionnés doivent être du même type pour un transfert groupé.",
+            parent=self,
+        ).exec_()
+        return
+
+    parent_window = self.window() if hasattr(self, "window") else None
+    if len(documents) > 1:
+        dialog = TransfertDocumentDialog(
+            parent=parent_window,
+            source_docs=documents,
+            default_operation="transfer",
+        )
+    else:
+        source_doc = documents[0]
+        dialog = TransfertDocumentDialog(
+            parent=parent_window,
+            source_doc_id=source_doc["id"],
+            source_doc_number=source_doc["number"],
+            default_operation="transfer",
+        )
+    dialog.exec_()
+    _reload_table_total_labels(self)
+
+
+def _on_remplacer_clicked(self):
+    """Open transfer dialog in replace mode for selected document."""
+    documents = _get_selected_documents(self)
+    if not documents:
+        MessageBox(
+            variant="info",
+            title="Remplacer",
+            message="Veuillez sélectionner un document à remplacer.",
+            parent=self,
+        ).exec_()
+        return
+
+    if len(documents) > 1:
+        MessageBox(
+            variant="info",
+            title="Remplacer",
+            message="Veuillez sélectionner un seul document pour le remplacement.",
+            parent=self,
+        ).exec_()
+        return
+
+    source_doc = documents[0]
+    parent_window = self.window() if hasattr(self, "window") else None
+    dialog = TransfertDocumentDialog(
+        parent=parent_window,
+        source_doc_id=source_doc["id"],
+        source_doc_number=source_doc["number"],
+        default_operation="replace",
+    )
+    dialog.exec_()
+    _reload_table_total_labels(self)
 
 def _start_auto_refresh(self):
-    """Auto-refresh documents list every 5 seconds."""
+    """Auto-refresh documents list every 10 seconds."""
     if not hasattr(self, "_refresh_timer"):
         self._refresh_timer = QTimer(self)
-        self._refresh_timer.setInterval(5000)
+        self._refresh_timer.setInterval(10000)
         self._refresh_timer.timeout.connect(lambda: _reload_table_total_labels(self))
 
     if not self._refresh_timer.isActive():
@@ -249,7 +426,18 @@ def _is_sync_guarded(self):
     return bool(getattr(self, "_checkbox_selection_sync_lock", False))
 
 
-def _on_checkbox_state_changed(self, row, state):
+def _find_row_for_checkbox(self, checkbox):
+    if checkbox is None or not hasattr(self, "tableDocuments"):
+        return -1
+
+    for row in range(self.tableDocuments.rowCount()):
+        widget = self.tableDocuments.cellWidget(row, 0)
+        if widget is checkbox:
+            return row
+    return -1
+
+
+def _on_checkbox_state_changed(self, checkbox, state):
     """When a checkbox changes, update row selection accordingly."""
     if _is_sync_guarded(self):
         return
@@ -258,7 +446,7 @@ def _on_checkbox_state_changed(self, row, state):
     if not selection_model:
         return
 
-    row = int(row)
+    row = _find_row_for_checkbox(self, checkbox)
     if row < 0 or row >= self.tableDocuments.rowCount():
         return
 
@@ -301,6 +489,22 @@ def _sync_checkboxes_from_selection(self):
     finally:
         _set_sync_guard(self, False)
 
+    _update_operation_actions_state(self)
+
+
+def _update_operation_actions_state(self):
+    """Enable/disable operation buttons based on selected document count."""
+    selected_count = len(_get_selected_documents(self))
+    has_selection = selected_count > 0
+    single_selection = selected_count == 1
+
+    if hasattr(self, "tbTransform"):
+        self.tbTransform.setEnabled(has_selection)
+    if hasattr(self, "tbDuplicate"):
+        self.tbDuplicate.setEnabled(single_selection)
+    if hasattr(self, "tbReplace"):
+        self.tbReplace.setEnabled(single_selection)
+
 
 def _collect_filter_values(self):
     """Read current filter widgets and normalize values."""
@@ -317,6 +521,22 @@ def _collect_filter_values(self):
     }
 
 
+def _clear_filters(self):
+    """Reset all filters to default values and reload table."""
+    self.editcodeclient.clear()
+    self.editClient.clear()
+    self.editDocNumber.clear()
+
+    self.comboDocType.setCurrentIndex(0)
+    self.comboStatus.setCurrentIndex(0)
+
+    today = datetime.today().date()
+    self.dateFrom.setDate(QDate(today.year - 10, today.month, today.day))
+    self.dateTo.setDate(QDate.currentDate())
+
+    _reload_table_total_labels(self)
+
+
 def _parse_row_date(date_text):
     """Support both 'YYYY-MM-DD' and 'dd/MM/yyyy' date string formats."""
     value = (date_text or "").strip()
@@ -331,37 +551,20 @@ def _parse_row_date(date_text):
     return None
 
 
-def _row_matches_filters(row_data, filters):
-    doc_type = (row_data.get("type") or "").casefold()
-    code_client = (row_data.get("code_client") or "").casefold()
-    client = (row_data.get("client") or "").casefold()
-    doc_number = (row_data.get("doc_number") or "").casefold()
-    status = (row_data.get("status") or "").casefold()
-
-    if filters["doc_type"] and filters["doc_type"] not in doc_type:
-        return False
-    if filters["code_client"] and filters["code_client"] not in code_client:
-        return False
-    if filters["client"] and filters["client"] not in client:
-        return False
-    if filters["doc_number"] and filters["doc_number"] not in doc_number:
-        return False
-    if filters["status"] and filters["status"] != status:
-        return False
-
-    row_date = _parse_row_date(row_data.get("date"))
-    if row_date is not None:
-        if filters["date_from"] and row_date < filters["date_from"]:
-            return False
-        if filters["date_to"] and row_date > filters["date_to"]:
-            return False
-
-    return True
-
-
 def _render_rows(self, rows_data):
     """Render rows into tableDocuments from normalized row dictionaries."""
-    self.tableDocuments.setRowCount(0)
+    was_sorting_enabled = self.tableDocuments.isSortingEnabled() if hasattr(self, "tableDocuments") else False
+    sort_section = getattr(self, "_table_sort_section", None)
+    sort_order = getattr(self, "_table_sort_order", Qt.AscendingOrder)
+
+    if sort_section is None and hasattr(self, "tableDocuments"):
+        sort_section = self.tableDocuments.horizontalHeader().sortIndicatorSection()
+        sort_order = self.tableDocuments.horizontalHeader().sortIndicatorOrder()
+
+    self.tableDocuments.setUpdatesEnabled(False)
+
+    if was_sorting_enabled:
+        self.tableDocuments.setSortingEnabled(False)
 
     current_col_count = self.tableDocuments.columnCount()
     if current_col_count < 10:
@@ -369,13 +572,12 @@ def _render_rows(self, rows_data):
         self.tableDocuments.setHorizontalHeaderItem(9, QTableWidgetItem("ID"))
         self.tableDocuments.setColumnHidden(9, True)
 
-    for row_data in rows_data:
-        row = self.tableDocuments.rowCount()
-        self.tableDocuments.insertRow(row)
+    self.tableDocuments.setRowCount(len(rows_data))
 
+    for row, row_data in enumerate(rows_data):
         checkbox = QCheckBox()
-        checkbox.stateChanged.connect(lambda state, r=row: _on_checkbox_state_changed(self, r, state))
         self.tableDocuments.setCellWidget(row, 0, checkbox)
+        checkbox.stateChanged.connect(lambda state, cb=checkbox: _on_checkbox_state_changed(self, cb, state))
 
         visible_values = [
             row_data.get("type", "N/A"),
@@ -390,8 +592,12 @@ def _render_rows(self, rows_data):
         ]
 
         for col, value in enumerate(visible_values):
-            item = QTableWidgetItem(str(value if value is not None else ""))
-            item.setTextAlignment(Qt.AlignVCenter | (Qt.AlignRight if col not in (0, 1, 2, 3, 7) else Qt.AlignLeft))
+            is_numeric = col in (4, 5, 6)
+            item = _build_table_item(
+                value,
+                align_right=(col not in (0, 1, 2, 3, 7)),
+                numeric=is_numeric,
+            )
             self.tableDocuments.setItem(row, col + 1, item)
 
         # Save client code in item metadata for in-memory filtering.
@@ -400,6 +606,19 @@ def _render_rows(self, rows_data):
             client_item.setData(Qt.UserRole, row_data.get("code_client", ""))
 
     _sync_checkboxes_from_selection(self)
+
+    if was_sorting_enabled:
+        # Set the sort indicator BEFORE enabling sorting to prevent Qt from auto-emitting
+        # sortIndicatorChanged(0, ...) which would overwrite our stored sort state.
+        if sort_section is not None and int(sort_section) >= 0:
+            header = self.tableDocuments.horizontalHeader()
+            header.setSortIndicator(int(sort_section), sort_order)
+        
+        self.tableDocuments.setSortingEnabled(True)
+        if sort_section is not None and int(sort_section) >= 0:
+            self.tableDocuments.sortItems(int(sort_section), sort_order)
+
+    self.tableDocuments.setUpdatesEnabled(True)
 
 
 def _capture_selected_document_ids(self):
@@ -426,6 +645,29 @@ def _capture_selected_document_ids(self):
                 selected_ids.append(doc_id)
 
     return selected_ids
+
+
+def _capture_table_scroll_position(self):
+    """Capture current scroll position of documents table."""
+    if not hasattr(self, "tableDocuments"):
+        return {"vertical": 0, "horizontal": 0}
+
+    return {
+        "vertical": self.tableDocuments.verticalScrollBar().value(),
+        "horizontal": self.tableDocuments.horizontalScrollBar().value(),
+    }
+
+
+def _restore_table_scroll_position(self, position):
+    """Restore scroll position after table reload."""
+    if not hasattr(self, "tableDocuments"):
+        return
+
+    if not isinstance(position, dict):
+        return
+
+    self.tableDocuments.verticalScrollBar().setValue(int(position.get("vertical", 0)))
+    self.tableDocuments.horizontalScrollBar().setValue(int(position.get("horizontal", 0)))
 
 
 def _restore_selection_by_ids(self, selected_ids):
@@ -460,118 +702,137 @@ def _restore_selection_by_ids(self, selected_ids):
     _sync_checkboxes_from_selection(self)
 
 
-def _snapshot_current_table_rows(self):
-    """Read currently displayed table rows into dictionaries (no DB access)."""
-    rows_data = []
-    for row in range(self.tableDocuments.rowCount()):
-        client_item = self.tableDocuments.item(row, 4)
-        rows_data.append({
-            "type": (self.tableDocuments.item(row, 1) or QTableWidgetItem("")).text(),
-            "doc_number": (self.tableDocuments.item(row, 2) or QTableWidgetItem("")).text(),
-            "date": (self.tableDocuments.item(row, 3) or QTableWidgetItem("")).text(),
-            "client": (client_item or QTableWidgetItem("")).text(),
-            "code_client": (client_item.data(Qt.UserRole) if client_item else "") or "",
-            "total_ht": (self.tableDocuments.item(row, 5) or QTableWidgetItem("0")).text(),
-            "total_ttc": (self.tableDocuments.item(row, 6) or QTableWidgetItem("0")).text(),
-            "solde": (self.tableDocuments.item(row, 7) or QTableWidgetItem("0")).text(),
-            "status": (self.tableDocuments.item(row, 8) or QTableWidgetItem("")).text(),
-            "id_document": (self.tableDocuments.item(row, 9) or QTableWidgetItem("")).text(),
-        })
-    return rows_data
-
-
-def _filter_from_current_table(self):
-    """Apply filters to existing table data only (isolated from database)."""
-    selected_ids = _capture_selected_document_ids(self)
-    filters = _collect_filter_values(self)
-    rows_data = _snapshot_current_table_rows(self)
-    filtered_rows = [row for row in rows_data if _row_matches_filters(row, filters)]
-    _render_rows(self, filtered_rows)
-    _restore_selection_by_ids(self, selected_ids)
-    _set_total_labels(self)
-
-
 def _safe_float(value_text):
-    text = str(value_text or "").strip().replace(" ", "").replace(",", ".")
+    text = str(value_text or "").strip().replace(" ", "")
     if text in ("", "-"):
         return 0.0
+
+    # Support both "6,857.25" and "6857,25" formats.
+    if "," in text and "." in text:
+        text = text.replace(",", "")
+    elif "," in text:
+        if text.count(",") == 1 and len(text.split(",", 1)[1]) <= 2:
+            text = text.replace(",", ".")
+        else:
+            text = text.replace(",", "")
+
     try:
         return float(text)
     except ValueError:
         return 0.0
 
 
-def _set_total_labels(self):
-    self.labelNbDocumentsValue.setText(str(self.tableDocuments.rowCount()))
+def _format_number(value):
+    """Format number with thousands separators and exactly 2 decimals."""
+    return f"{_safe_float(value):,.2f}"
 
-    total_ht = 0.0
-    total_ttc = 0.0
-    total_balance = 0.0
 
-    for row in range(self.tableDocuments.rowCount()):
-        total_ht += _safe_float((self.tableDocuments.item(row, 5) or QTableWidgetItem("0")).text())
-        total_ttc += _safe_float((self.tableDocuments.item(row, 6) or QTableWidgetItem("0")).text())
-        total_balance += _safe_float((self.tableDocuments.item(row, 7) or QTableWidgetItem("0")).text())
+def _build_table_item(value, align_right=False, numeric=False):
+    """Create a table item with optional numeric sort role."""
+    if numeric:
+        display_text = _format_number(value)
+        item = _NumericSortTableWidgetItem(display_text)
+        item.setData(Qt.UserRole, _safe_float(value))
+    else:
+        display_text = str(value if value is not None else "")
+        item = QTableWidgetItem(display_text)
 
-    self.labelTotalHtValue.setText(f"{total_ht:.2f}")
-    self.labelTotalTtcValue.setText(f"{total_ttc:.2f}")
-    self.labelTotalBalanceValue.setText(f"{total_balance:.2f}")
+    item.setTextAlignment(Qt.AlignVCenter | (Qt.AlignRight if align_right else Qt.AlignLeft))
+
+    return item
+
+
+def _set_total_labels_from_rows(self, rows_data):
+    """Fast totals from in-memory normalized rows, avoids table text parsing."""
+    self.labelNbDocumentsValue.setText(str(len(rows_data)))
+
+    total_ht = sum(float(row.get("total_ht") or 0) for row in rows_data)
+    total_ttc = sum(float(row.get("total_ttc") or 0) for row in rows_data)
+    total_balance = sum(float(row.get("solde") or 0) for row in rows_data)
+
+    self.labelTotalHtValue.setText(_format_number(total_ht))
+    self.labelTotalTtcValue.setText(_format_number(total_ttc))
+    self.labelTotalBalanceValue.setText(_format_number(total_balance))
 
 @with_db_session
 def _reload_table_total_labels(self, session=None):
-    # Fetch fresh data from DB then apply current UI filters before rendering.
+    # Fetch only filtered rows from DB (SQL-side filtering) for better performance.
     selected_ids = _capture_selected_document_ids(self)
+    scroll_position = _capture_table_scroll_position(self)
+    filters = _collect_filter_values(self)
+
+    vente_codes = ["DV", "BC", "BL", "FA", "AV"]
     query = (
-        select(Document).where(Document.id_domaine == 1).order_by(Document.id_document.desc())
+        select(
+            Document.id_document,
+            Document.numero_document,
+            Document.date_document,
+            Document.total_ht,
+            Document.total_ttc,
+            Document.solde,
+            Document.id_tiers,
+            Document.id_statut,
+            RefTypeDocument.libelle_type,
+            Tiers.nom_tiers,
+            Tiers.code_tiers,
+            RefStatutDocument.libelle_statut,
+        )
+        .join(RefTypeDocument, Document.id_type_document == RefTypeDocument.id_type_document)
+        .outerjoin(Tiers, Document.id_tiers == Tiers.id_tiers)
+        .join(RefStatutDocument, Document.id_statut == RefStatutDocument.id_statut)
+        .where(
+            and_(
+                Document.id_domaine == 1,
+                Document.doc_actif == 1,
+                RefTypeDocument.code_type.in_(vente_codes),
+            )
+        )
     )
-    docs = session.execute(query).fetchall()
+
+    if filters["date_from"]:
+        query = query.where(Document.date_document >= filters["date_from"])
+    if filters["date_to"]:
+        query = query.where(Document.date_document <= filters["date_to"])
+    if filters["code_client"]:
+        query = query.where(func.lower(Tiers.code_tiers).like(f"%{filters['code_client']}%"))
+    if filters["client"]:
+        query = query.where(func.lower(Tiers.nom_tiers).like(f"%{filters['client']}%"))
+    if filters["doc_number"]:
+        query = query.where(func.lower(Document.numero_document).like(f"%{filters['doc_number']}%"))
+    if filters["doc_type"]:
+        query = query.where(func.lower(RefTypeDocument.libelle_type).like(f"%{filters['doc_type']}%"))
+    if filters["status"]:
+        query = query.where(func.lower(RefStatutDocument.libelle_statut) == filters["status"])
+
+    query = query.order_by(Document.id_document.desc())
+
+    docs = session.execute(query).all()
+
     if not docs:
+        self.tableDocuments.setRowCount(0)
+        _set_total_labels_from_rows(self, [])
+        _restore_table_scroll_position(self, scroll_position)
         return
-
-    ref_dict = {}
-    query = select(RefTypeDocument.id_type_document, RefTypeDocument.libelle_type)
-    ref_types = session.execute(query).fetchall()
-    for type in ref_types:
-        ref_dict[type.id_type_document] = type.libelle_type
-
-    cln_dict = {}
-    query = select(Tiers.id_tiers, Tiers.nom_tiers)
-    ref_types = session.execute(query).fetchall()
-    for type in ref_types:
-        cln_dict[type.id_tiers] = type.nom_tiers
-
-    stts_dict = {}
-    query = select(RefStatutDocument.id_statut, RefStatutDocument.libelle_statut)
-    stts_types = session.execute(query).fetchall()
-    for type in stts_types:
-        stts_dict[type.id_statut] = type.libelle_statut
-
-    code_dict = {}
-    query = select(Tiers.id_tiers, Tiers.code_tiers)
-    code_rows = session.execute(query).fetchall()
-    for row in code_rows:
-        code_dict[row.id_tiers] = row.code_tiers or ""
 
     rows_data = []
     for doc in docs:
         rows_data.append({
-            "type": ref_dict.get(doc.Document.id_type_document, "N/A"),
-            "doc_number": doc.Document.numero_document,
-            "date": doc.Document.date_document.strftime("%Y-%m-%d"),
-            "client": cln_dict.get(doc.Document.id_tiers, "N/A"),
-            "code_client": code_dict.get(doc.Document.id_tiers, ""),
-            "total_ht": doc.Document.total_ht,
-            "total_ttc": doc.Document.total_ttc,
-            "solde": doc.Document.solde,
-            "status": stts_dict.get(doc.Document.id_statut, "N/A"),
-            "id_document": doc.Document.id_document,
+            "type": doc.libelle_type or "N/A",
+            "doc_number": doc.numero_document,
+            "date": doc.date_document.strftime("%Y-%m-%d") if doc.date_document else "",
+            "client": doc.nom_tiers or "N/A",
+            "code_client": doc.code_tiers or "",
+            "total_ht": float(doc.total_ht or 0),
+            "total_ttc": float(doc.total_ttc or 0),
+            "solde": float(doc.solde or 0),
+            "status": doc.libelle_statut or "N/A",
+            "id_document": doc.id_document,
         })
 
-    filters = _collect_filter_values(self)
-    filtered_rows = [row for row in rows_data if _row_matches_filters(row, filters)]
-    _render_rows(self, filtered_rows)
+    _render_rows(self, rows_data)
     _restore_selection_by_ids(self, selected_ids)
-    _set_total_labels(self)
+    _restore_table_scroll_position(self, scroll_position)
+    _set_total_labels_from_rows(self, rows_data)
 
 
 def _open_document_from_row(self, row, col):
@@ -616,11 +877,27 @@ def _get_selected_document_id(self):
 def _get_selected_documents(self):
     """Return selected documents as dictionaries with id and displayed reference."""
     selection_model = self.tableDocuments.selectionModel()
-    if not selection_model:
+    if not selection_model and self.tableDocuments.rowCount() <= 0:
         return []
 
     selected_docs = []
-    for index in selection_model.selectedRows():
+    selected_rows = selection_model.selectedRows() if selection_model else []
+
+    # Fallback 1: current row when selection model has no selected rows.
+    if not selected_rows and self.tableDocuments.currentRow() >= 0:
+        selected_rows = [self.tableDocuments.model().index(self.tableDocuments.currentRow(), 1)]
+
+    # Fallback 2: checked rows when no highlighted row exists.
+    if not selected_rows:
+        for row in range(self.tableDocuments.rowCount()):
+            checkbox = self.tableDocuments.cellWidget(row, 0)
+            if not isinstance(checkbox, QCheckBox) or not checkbox.isChecked():
+                continue
+            selected_rows.append(self.tableDocuments.model().index(row, 1))
+
+    for index in selected_rows:
+        if not index.isValid():
+            continue
         id_item = self.tableDocuments.item(index.row(), 9)
         number_item = self.tableDocuments.item(index.row(), 2)
         if not id_item:
@@ -666,7 +943,7 @@ def _on_modifier_clicked(self):
 
 @with_db_session
 def _on_supprimer_clicked(self, session=None):
-    """Delete one or many selected documents with per-row confirmation."""
+    """Soft-delete one or many selected documents (doc_actif = 0)."""
     documents = _get_selected_documents(self)
     if not documents:
         MessageBox(
@@ -677,7 +954,7 @@ def _on_supprimer_clicked(self, session=None):
         ).exec_()
         return
 
-    deleted_count = 0
+    archived_count = 0
     skipped_count = 0
 
     for doc in documents:
@@ -694,10 +971,18 @@ def _on_supprimer_clicked(self, session=None):
             skipped_count += 1
             continue
 
-        session.execute(delete(Document).where(Document.id_document == document_id))
-        deleted_count += 1
+        document = session.execute(
+            select(Document).where(Document.id_document == document_id)
+        ).scalar_one_or_none()
 
-    if deleted_count > 0:
+        if not document or int(document.doc_actif or 0) == 0:
+            skipped_count += 1
+            continue
+
+        document.doc_actif = 0
+        archived_count += 1
+
+    if archived_count > 0:
         session.commit()
 
     _reload_table_total_labels(self)
@@ -706,7 +991,7 @@ def _on_supprimer_clicked(self, session=None):
         MessageBox(
             variant="attention",
             title="Suppression partielle",
-            message=f"{deleted_count} document(s) supprimé(s), {skipped_count} ignoré(s).",
+            message=f"{archived_count} document(s) supprimé(s), {skipped_count} ignoré(s).",
             parent=self,
         ).exec_()
 

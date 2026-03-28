@@ -349,6 +349,51 @@ QDateEdit#date_dateedit::down-arrow:disabled {
          </item>
         </layout>
        </item>
+            <item>
+             <layout class="QVBoxLayout" name="statusGroupLayout">
+                <property name="spacing">
+                 <number>5</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="statusLabel">
+                    <property name="styleSheet">
+                     <string notr="true">QLabel#statusLabel { color: #6b7280; font: 600 10pt &quot;Overpass&quot;; text-transform: uppercase; background-color: transparent;padding: 0px; padding-left: 5px;}</string>
+                    </property>
+                    <property name="text">
+                     <string>STATUT</string>
+                    </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="status_combobox">
+                    <property name="minimumSize">
+                     <size>
+                        <width>190</width>
+                        <height>40</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                        <width>16777215</width>
+                        <height>40</height>
+                     </size>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QComboBox#status_combobox { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 6px 10px; font: 500 10pt &quot;Overpass&quot;; color: #374151; }
+QComboBox#status_combobox:hover { border-color: #d1d5db; }
+QComboBox#status_combobox:focus { border-color: #1d7ae2; }
+QComboBox#status_combobox::drop-down { border: none; width: 20px; }
+QComboBox#status_combobox::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }
+QComboBox#status_combobox:disabled {
+        background-color: #f1f5f9;
+        color: #94a3b8;
+        border: 1px solid #e2e8f0;
+}</string>
+                    </property>
+                 </widget>
+                </item>
+             </layout>
+            </item>
        <item>
         <layout class="QVBoxLayout" name="pieceGroupLayout">
          <property name="spacing">

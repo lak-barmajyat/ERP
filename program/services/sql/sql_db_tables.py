@@ -314,6 +314,7 @@ class Document(Base):
         ),
         Index("idx_documents_date",  "date_document"),
         Index("idx_documents_tiers", "id_tiers"),
+        Index("idx_documents_list_vente", "id_domaine", "doc_actif", "id_type_document", "date_document"),
     )
 
     id_document: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
@@ -358,6 +359,11 @@ class Document(Base):
 
     commentaire: Mapped[Optional[str]] = mapped_column(String(255))
 
+    id_precedent_doc: Mapped[Optional[int]] = mapped_column(
+        ForeignKey("documents.id_document", onupdate="CASCADE", ondelete="SET NULL")
+    )
+    doc_actif: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("1"))
+
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP")
     )
@@ -390,6 +396,7 @@ class DetailDocument(Base):
     __table_args__ = (
         Index("idx_details_doc",     "id_document"),   # ← add
         Index("idx_details_article", "id_article"),    # ← add
+        Index("idx_details_doc_actif", "id_document", "doc_actif"),
     )
 
     id_detail: Mapped[int] = mapped_column(BigInteger, primary_key=True, autoincrement=True)
@@ -417,6 +424,9 @@ class DetailDocument(Base):
     total_ligne_ht: Mapped[float] = mapped_column(DECIMAL(14, 2), nullable=False, server_default=text("0.00"))
     total_ligne_tva: Mapped[float] = mapped_column(DECIMAL(14, 2), nullable=False, server_default=text("0.00"))
     total_ligne_ttc: Mapped[float] = mapped_column(DECIMAL(14, 2), nullable=False, server_default=text("0.00"))
+
+    id_precedent_doc: Mapped[Optional[int]] = mapped_column(BigInteger)
+    doc_actif: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("1"))
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP")

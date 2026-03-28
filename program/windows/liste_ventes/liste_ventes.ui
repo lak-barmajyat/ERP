@@ -51,7 +51,7 @@ QFrame#toolbarFrame {
 }
 QToolButton#tbNew, QToolButton#tbEdit, QToolButton#tbDelete,QToolButton#tbFermer,
 QToolButton#tbPrint, QToolButton#tbExportExcel, QToolButton#tbTransform,
-QToolButton#tbDuplicate{
+QToolButton#tbDuplicate, QToolButton#tbReplace{
     background-color: transparent;
     border: none;
     padding: 4px 12px;
@@ -69,6 +69,7 @@ QToolButton#tbPrint:hover,
 QToolButton#tbFermer:hover,
 QToolButton#tbTransform:hover,
 QToolButton#tbDuplicate:hover,
+QToolButton#tbReplace:hover,
 QToolButton#tbExportExcel:hover {
     background-color: #f9fafb;
 }
@@ -98,6 +99,9 @@ QToolButton#tbTransform {
 }
 QToolButton#tbDuplicate {
     qproperty-icon: url(program/assets/documents/duplicate.svg);
+}
+QToolButton#tbReplace {
+    qproperty-icon: url(program/assets/documents/transform.svg);
 }
        </string>
      </property>
@@ -260,7 +264,7 @@ QFrame#toolbarDivider2_2 {
          </size>
         </property>
         <property name="text">
-         <string>Duplicate</string>
+                 <string>Dupliquer</string>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -276,13 +280,29 @@ QFrame#toolbarDivider2_2 {
          </size>
         </property>
         <property name="text">
-         <string>Transformer</string>
+                 <string>Transférer</string>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextUnderIcon</enum>
         </property>
        </widget>
       </item>
+            <item>
+             <widget class="QToolButton" name="tbReplace">
+                <property name="minimumSize">
+                 <size>
+                    <width>80</width>
+                    <height>46</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Remplacer</string>
+                </property>
+                <property name="toolButtonStyle">
+                 <enum>Qt::ToolButtonTextUnderIcon</enum>
+                </property>
+             </widget>
+            </item>
       <item>
        <spacer name="toolbarSpacer">
         <property name="orientation">
@@ -390,6 +410,20 @@ QPushButton#btnFilter {
 }
 QPushButton#btnFilter:hover {
     background-color: #0f4bc4;
+}
+
+QPushButton#btnClearFilters {
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    min-width: 36px;
+    max-width: 36px;
+    min-height: 36px;
+    max-height: 36px;
+}
+QPushButton#btnClearFilters:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
 }
        </string>
      </property>
@@ -666,13 +700,13 @@ QLabel#labelPeriodDash {
          <widget class="QComboBox" name="comboStatus">
           <property name="minimumSize">
            <size>
-                <width>170</width>
+                <width>102</width>
             <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>102</width>
             <height>40</height>
            </size>
           </property>
@@ -688,17 +722,17 @@ QLabel#labelPeriodDash {
           </item>
           <item>
            <property name="text">
-            <string>Valide</string>
+            <string>Validé</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Annuler</string>
+            <string>Annulé</string>
            </property>
           </item>
           <item>
            <property name="text">
-            <string>Partiel</string>
+            <string>Partiellement payé</string>
            </property>
           </item>
           <item>
@@ -716,16 +750,61 @@ QLabel#labelPeriodDash {
          <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
+                 <enum>QSizePolicy::Fixed</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>40</width>
+                    <width>0</width>
           <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
+        <item>
+         <layout class="QVBoxLayout" name="clearFilterButtonLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <spacer name="verticalSpacerClearFilter">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Fixed</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+            <width>11</width>
+            <height>25</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="btnClearFilters">
+            <property name="minimumSize">
+             <size>
+            <width>36</width>
+            <height>36</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+            <width>36</width>
+            <height>36</height>
+             </size>
+            </property>
+            <property name="cursor">
+             <cursorShape>PointingHandCursor</cursorShape>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_2">
         <property name="spacing">
@@ -754,13 +833,19 @@ QLabel#labelPeriodDash {
          <widget class="QPushButton" name="btnFilter">
           <property name="minimumSize">
            <size>
-            <width>120</width>
+                        <width>160</width>
             <height>36</height>
            </size>
           </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                        <horstretch>1</horstretch>
+                        <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
           <property name="maximumSize">
            <size>
-            <width>16777215</width>
+            <width>17777215</width>
             <height>40</height>
            </size>
           </property>
@@ -768,7 +853,7 @@ QLabel#labelPeriodDash {
            <cursorShape>PointingHandCursor</cursorShape>
           </property>
           <property name="text">
-           <string>Filtrer</string>
+                     <string>Filtrer/Actualiser</string>
           </property>
          </widget>
         </item>

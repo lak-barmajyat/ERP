@@ -72,8 +72,6 @@ class SalesDocumentsWindow(QWidget):
         self._apply_context_to_ui()
         self._setup_table()
         self._setup_defaults()
-        self._connect_signals()
-        self._populate_demo_data()
         liste_ventes_setup(self)
 
     def _apply_context_to_ui(self) -> None:
@@ -109,13 +107,14 @@ class SalesDocumentsWindow(QWidget):
         # Hide row headers for a cleaner, grid-like look
         self.tableDocuments.verticalHeader().setVisible(False)
         self.tableDocuments.setSelectionMode(QAbstractItemView.ExtendedSelection)
+        self.tableDocuments.setSortingEnabled(True)
 
     def _setup_defaults(self) -> None:
         """
         Set default values for the filters and summary section.
         """
         today = QDate.currentDate()
-        self.dateFrom.setDate(today.addMonths(-1))
+        self.dateFrom.setDate(today.addYears(-10))
         self.dateTo.setDate(today)
 
         self.comboStatus.setCurrentIndex(0)  # "Tous les statuts"
@@ -127,16 +126,10 @@ class SalesDocumentsWindow(QWidget):
 
     def _connect_signals(self) -> None:
         """
-        Wire widget signals to handler methods.
+        Legacy local wiring kept for backward compatibility.
+        Runtime signal wiring is handled by `liste_ventes_setup` in funcs.py.
         """
-        self.btnFilter.clicked.connect(self._on_filter_clicked)
-
-        # Toolbar actions (currently simple stubs that you can extend)
-        self.tbNew.clicked.connect(self._on_new_document)
-        self.tbEdit.clicked.connect(self._on_edit_document)
-        self.tbDelete.clicked.connect(self._on_delete_document)
-        self.tbPrint.clicked.connect(self._on_print_documents)
-        self.tbExportExcel.clicked.connect(self._on_export_excel)
+        return
 
     def _populate_demo_data(self) -> None:
         """
@@ -202,14 +195,10 @@ class SalesDocumentsWindow(QWidget):
 
     def _on_delete_document(self) -> None:
         """
-        Placeholder for deleting selected documents.
+        Legacy placeholder disabled.
+        Deletion is handled in funcs.py with DB soft-delete (`doc_actif = 0`).
         """
-        selected_rows = sorted({index.row() for index in self.tableDocuments.selectionModel().selectedRows()},
-                               reverse=True)
-        for row in selected_rows:
-            self.tableDocuments.removeRow(row)
-        if selected_rows:
-            self._recalculate_summary()
+        return
 
     def _on_print_documents(self) -> None:
         """

@@ -6,6 +6,15 @@
 USE erp;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- Schema sync (new columns added in erp.sql dump)
+ALTER TABLE documents
+  ADD COLUMN IF NOT EXISTS id_precedent_doc BIGINT NULL,
+  ADD COLUMN IF NOT EXISTS doc_actif TINYINT(1) NOT NULL DEFAULT 1;
+
+ALTER TABLE details_documents
+  ADD COLUMN IF NOT EXISTS id_precedent_doc BIGINT NULL,
+  ADD COLUMN IF NOT EXISTS doc_actif TINYINT(1) NOT NULL DEFAULT 1;
+
 -- =========================
 -- informations_societe
 -- =========================

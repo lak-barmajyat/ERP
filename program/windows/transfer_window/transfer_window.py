@@ -14,7 +14,14 @@ def resource_path(relative_path: str) -> str:
 
 
 class TransfertDocumentDialog(QDialog):
-    def __init__(self, parent=None, source_doc_id=None, source_doc_number=None) -> None:
+    def __init__(
+        self,
+        parent=None,
+        source_doc_id=None,
+        source_doc_number=None,
+        source_docs=None,
+        default_operation="transfer",
+    ) -> None:
         super().__init__(parent)
         loadUi(resource_path("transfert_document_dialog.ui"), self)
 
@@ -22,6 +29,8 @@ class TransfertDocumentDialog(QDialog):
             self,
             source_doc_id=source_doc_id,
             source_doc_number=source_doc_number,
+            source_docs=source_docs,
+            default_operation=default_operation,
         )
 
 

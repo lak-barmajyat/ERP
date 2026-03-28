@@ -111,7 +111,7 @@
             <string notr="true">QLabel#labelTitlePrefix { color: #191c1e; font: 700 12pt &quot;Overpass&quot;; }</string>
            </property>
            <property name="text">
-            <string>Operation de Documents:</string>
+            <string>Opération de documents:</string>
            </property>
           </widget>
          </item>
@@ -164,131 +164,6 @@
           <property name="bottomMargin">
            <number>16</number>
           </property>
-          <item>
-           <widget class="QFrame" name="frame">
-            <property name="styleSheet">
-             <string notr="true">QFrame 
-{
-	background-color:#ffffff;
-}</string>
-            </property>
-            <layout class="QVBoxLayout" name="_15">
-             <property name="spacing">
-              <number>24</number>
-             </property>
-             <property name="leftMargin">
-              <number>20</number>
-             </property>
-             <property name="topMargin">
-              <number>20</number>
-             </property>
-             <property name="rightMargin">
-              <number>20</number>
-             </property>
-             <property name="bottomMargin">
-              <number>20</number>
-             </property>
-             <item>
-              <layout class="QVBoxLayout" name="_16">
-               <property name="spacing">
-                <number>12</number>
-               </property>
-               <item>
-                <widget class="QLabel" name="label_18">
-                 <property name="font">
-                  <font>
-                   <family>Overpass</family>
-                   <pointsize>-1</pointsize>
-                   <weight>75</weight>
-                   <bold>true</bold>
-                  </font>
-                 </property>
-                 <property name="styleSheet">
-                  <string>font-size: 10px; font-weight: bold; color: #94a3b8; letter-spacing: 1px;</string>
-                 </property>
-                 <property name="text">
-                  <string>MODE D'OPÉRATION</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <layout class="QHBoxLayout" name="_17">
-                 <property name="spacing">
-                  <number>8</number>
-                 </property>
-                 <item>
-                  <widget class="QComboBox" name="comboModeOperation">
-                   <property name="minimumSize">
-                    <size>
-                     <width>300</width>
-                     <height>0</height>
-                    </size>
-                   </property>
-                   <property name="font">
-                    <font>
-                     <family>Overpass</family>
-                     <pointsize>9</pointsize>
-                     <weight>50</weight>
-                     <italic>false</italic>
-                     <bold>false</bold>
-                    </font>
-                   </property>
-                   <property name="styleSheet">
-                    <string notr="true">QComboBox {
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font: 400 9pt &quot;Overpass&quot;;
-    color: #374151;
-}
-QComboBox::drop-down {
-    border: none;
-    width: 18px;
-}
-QComboBox::down-arrow {
-    image: url(program/assets/global/down_blue_arrow.svg);
-    width: 10px;
-    height: 10px;
-}</string>
-                   </property>
-                   <item>
-                    <property name="text">
-                     <string>Transfer</string>
-                    </property>
-                   </item>
-                   <item>
-                    <property name="text">
-                     <string>Dublique</string>
-                    </property>
-                   </item>
-                   <item>
-                    <property name="text">
-                     <string>Remplace</string>
-                    </property>
-                   </item>
-                  </widget>
-                 </item>
-                 <item>
-                  <spacer name="horizontalSpacer">
-                   <property name="orientation">
-                    <enum>Qt::Horizontal</enum>
-                   </property>
-                   <property name="sizeHint" stdset="0">
-                    <size>
-                     <width>40</width>
-                     <height>20</height>
-                    </size>
-                   </property>
-                  </spacer>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </widget>
-          </item>
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_2">
             <property name="rightMargin">
@@ -509,7 +384,7 @@ QLineEdit#RefEditline[readOnly=&quot;true&quot;]:focus {
 }</string>
                    </property>
                    <property name="placeholderText">
-                    <string>N Doc</string>
+                    <string>N° Doc</string>
                    </property>
                   </widget>
                  </item>
@@ -551,7 +426,7 @@ QComboBox::down-arrow {
                    </property>
                    <item>
                     <property name="text">
-                     <string>Clients</string>
+                    <string>Client</string>
                     </property>
                    </item>
                   </widget>
@@ -712,7 +587,7 @@ QComboBox::down-arrow {
                    <string notr="true">QLabel#labelDetailsTitle { color: #191c1e; font: 700 11pt &quot;Overpass&quot;; }</string>
                   </property>
                   <property name="text">
-                   <string>Détails du Document</string>
+                   <string>Détails du document</string>
                   </property>
                  </widget>
                 </item>
@@ -907,7 +782,7 @@ QComboBox::down-arrow {
             <string notr="true">QPushButton#btnLaunchTransfer { border: none; border-radius: 4px; color: #ffffff; font: 700 9pt &quot;Overpass&quot;; padding: 8px 18px; background-color: #1d7ae2; } QPushButton#btnLaunchTransfer:hover { background-color: #0037b0; }</string>
            </property>
            <property name="text">
-            <string>Transfer</string>
+            <string>Valider</string>
            </property>
           </widget>
          </item>
