@@ -765,7 +765,7 @@ QToolButton#valider_button:disabled {
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="taxe_editline">
+            <widget class="QComboBox" name="taxe_editline">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                <horstretch>0</horstretch>
@@ -785,14 +785,23 @@ QToolButton#valider_button:disabled {
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">QLineEdit#taxe_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QLineEdit#taxe_editline:hover { border-color: #d1d5db; } QLineEdit#taxe_editline:focus { border-color: #1d7ae2; }</string>
+              <string notr="true">QComboBox#taxe_editline { background-color: #ffffff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 5px 8px; font: 400 10pt &quot;Overpass&quot;; color: #374151; min-width: 55px; max-width: 75px; } QComboBox#taxe_editline:hover { border-color: #d1d5db; } QComboBox#taxe_editline:focus { border-color: #1d7ae2; } QComboBox#taxe_editline::drop-down { border: none; width: 18px; } QComboBox#taxe_editline::down-arrow { image: url(program/assets/global/down_blue_arrow.svg); width: 10px; height: 10px; }</string>
              </property>
-             <property name="text">
-              <string>1</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignCenter</set>
-             </property>
+             <item>
+              <property name="text">
+               <string>20.00%</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>10.00%</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>5.00%</string>
+              </property>
+             </item>
             </widget>
            </item>
           </layout>

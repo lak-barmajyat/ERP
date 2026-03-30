@@ -473,7 +473,7 @@ QPushButton#btnClearFilters:hover {
            </size>
           </property>
           <property name="placeholderText">
-           <string>ex: CL00122</string>
+           <string>CL0012</string>
           </property>
          </widget>
         </item>
@@ -539,7 +539,7 @@ QPushButton#btnClearFilters:hover {
            </size>
           </property>
           <property name="placeholderText">
-           <string>EX: FAC-2023-...</string>
+           <string>FA0012</string>
           </property>
          </widget>
         </item>
@@ -785,8 +785,8 @@ QLabel#labelPeriodDash {
            <widget class="QPushButton" name="btnClearFilters">
             <property name="minimumSize">
              <size>
-            <width>36</width>
-            <height>36</height>
+            <width>10</width>
+            <height>10</height>
              </size>
             </property>
             <property name="maximumSize">

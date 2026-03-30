@@ -15,6 +15,7 @@ from program.services import (Tiers,
                             RefStatutDocument,
                             MessageBox)
 from PyQt5.QtWidgets import (
+    QComboBox,
     QDialog,
     QTableWidgetItem,
     QLineEdit,
@@ -84,6 +85,49 @@ def _build_detail_item(value, align_right=False, numeric=False, quantity=False):
 
 def _status_label_key(label):
     return (label or "").strip().casefold().replace("é", "e").replace("è", "e").replace("ê", "e")
+
+
+TAX_OPTIONS = ("20.00%", "10.00%", "5.00%")
+
+
+def _tax_widget(self):
+    return getattr(self, "taxe_editline", None)
+
+
+def _normalize_tax_option(raw_value):
+    value = _safe_float(str(raw_value or "").replace("%", ""))
+    candidate = f"{value:.2f}%"
+    return candidate if candidate in TAX_OPTIONS else TAX_OPTIONS[0]
+
+
+def _set_tax_text(self, raw_value=None):
+    option = _normalize_tax_option(raw_value)
+    widget = _tax_widget(self)
+    if widget is None:
+        return
+
+    if isinstance(widget, QComboBox):
+        if widget.count() == 0:
+            widget.addItems(list(TAX_OPTIONS))
+        widget.setCurrentText(option)
+        return
+
+    widget.setText(option)
+
+
+def _get_tax_text(self):
+    widget = _tax_widget(self)
+    if widget is None:
+        return TAX_OPTIONS[0]
+    if isinstance(widget, QComboBox):
+        text = (widget.currentText() or "").strip()
+        return text if text else TAX_OPTIONS[0]
+    text = (widget.text() or "").strip()
+    return text if text else TAX_OPTIONS[0]
+
+
+def _get_tax_percent(self):
+    return _safe_float(_get_tax_text(self).replace("%", "") or 0)
 
 
 @with_db_session
@@ -209,7 +253,7 @@ def _install_close_cleanup(self):
 
 def show_error_message(message_text=None):
     details = "Veuillez vérifier les informations et réessayer."
-    full_message = f"{message_text}\n\n{details}" if message_text else details
+    full_message = f"{message_text}" if message_text else details
     MessageBox(
         variant="error",
         title="Erreur",
@@ -352,8 +396,7 @@ def _recalculate_entry(self):
     try:
         puht = _safe_float(self.puht_editline.text() or 0)
         qte = _safe_float(self.qte_lineedit.text() or 1)
-        taxe_text = self.taxe_editline.text().replace("%", "")
-        taxe = _safe_float(taxe_text) / 100
+        taxe = _get_tax_percent(self) / 100
         pttc = puht * (1 + taxe)
         total = pttc * qte
         self.pttc_editline.setText(f"{pttc:.2f}")
@@ -367,7 +410,7 @@ def _on_annuler(self):
     self.puht_editline.clear()
     self.pttc_editline.clear()
     self.qte_lineedit.setText("1")
-    self.taxe_editline.clear()
+    _set_tax_text(self, TAX_OPTIONS[0])
     self.ttc_lineedit.clear()
     self._editing_detail_id = None
 
@@ -411,7 +454,7 @@ def _on_enregistrer(self, session=None):
         puht = _safe_float(self.puht_editline.text() or 0)
         pttc = _safe_float(self.pttc_editline.text() or 0)
         qte = _safe_float(self.qte_lineedit.text() or 1)
-        taxe = _safe_float(self.taxe_editline.text().replace("%", "") or 0)
+        taxe = _get_tax_percent(self)
         total = _safe_float(self.ttc_lineedit.text() or 0)
     except ValueError:
         show_error_message("Ligne invalide. Vérifiez la référence article, les prix, la quantité et la taxe.")
@@ -527,7 +570,7 @@ def _on_nouveau(self):
     self.date_dateedit.setDate(QDate.currentDate())
     self.clientid_lineedit.clear()
     self.clients_lineedit.clear()
-    self.taxe_editline.clear()
+    _set_tax_text(self, TAX_OPTIONS[0])
     self.total_tax_label.setText("0.00")
     self.total_UT_label.setText("0.00")
     self.total_ttc_label.setText("0.00")
@@ -618,7 +661,7 @@ def _on_table_row_selected(self):
     self.pttc_editline.setText(f"{_safe_float(pttc):.2f}")
     qte_value = _safe_float(qte)
     self.qte_lineedit.setText(str(int(qte_value)) if qte_value.is_integer() else f"{qte_value:g}")
-    self.taxe_editline.setText(f"{_safe_float(taxe):.2f}")
+    _set_tax_text(self, taxe)
     self.ttc_lineedit.setText(f"{_safe_float(total):.2f}")
     self._editing_detail_id = id_detail or None
 
@@ -646,12 +689,21 @@ def _connect_signals(self, session=None):
             pass
         signal.connect(handler)
 
-    for signal in (self.puht_editline.textChanged, self.qte_lineedit.textChanged, self.taxe_editline.textChanged):
+    for signal in (self.puht_editline.textChanged, self.qte_lineedit.textChanged):
         try:
             signal.disconnect()
         except TypeError:
             pass
         signal.connect(lambda: _recalculate_entry(self))
+
+    tax_widget = _tax_widget(self)
+    if tax_widget is not None:
+        tax_signal = tax_widget.currentTextChanged if isinstance(tax_widget, QComboBox) else tax_widget.textChanged
+        try:
+            tax_signal.disconnect()
+        except TypeError:
+            pass
+        tax_signal.connect(lambda _value=None: _recalculate_entry(self))
 
     if hasattr(self, "productSelector"):
         try:
@@ -700,7 +752,7 @@ def _connect_signals(self, session=None):
 def _on_product_selected_from_selector(self, product):
     self.puht_editline.setText(f'{float(product.get("price", 0)):.2f}')
     self.pttc_editline.setText(f'{float(product.get("price_ttc", 0)):.2f}')
-    self.taxe_editline.setText(f'{float(product.get("tax", 0)):.2f}')
+    _set_tax_text(self, product.get("tax", 20.0))
     if not self.qte_lineedit.text().strip():
         self.qte_lineedit.setText("1")
     _recalculate_entry(self)
@@ -736,10 +788,10 @@ def ref_tab_func(self, session=None):
 
         _set_product_fields(self, ref_value, designation)
         self.puht_editline.setText(f"{float(article.prix_vente_ht or 0):.2f}")
-        self.taxe_editline.setText(f"{float(article.taux_tva or 0):.2f}")
+        _set_tax_text(self, article.taux_tva)
     else:
         self.puht_editline.clear()
-        self.taxe_editline.clear()
+        _set_tax_text(self, TAX_OPTIONS[0])
 
     _recalculate_entry(self)
 
@@ -774,6 +826,7 @@ def nouveau_doc_setup(self,document_id=None, session=None):
     _install_close_cleanup(self)
 
     self._opened_existing_document = is_existing_document
+    _set_tax_text(self, TAX_OPTIONS[0])
 
     if not is_existing_document:
         self.current_doc_type = self.doc_type_window.get_current_doc_type()

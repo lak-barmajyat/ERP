@@ -2,6 +2,7 @@ import sys
 import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
+from program.themes.shared_input_popup_style import apply_global_font_to_window
 
 class DupliquateWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -10,6 +11,7 @@ class DupliquateWindow(QtWidgets.QMainWindow):
         # Load the UI file
         ui_path = os.path.join(os.path.dirname(__file__), "dupliquate.ui")
         uic.loadUi(ui_path, self)
+        apply_global_font_to_window(self)
         
         # In a real app, logic would be hooked up here
         self.btnDlgClose.clicked.connect(self.close)

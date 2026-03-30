@@ -2,6 +2,7 @@ import sys
 import os
 from PyQt5 import QtWidgets, uic
 from PyQt5.QtCore import Qt
+from program.themes.shared_input_popup_style import apply_global_font_to_window
 
 class ListeClientsWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -10,6 +11,7 @@ class ListeClientsWindow(QtWidgets.QMainWindow):
         # Load the UI file
         ui_path = os.path.join(os.path.dirname(__file__), "liste_clients.ui")
         uic.loadUi(ui_path, self)
+        apply_global_font_to_window(self)
         
         # We can populate the table with some dummy data to match the screenshot
         self.populate_dummy_data()

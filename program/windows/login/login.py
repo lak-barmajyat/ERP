@@ -6,6 +6,7 @@ import os
 from  program.services.tools import get_colored_icon
 from program.services.paths import ASSETS_LOGIN
 from program.windows.login.login_funcs import check_user
+from program.themes.shared_input_popup_style import apply_global_font_to_window
 
 def resource_path(relative_path):
     base_path = os.path.dirname(os.path.abspath(__file__))
@@ -18,6 +19,7 @@ class LoginWindow(QMainWindow):
     def __init__(self):
         super(LoginWindow, self).__init__()
         loadUi(resource_path("login.ui"), self)
+        apply_global_font_to_window(self)
 
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)

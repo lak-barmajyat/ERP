@@ -7,6 +7,29 @@ from PyQt5.QtCore import Qt, QDate
 from PyQt5.uic import loadUi
 
 from .funcs import liste_ventes_setup
+from program.themes.shared_input_popup_style import (
+    apply_input_styles_to_window,
+)
+
+
+LISTE_VENTES_STYLE_MAP = {
+    "__window__": ["QWidget", "global_font"],
+    "__all_lineedits__": ["QLineEdit", "entry"],
+    "__all_comboboxes__": ["QComboBox", "combobox"],
+    "__all_dateedits__": ["QDateEdit", "dateedit"],
+    "__all_combobox_popups__": ["QComboBox", "popup_list", {"row_height": 36}],
+    "__all_completer_popups__": ["QLineEdit", "completer_popup", {"row_height": 36}],
+    "btnFilter": ["QPushButton", "primary"],
+    "btnClearFilters": ["QPushButton", "primary"],
+    "tbNew": ["QToolButton", "toolbar"],
+    "tbEdit": ["QToolButton", "toolbar"],
+    "tbDelete": ["QToolButton", "toolbar"],
+    "tbPrint": ["QToolButton", "toolbar"],
+    "tbExportExcel": ["QToolButton", "toolbar"],
+    "tbDuplicate": ["QToolButton", "toolbar"],
+    "tbTransform": ["QToolButton", "toolbar"],
+    "tbReplace": ["QToolButton", "toolbar"],
+}
 
 
 @dataclass(frozen=True)
@@ -73,6 +96,7 @@ class SalesDocumentsWindow(QWidget):
         self._setup_table()
         self._setup_defaults()
         liste_ventes_setup(self)
+        apply_input_styles_to_window(self, row_height=36, widget_styles_map=LISTE_VENTES_STYLE_MAP)
 
     def _apply_context_to_ui(self) -> None:
         """Update labels/placeholders to match sales vs purchases context."""
@@ -83,7 +107,7 @@ class SalesDocumentsWindow(QWidget):
         if hasattr(self, "editClient"):
             self.editClient.setPlaceholderText(f"Rechercher un {self.context.tiers_label.lower()}...")
         if hasattr(self, "editcodeclient"):
-            self.editcodeclient.setPlaceholderText(f"ex: {self.context.tiers_code_prefix}00122")
+            self.editcodeclient.setPlaceholderText(f"{self.context.tiers_code_prefix}0012")
 
     # ------------------------------------------------------------------ #
     # UI helpers
@@ -96,9 +120,10 @@ class SalesDocumentsWindow(QWidget):
         header = self.tableDocuments.horizontalHeader()
         header.setStretchLastSection(False)
         
-        # Set all columns to resize to content except Client column
-        # Column 4: Client - takes remaining space        
-        for i in range(8):
+        # Keep checkbox column comfortably wide and client column elastic.
+        header.setSectionResizeMode(0, QHeaderView.Fixed)
+        self.tableDocuments.setColumnWidth(0, 34)
+        for i in range(1, 8):
             if i == 4:
                 header.setSectionResizeMode(i, QHeaderView.Stretch)
             else:

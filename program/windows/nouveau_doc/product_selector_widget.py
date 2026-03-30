@@ -1,9 +1,10 @@
 from PyQt5.QtCore import Qt, pyqtSignal, QPoint, QEvent, QTimer
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 from PyQt5.QtWidgets import (
-    QWidget, QHBoxLayout, QVBoxLayout, QLineEdit,
-    QTableView, QAbstractItemView, QFrame
+    QApplication, QWidget, QHBoxLayout, QVBoxLayout, QLineEdit,
+    QTableView, QAbstractItemView, QFrame, QHeaderView
 )
+from program.themes.shared_input_popup_style import apply_lineedit_style, apply_table_popup_style
 
 
 class ProductSelectorWidget(QWidget):
@@ -21,15 +22,15 @@ class ProductSelectorWidget(QWidget):
         # --------------------------
         self.code_edit = QLineEdit(self)
         self.code_edit.setPlaceholderText("Reference")
-        self.code_edit.setClearButtonEnabled(True)
+        apply_lineedit_style(self.code_edit)
 
         self.desc_edit = QLineEdit(self)
         self.desc_edit.setPlaceholderText("Designation")
-        self.desc_edit.setClearButtonEnabled(True)
+        apply_lineedit_style(self.desc_edit)
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
+        layout.setSpacing(10)
         layout.addWidget(self.code_edit, 1)
         layout.addWidget(self.desc_edit, 3)
 
@@ -40,7 +41,7 @@ class ProductSelectorWidget(QWidget):
         self.popup.setAttribute(Qt.WA_ShowWithoutActivating)
         self.popup.setFocusPolicy(Qt.NoFocus)
         self.popup.setFrameShape(QFrame.Box)
-        self.popup.setStyleSheet("background:white; border:1px solid #d1d5db;")
+        self.popup.setStyleSheet("background: transparent; border: none;")
 
         popup_layout = QVBoxLayout(self.popup)
         popup_layout.setContentsMargins(0, 0, 0, 0)
@@ -50,9 +51,12 @@ class ProductSelectorWidget(QWidget):
         self.table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.table.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.table.setFocusPolicy(Qt.NoFocus)
+        self.table.setMouseTracking(True)
         self.table.verticalHeader().setVisible(False)
         self.table.horizontalHeader().hide()
         self.table.setShowGrid(False)
+        self.table.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        apply_table_popup_style(self.table, row_height=30)
 
         popup_layout.addWidget(self.table)
 
@@ -62,9 +66,10 @@ class ProductSelectorWidget(QWidget):
         self.model = QStandardItemModel(0, 3, self)
         self.table.setModel(self.model)
 
-        self.table.setColumnWidth(0, 120)
-        self.table.setColumnWidth(1, 380)
-        self.table.setColumnWidth(2, 120)
+        header = self.table.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(1, QHeaderView.Stretch)
+        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
 
         # --------------------------
         # Events
@@ -80,7 +85,46 @@ class ProductSelectorWidget(QWidget):
         self.desc_edit.installEventFilter(self)
         self.table.installEventFilter(self)
 
+        self.table.entered.connect(self._on_table_row_hovered)
         self.table.clicked.connect(self.choose_current_row)
+
+        # Ensure popup is cleaned up with parent/window lifecycle.
+        self.destroyed.connect(lambda *_: self._hide_popup_safely())
+        QTimer.singleShot(0, self._install_window_event_filter)
+
+    def _install_window_event_filter(self):
+        top = self.window()
+        if top is not None and top is not self:
+            top.installEventFilter(self)
+
+        app = QApplication.instance()
+        if app is not None:
+            app.installEventFilter(self)
+
+    def _point_in_widget(self, widget, global_pos):
+        if widget is None or not widget.isVisible():
+            return False
+        local_pos = widget.mapFromGlobal(global_pos)
+        return widget.rect().contains(local_pos)
+
+    def _is_inside_selector_or_popup(self, global_pos):
+        # Keep popup open when user interacts with selector inputs or popup/table.
+        if self._point_in_widget(self, global_pos):
+            return True
+        if self._point_in_widget(self.popup, global_pos):
+            return True
+        if self._point_in_widget(self.table, global_pos):
+            return True
+        viewport = self.table.viewport() if self.table else None
+        if viewport is not None and self._point_in_widget(viewport, global_pos):
+            return True
+        return False
+
+    def _hide_popup_safely(self):
+        try:
+            self.popup.hide()
+        except RuntimeError:
+            pass
 
     # ==========================
     # API
@@ -183,10 +227,28 @@ class ProductSelectorWidget(QWidget):
         self.popup.hide()
         self.productSelected.emit(product)
 
+    def _on_table_row_hovered(self, index):
+        if not index.isValid():
+            return
+        self.table.selectRow(index.row())
+
     # ==========================
     # Keyboard
     # ==========================
     def eventFilter(self, obj, event):
+        if obj is self.window() and event.type() in (QEvent.Close, QEvent.Hide):
+            self._hide_popup_safely()
+            return super().eventFilter(obj, event)
+
+        if self.popup.isVisible() and event.type() in (QEvent.MouseButtonPress, QEvent.MouseButtonDblClick):
+            global_pos_getter = getattr(event, "globalPos", None)
+            if callable(global_pos_getter):
+                if not self._is_inside_selector_or_popup(global_pos_getter()):
+                    self.popup.hide()
+
+        if self.popup.isVisible() and event.type() == QEvent.WindowDeactivate:
+            self.popup.hide()
+
         if obj in (self.code_edit, self.desc_edit):
             if event.type() == QEvent.KeyPress:
                 if self.popup.isVisible():
@@ -205,7 +267,19 @@ class ProductSelectorWidget(QWidget):
                         self.choose_current_row()
                         return True
 
+                    if event.key() == Qt.Key_Escape:
+                        self.popup.hide()
+                        return True
+
         return super().eventFilter(obj, event)
+
+    def hideEvent(self, event):
+        self._hide_popup_safely()
+        super().hideEvent(event)
+
+    def closeEvent(self, event):
+        self._hide_popup_safely()
+        super().closeEvent(event)
 
     def clear_selection(self):
         self.code_edit.clear()

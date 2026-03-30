@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import QSize, Qt
 from PyQt5.uic import loadUi
+from program.themes.shared_input_popup_style import apply_global_font_to_window
 
 
 def resource_path(relative_path):
@@ -18,6 +19,7 @@ class DashboardWidget(QWidget):
     def __init__(self):
         super(DashboardWidget, self).__init__()
         loadUi(resource_path("dash_widget.ui"), self)
+        apply_global_font_to_window(self)
         
         # Stat icon sizes:
         #   container_size — diameter of the colored circle background (px)

@@ -2,25 +2,40 @@ from datetime import datetime
 import os
 
 from PyQt5.QtCore import QDate, Qt
-from PyQt5.QtWidgets import QCheckBox, QDialog, QFrame, QHBoxLayout, QLabel, QSizePolicy, QTableWidgetItem, QWidget
+from PyQt5.QtWidgets import QCheckBox, QDialog, QFrame, QHBoxLayout, QLabel, QLineEdit, QSizePolicy, QTableWidgetItem, QWidget
 
 from program.services import (
     Article,
     DetailDocument,
     Document,
+    LineEditAutoComplete,
     MessageBox,
     RefTypeDocument,
     Tiers,
     and_,
     generate_document_number,
+    replace_combobox_with_lineedit,
     select,
     with_db_session,
 )
+from program.themes.shared_input_popup_style import apply_input_styles_to_window
 
 
 TRANSFER = "transfer"
 DUPLICATE = "duplicate"
 REPLACE = "replace"
+
+
+TRANSFER_STYLE_MAP = {
+    "__window__": ["QWidget", "global_font"],
+    "__all_lineedits__": ["QLineEdit", "entry"],
+    "__all_comboboxes__": ["QComboBox", "combobox"],
+    "__all_dateedits__": ["QDateEdit", "dateedit"],
+    "__all_combobox_popups__": ["QComboBox", "popup_list", {"row_height": 36}],
+    "__all_completer_popups__": ["QLineEdit", "completer_popup", {"row_height": 36}],
+    "btnLaunchTransfer": ["QPushButton", "primary"],
+    "btnCancel": ["QPushButton", "secondary"],
+}
 
 
 def _fmt_amount(value) -> str:
@@ -253,13 +268,30 @@ def _all_duplicate_codes():
     return ["DV", "BC", "BL", "FA", "AV"]
 
 
+def _ensure_client_lineedit(self):
+    """Replace destination client combobox with a single styled autocomplete line edit."""
+    line_edit = getattr(self, "comboClient", None)
+    if isinstance(line_edit, QLineEdit):
+        if not hasattr(self, "_target_client_autocomplete"):
+            self._target_client_autocomplete = LineEditAutoComplete(line_edit, self)
+        return line_edit
+
+    if line_edit is None:
+        return None
+
+    line_edit = replace_combobox_with_lineedit(line_edit)
+    line_edit.setObjectName("comboClient")
+    line_edit.setPlaceholderText("Client")
+    self.comboClient = line_edit
+    self._target_client_autocomplete = LineEditAutoComplete(line_edit, self)
+    return line_edit
+
+
 @with_db_session
 def _populate_clients(self, selected_client_id=None, session=None):
-    if not hasattr(self, "comboClient"):
+    line_edit = _ensure_client_lineedit(self)
+    if line_edit is None:
         return
-
-    self.comboClient.blockSignals(True)
-    self.comboClient.clear()
 
     rows = session.execute(
         select(Tiers.id_tiers, Tiers.nom_tiers)
@@ -267,32 +299,44 @@ def _populate_clients(self, selected_client_id=None, session=None):
         .order_by(Tiers.nom_tiers)
     ).all()
 
-    for id_tiers, nom_tiers in rows:
-        self.comboClient.addItem(nom_tiers or "N/A", id_tiers)
+    self._target_clients = [
+        (int(id_tiers), (nom_tiers or "N/A").strip())
+        for id_tiers, nom_tiers in rows
+    ]
+    self._target_client_autocomplete.set_items([name for _, name in self._target_clients])
 
+    selected_name = ""
     if selected_client_id is not None:
-        idx = self.comboClient.findData(selected_client_id)
-        if idx >= 0:
-            self.comboClient.setCurrentIndex(idx)
+        try:
+            selected_id = int(selected_client_id)
+        except (TypeError, ValueError):
+            selected_id = None
 
-    self.comboClient.blockSignals(False)
+        if selected_id is not None:
+            for client_id, client_name in self._target_clients:
+                if client_id == selected_id:
+                    selected_name = client_name
+                    break
+
+    line_edit.blockSignals(True)
+    line_edit.setText(selected_name)
+    line_edit.blockSignals(False)
 
 
 @with_db_session
 def _resolve_target_client_id(self, session=None):
-    if not hasattr(self, "comboClient"):
+    line_edit = _ensure_client_lineedit(self)
+    if line_edit is None:
         return None
 
-    current_data = self.comboClient.currentData()
-    if current_data is not None:
-        try:
-            return int(current_data)
-        except (TypeError, ValueError):
-            pass
-
-    typed_name = (self.comboClient.currentText() or "").strip()
+    typed_name = (line_edit.text() or "").strip()
     if not typed_name:
         return None
+
+    typed_key = typed_name.casefold()
+    for client_id, client_name in getattr(self, "_target_clients", []):
+        if client_name.casefold() == typed_key:
+            return int(client_id)
 
     client_id = session.execute(
         select(Tiers.id_tiers)
@@ -366,8 +410,7 @@ def _set_operation_defaults(self, default_operation=None):
     if hasattr(self, "RefEditline"):
         self.RefEditline.setReadOnly(False)
 
-    if hasattr(self, "comboClient"):
-        self.comboClient.setEditable(True)
+    _ensure_client_lineedit(self)
 
     _apply_operation_chrome(self)
     _set_button_text_for_operation(self)
@@ -380,9 +423,9 @@ def _apply_mode_ui_rules(self):
     if hasattr(self, "dateTarget_2"):
         self.dateTarget_2.setDate(QDate.currentDate())
 
-    if hasattr(self, "comboClient"):
-        self.comboClient.setEditable(True)
-        self.comboClient.setEnabled(op != TRANSFER)
+    line_edit = _ensure_client_lineedit(self)
+    if line_edit is not None:
+        line_edit.setEnabled(op != TRANSFER)
 
     if hasattr(self, "RefEditline"):
         self.RefEditline.setReadOnly(op == REPLACE)
@@ -1054,6 +1097,8 @@ def _connect_signals(self):
 def transfer_window_setup(self, source_doc_id=None, source_doc_number=None, source_docs=None, default_operation="transfer"):
     _configure_table(self)
     _ensure_totals_footer(self)
+    _ensure_client_lineedit(self)
+    apply_input_styles_to_window(self, row_height=36, widget_styles_map=TRANSFER_STYLE_MAP)
     _set_operation_defaults(self, default_operation=default_operation)
     _connect_signals(self)
 

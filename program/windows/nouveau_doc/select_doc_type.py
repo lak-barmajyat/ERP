@@ -2,6 +2,7 @@ import sys
 from PyQt5.QtWidgets import QDialog, QApplication
 from PyQt5.uic import loadUi
 import os
+from program.themes.shared_input_popup_style import apply_global_font_to_window
 
 
 def resource_path(relative_path):
@@ -14,6 +15,7 @@ class SelectDocTypeDialog(QDialog):
     def __init__(self):
         super(SelectDocTypeDialog, self).__init__()
         loadUi(resource_path("select_doc_type.ui"), self)
+        apply_global_font_to_window(self)
         
         # Connect buttons
         self.okButton.clicked.connect(self.accept)

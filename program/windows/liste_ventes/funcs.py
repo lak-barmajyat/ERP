@@ -11,6 +11,7 @@ from program.services import (with_db_session,
                               RefStatutDocument,
                               LineEditAutoComplete,
                               MessageBox)
+from program.themes.shared_input_popup_style import apply_menu_style
 from program.windows.nouveau_doc import nouveau_doc_setup, NouveauDocWindow
 from program.windows.transfer_window import TransfertDocumentDialog
 
@@ -116,6 +117,19 @@ def _connect_filter_enter_reload(self):
         combo.activated.connect(lambda _idx: _reload_table_total_labels(self))
 
 
+def _get_current_domain_id(self):
+    """Return active domain id from window context, defaults to sales domain."""
+    try:
+        return int(getattr(self, "doc_domain_id", 1) or 1)
+    except (TypeError, ValueError):
+        return 1
+
+
+def _get_current_tiers_type(self):
+    """Return active tiers type from window context (uppercased) if available."""
+    return str(getattr(self, "tiers_type_filter", "") or "").strip().upper()
+
+
 @with_db_session
 def _setup_client_filter_autocomplete(self, session=None):
     """Apply nouveau_doc-like autocomplete to client-name filter and sync code/name fields."""
@@ -124,24 +138,30 @@ def _setup_client_filter_autocomplete(self, session=None):
 
     self._filter_client_autocomplete = LineEditAutoComplete(self.editClient, self)
 
-    names = session.execute(
-        select(Tiers.nom_tiers)
-        .where(Tiers.type_tiers == "CLIENT")
-        .order_by(Tiers.nom_tiers)
-    ).scalars().all()
+    tiers_type = _get_current_tiers_type(self)
+    names_query = select(Tiers.nom_tiers)
+    if tiers_type:
+        names_query = names_query.where(Tiers.type_tiers == tiers_type)
+    names = session.execute(names_query.order_by(Tiers.nom_tiers)).scalars().all()
     self._filter_client_autocomplete.set_items([name for name in names if name])
 
+    # Keep client name/code filters independent to isolate code_tiers behavior.
     try:
         self.editClient.textChanged.disconnect()
     except TypeError:
         pass
-    self.editClient.textChanged.connect(lambda text: _sync_client_code_from_name(self, text))
 
     try:
         self.editcodeclient.textChanged.disconnect()
     except TypeError:
         pass
-    self.editcodeclient.textChanged.connect(lambda text: _sync_client_name_from_code(self, text))
+
+    if hasattr(self, "editDocNumber"):
+        try:
+            self.editDocNumber.textChanged.disconnect()
+        except TypeError:
+            pass
+        self.editDocNumber.textChanged.connect(lambda text: _sync_filters_from_doc_number(self, text))
 
 
 @with_db_session
@@ -159,20 +179,27 @@ def _sync_client_code_from_name(self, name_text, session=None):
         self.editcodeclient.blockSignals(False)
         return
 
-    # If several clients match the typed name, keep code empty to avoid narrowing to a single client.
-    matching_codes = session.execute(
-        select(Tiers.code_tiers)
-        .where(
-            and_(
-                Tiers.type_tiers == "CLIENT",
-                Tiers.nom_tiers.like(f"%{value}%"),
-            )
-        )
-        .order_by(Tiers.nom_tiers)
-        .limit(2)
-    ).scalars().all()
+    tiers_type = _get_current_tiers_type(self)
 
-    code = (matching_codes[0] or "") if len(matching_codes) == 1 else ""
+    # Exact name match first for predictable sync behavior.
+    exact_code_query = select(Tiers.code_tiers).where(func.lower(Tiers.nom_tiers) == value.casefold())
+    if tiers_type:
+        exact_code_query = exact_code_query.where(Tiers.type_tiers == tiers_type)
+    exact_code = session.execute(exact_code_query.limit(1)).scalar_one_or_none()
+
+    if exact_code:
+        code = exact_code
+    else:
+        # Fallback: keep code only when there is exactly one fuzzy match.
+        matching_codes_query = select(Tiers.code_tiers).where(Tiers.nom_tiers.like(f"%{value}%"))
+        if tiers_type:
+            matching_codes_query = matching_codes_query.where(Tiers.type_tiers == tiers_type)
+        matching_codes = session.execute(
+            matching_codes_query
+            .order_by(Tiers.nom_tiers)
+            .limit(2)
+        ).scalars().all()
+        code = (matching_codes[0] or "") if len(matching_codes) == 1 else ""
 
     self.editcodeclient.blockSignals(True)
     self.editcodeclient.setText(code)
@@ -194,21 +221,93 @@ def _sync_client_name_from_code(self, code_text, session=None):
         self.editClient.blockSignals(False)
         return
 
-    name = session.execute(
+    # Code lookup must stay type-agnostic: same code should always resolve to its tier.
+    exact_name = session.execute(
         select(Tiers.nom_tiers)
-        .where(
-            and_(
-                Tiers.type_tiers == "CLIENT",
-                Tiers.code_tiers.like(f"%{value}%"),
-            )
-        )
-        .order_by(Tiers.nom_tiers)
+        .where(func.lower(Tiers.code_tiers) == value.casefold())
         .limit(1)
-    ).scalar_one_or_none() or ""
+    ).scalar_one_or_none()
+
+    if exact_name:
+        name = exact_name
+    else:
+        # Keep name empty unless there is exactly one fuzzy match.
+        matching_names_query = select(Tiers.nom_tiers).where(Tiers.code_tiers.like(f"%{value}%"))
+        matching_names = session.execute(
+            matching_names_query
+            .order_by(Tiers.nom_tiers)
+            .limit(2)
+        ).scalars().all()
+        name = (matching_names[0] or "") if len(matching_names) == 1 else ""
 
     self.editClient.blockSignals(True)
     self.editClient.setText(name)
     self.editClient.blockSignals(False)
+
+
+@with_db_session
+def _sync_filters_from_doc_number(self, doc_number_text, session=None):
+    """When a unique document number is typed, sync related filter fields."""
+    if not hasattr(self, "editDocNumber") or not self.editDocNumber.hasFocus():
+        return
+
+    value = (doc_number_text or "").strip()
+    if not value:
+        return
+
+    current_domain_id = _get_current_domain_id(self)
+
+    matches = session.execute(
+        select(
+            Document.numero_document,
+            Tiers.code_tiers,
+            Tiers.nom_tiers,
+            RefTypeDocument.libelle_type,
+            RefStatutDocument.libelle_statut,
+        )
+        .join(RefTypeDocument, Document.id_type_document == RefTypeDocument.id_type_document)
+        .outerjoin(Tiers, Document.id_tiers == Tiers.id_tiers)
+        .join(RefStatutDocument, Document.id_statut == RefStatutDocument.id_statut)
+        .where(
+            and_(
+                Document.id_domaine == current_domain_id,
+                Document.doc_actif == 1,
+                func.lower(Document.numero_document).like(f"%{value.casefold()}%"),
+            )
+        )
+        .order_by(Document.id_document.desc())
+        .limit(2)
+    ).all()
+
+    if len(matches) != 1:
+        return
+
+    _numero, code_tiers, nom_tiers, type_label, statut_label = matches[0]
+
+    self.editcodeclient.blockSignals(True)
+    self.editClient.blockSignals(True)
+    self.comboDocType.blockSignals(True)
+    self.comboStatus.blockSignals(True)
+    try:
+        self.editcodeclient.setText((code_tiers or "").strip())
+        self.editClient.setText((nom_tiers or "").strip())
+
+        wanted_type = (type_label or "").strip().casefold()
+        for idx in range(self.comboDocType.count()):
+            if (self.comboDocType.itemText(idx) or "").strip().casefold() == wanted_type:
+                self.comboDocType.setCurrentIndex(idx)
+                break
+
+        wanted_status = (statut_label or "").strip().casefold()
+        for idx in range(self.comboStatus.count()):
+            if (self.comboStatus.itemText(idx) or "").strip().casefold() == wanted_status:
+                self.comboStatus.setCurrentIndex(idx)
+                break
+    finally:
+        self.comboStatus.blockSignals(False)
+        self.comboDocType.blockSignals(False)
+        self.editClient.blockSignals(False)
+        self.editcodeclient.blockSignals(False)
 
 
 def _on_table_context_menu(self, pos):
@@ -227,33 +326,7 @@ def _on_table_context_menu(self, pos):
         selection_model.setCurrentIndex(target_index, QItemSelectionModel.NoUpdate)
 
     menu = QMenu(self.tableDocuments)
-    menu.setMinimumWidth(220)
-    menu.setStyleSheet(
-        """
-        QMenu {
-            background-color: #ffffff;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 3px;
-            font: 600 9pt "Overpass";
-            color: #374151;
-        }
-        QMenu::item {
-            padding: 3px 8px;
-            border-radius: 6px;
-            min-width: 180px;
-        }
-        QMenu::item:selected {
-            background-color: #eef4ff;
-            color: #135bec;
-        }
-        QMenu::separator {
-            height: 1px;
-            margin: 6px 8px;
-            background: #e5e7eb;
-        }
-        """
-    )
+    apply_menu_style(menu)
     action_modifier = menu.addAction("Modifier")
     action_supprimer = menu.addAction("Supprimer")
     menu.addSeparator()
@@ -510,10 +583,14 @@ def _collect_filter_values(self):
     """Read current filter widgets and normalize values."""
     status_text = (self.comboStatus.currentText() or "").strip()
     doc_type_text = (self.comboDocType.currentText() or "").strip() if hasattr(self, "comboDocType") else ""
+    code_client = (self.editcodeclient.text() or "").strip().casefold()
+    client = (self.editClient.text() or "").strip().casefold()
+    doc_number = (self.editDocNumber.text() or "").strip().casefold()
+
     return {
-        "code_client": (self.editcodeclient.text() or "").strip().casefold(),
-        "client": (self.editClient.text() or "").strip().casefold(),
-        "doc_number": (self.editDocNumber.text() or "").strip().casefold(),
+        "code_client": code_client,
+        "client": client,
+        "doc_number": doc_number,
         "date_from": self.dateFrom.date().toPyDate() if hasattr(self, "dateFrom") else None,
         "date_to": self.dateTo.date().toPyDate() if hasattr(self, "dateTo") else None,
         "doc_type": "" if doc_type_text.casefold() == "tous les types" else doc_type_text.casefold(),
@@ -761,7 +838,7 @@ def _reload_table_total_labels(self, session=None):
     scroll_position = _capture_table_scroll_position(self)
     filters = _collect_filter_values(self)
 
-    vente_codes = ["DV", "BC", "BL", "FA", "AV"]
+    current_domain_id = _get_current_domain_id(self)
     query = (
         select(
             Document.id_document,
@@ -782,9 +859,8 @@ def _reload_table_total_labels(self, session=None):
         .join(RefStatutDocument, Document.id_statut == RefStatutDocument.id_statut)
         .where(
             and_(
-                Document.id_domaine == 1,
+                Document.id_domaine == current_domain_id,
                 Document.doc_actif == 1,
-                RefTypeDocument.code_type.in_(vente_codes),
             )
         )
     )
@@ -794,7 +870,21 @@ def _reload_table_total_labels(self, session=None):
     if filters["date_to"]:
         query = query.where(Document.date_document <= filters["date_to"])
     if filters["code_client"]:
-        query = query.where(func.lower(Tiers.code_tiers).like(f"%{filters['code_client']}%"))
+        tier_ids_query = select(Tiers.id_tiers).where(
+            func.lower(Tiers.code_tiers).like(f"%{filters['code_client']}%")
+        )
+
+        matching_tier_ids = session.execute(
+            tier_ids_query.order_by(Tiers.nom_tiers)
+        ).scalars().all()
+
+        if not matching_tier_ids:
+            self.tableDocuments.setRowCount(0)
+            _set_total_labels_from_rows(self, [])
+            _restore_table_scroll_position(self, scroll_position)
+            return
+
+        query = query.where(Document.id_tiers.in_(list(matching_tier_ids)))
     if filters["client"]:
         query = query.where(func.lower(Tiers.nom_tiers).like(f"%{filters['client']}%"))
     if filters["doc_number"]:

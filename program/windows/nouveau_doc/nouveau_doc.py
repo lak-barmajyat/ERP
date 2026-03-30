@@ -3,6 +3,7 @@ import sys
 
 from PyQt5.QtWidgets import (
     QApplication,
+    QComboBox,
     QHeaderView,
     QLineEdit,
     QMainWindow,
@@ -20,8 +21,25 @@ from program.services import (
     get_colored_icon,
     LineEditAutoComplete,
 )
+from program.themes.shared_input_popup_style import apply_input_styles_to_window
 from .select_doc_type import SelectDocTypeDialog
 from .product_selector_widget import ProductSelectorWidget
+
+
+NOUVEAU_DOC_STYLE_MAP = {
+    "__window__": ["QWidget", "global_font"],
+    "__all_lineedits__": ["QLineEdit", "entry"],
+    "__all_comboboxes__": ["QComboBox", "combobox"],
+    "__all_dateedits__": ["QDateEdit", "dateedit"],
+    "__all_combobox_popups__": ["QComboBox", "popup_list", {"row_height": 36}],
+    "__all_completer_popups__": ["QLineEdit", "completer_popup", {"row_height": 36}],
+    "btn_imprimer": ["QToolButton", "primary"],
+    "btn_nouveau": ["QToolButton", "primary"],
+    "enrgistrer": ["QPushButton", "primary"],
+    "valider_button": ["QPushButton", "primary"],
+    "btn_fermer": ["QPushButton", "secondary"],
+    "annule": ["QPushButton", "secondary"],
+}
 
 
 def resource_path(relative_path):
@@ -39,9 +57,14 @@ class NouveauDocWindow(QMainWindow):
         self.setWindowFlag(Qt.Window, True)
 
         self._setup_table()
+        self._setup_taxe_combobox()
         self._setup_defaults()
         self._setup_icons()
         self._setup_product_selector_connections()
+        self._setup_input_styles()
+
+    def _setup_input_styles(self):
+        apply_input_styles_to_window(self, row_height=36, widget_styles_map=NOUVEAU_DOC_STYLE_MAP)
 
     def _setup_table(self):
         """Configure the document lines table."""
@@ -72,17 +95,52 @@ class NouveauDocWindow(QMainWindow):
         """Set sensible default values for form fields."""
         self.date_dateedit.setDate(QDate.currentDate())
         self.qte_lineedit.setText("1")
+        if hasattr(self, "taxe_editline") and hasattr(self.taxe_editline, "setCurrentText"):
+            self.taxe_editline.setCurrentText("20.00%")
         self.ttc_lineedit.setReadOnly(True)
         self.total_tax_label.setReadOnly(True)
         self.total_UT_label.setReadOnly(True)
         self.total_ttc_label.setReadOnly(True)
 
-        # Read-only prices until a product is selected
-        self.puht_editline.setReadOnly(True)
+        # Price remains editable once line fields are enabled.
+        self.puht_editline.setReadOnly(False)
         self.pttc_editline.setReadOnly(True)
 
         # Lock entry fields until document is validated
         self._set_entry_fields_enabled(False)
+
+    def _setup_taxe_combobox(self) -> None:
+        """Replace taxe line edit with fixed tax combo options."""
+        tax_widget = getattr(self, "taxe_editline", None)
+        if isinstance(tax_widget, QComboBox):
+            tax_widget.clear()
+            tax_widget.addItems(["20.00%", "10.00%", "5.00%"])
+            tax_widget.setCurrentText("20.00%")
+            return
+
+        if not isinstance(tax_widget, QLineEdit):
+            return
+
+        parent = tax_widget.parentWidget()
+        tax_combo = QComboBox(parent)
+        tax_combo.setObjectName("taxe_editline")
+        tax_combo.setMinimumSize(tax_widget.minimumSize())
+        tax_combo.setMaximumSize(tax_widget.maximumSize())
+        tax_combo.setSizePolicy(tax_widget.sizePolicy())
+        tax_combo.setFont(tax_widget.font())
+        tax_combo.setEnabled(tax_widget.isEnabled())
+        tax_combo.addItems(["20.00%", "10.00%", "5.00%"])
+        tax_combo.setCurrentText("20.00%")
+
+        parent_layout = parent.layout() if parent else None
+        if parent_layout is not None:
+            parent_layout.replaceWidget(tax_widget, tax_combo)
+        else:
+            tax_combo.setGeometry(tax_widget.geometry())
+
+        tax_widget.hide()
+        tax_widget.deleteLater()
+        self.taxe_editline = tax_combo
 
     def _set_entry_fields_enabled(self, enabled: bool) -> None:
         """Enable or disable all article entry fields and their action buttons."""
@@ -171,7 +229,8 @@ class NouveauDocWindow(QMainWindow):
     def _on_product_selected(self, product):
         self.puht_editline.setText(f'{float(product.get("price", 0)):.2f}')
         self.pttc_editline.setText(f'{float(product.get("price_ttc", 0)):.2f}')
-        self.taxe_editline.setText(f'{float(product.get("tax", 0)):.2f}' if product.get("tax") is not None else "")
+        if hasattr(self.taxe_editline, "setCurrentText"):
+            self.taxe_editline.setCurrentText(f'{float(product.get("tax", 20.0)):.2f}%')
         if not self.qte_lineedit.text().strip():
             self.qte_lineedit.setText("1")
 
@@ -203,12 +262,8 @@ class NouveauDocWindow(QMainWindow):
     @with_db_session
     def _setup_clients_lineedit(self, session=None):
         line_edit: QLineEdit = self.clients_lineedit
-        original_stylesheet = line_edit.styleSheet()
 
         self._clients_autocomplete = LineEditAutoComplete(line_edit, self)
-
-        if original_stylesheet:
-            line_edit.setStyleSheet(original_stylesheet)
 
         stmt = (
             select(Tiers.nom_tiers)

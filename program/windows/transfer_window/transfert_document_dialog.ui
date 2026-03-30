@@ -389,7 +389,7 @@ QLineEdit#RefEditline[readOnly=&quot;true&quot;]:focus {
                   </widget>
                  </item>
                  <item>
-                  <widget class="QComboBox" name="comboClient">
+                  <widget class="QLineEdit" name="comboClient">
                    <property name="minimumSize">
                     <size>
                      <width>215</width>
@@ -405,30 +405,9 @@ QLineEdit#RefEditline[readOnly=&quot;true&quot;]:focus {
                      <bold>false</bold>
                     </font>
                    </property>
-                   <property name="styleSheet">
-                    <string notr="true">QComboBox {
-    background-color: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font: 400 9pt &quot;Overpass&quot;;
-    color: #374151;
-}
-QComboBox::drop-down {
-    border: none;
-    width: 18px;
-}
-QComboBox::down-arrow {
-    image: url(program/assets/global/down_blue_arrow.svg);
-    width: 10px;
-    height: 10px;
-}</string>
-                   </property>
-                   <item>
-                    <property name="text">
+                   <property name="placeholderText">
                     <string>Client</string>
-                    </property>
-                   </item>
+                   </property>
                   </widget>
                  </item>
                 </layout>

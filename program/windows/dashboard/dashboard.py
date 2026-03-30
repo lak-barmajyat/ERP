@@ -12,6 +12,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow,
 from ..liste_ventes import SalesDocumentsWindow
 from .dash_widget import DashboardWidget
 from program.services import LogoutDialog
+from program.themes.shared_input_popup_style import apply_global_font_to_window
 
 # Icon configuration constants
 ICON_SIZE = 20
@@ -54,6 +55,7 @@ class DashboardWindow(QMainWindow):
     def __init__(self):
         super(DashboardWindow, self).__init__()
         loadUi(resource_path("dash.ui"), self)
+        apply_global_font_to_window(self)
 
         self._did_apply_default_screen_geometry = False
 
