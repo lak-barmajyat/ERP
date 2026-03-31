@@ -6,6 +6,20 @@
 USE erp;
 SET FOREIGN_KEY_CHECKS = 0;
 
+-- =========================
+-- ref_types_documents / counters sync
+-- =========================
+-- Achats uses "Demande d'achat" (DA) instead of Devis (DV)
+INSERT IGNORE INTO ref_types_documents (code_type, libelle_type, id_domaine, impact_stock, signe_quantite, ordre)
+SELECT 'DA', 'Demande d''achat', d.id_domaine, 0, 0, 1
+FROM ref_domaines d
+WHERE d.code_domaine = 'ACHAT';
+
+INSERT IGNORE INTO counters
+  (categorie, code, annee, valeur_courante, longueur, prefixe, suffixe, reset_annuel)
+VALUES
+  ('DOCUMENT', 'DA', YEAR(CURDATE()), 0, 3, 'DA', NULL, 1);
+
 -- Schema sync (new columns added in erp.sql dump)
 ALTER TABLE documents
   ADD COLUMN IF NOT EXISTS id_precedent_doc BIGINT NULL,
@@ -14,6 +28,18 @@ ALTER TABLE documents
 ALTER TABLE details_documents
   ADD COLUMN IF NOT EXISTS id_precedent_doc BIGINT NULL,
   ADD COLUMN IF NOT EXISTS doc_actif TINYINT(1) NOT NULL DEFAULT 1;
+
+ALTER TABLE articles
+  ADD COLUMN IF NOT EXISTS quantite DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+  ADD COLUMN IF NOT EXISTS quantite_min DECIMAL(12,2) NULL,
+  ADD COLUMN IF NOT EXISTS quantite_max DECIMAL(12,2) NULL;
+
+ALTER TABLE articles
+  MODIFY COLUMN suivi_stock ENUM('CMUP','FIFO','LIFO','SERIAL_NUMERO','AUCUN') NOT NULL DEFAULT 'CMUP';
+
+UPDATE articles
+SET suivi_stock = 'AUCUN'
+WHERE suivi_stock IN ('', '0') OR suivi_stock IS NULL;
 
 -- =========================
 -- informations_societe
@@ -75,47 +101,47 @@ INSERT IGNORE INTO familles (nom_famille, description, taux_tva, suivi_stock, un
 -- 20 articles (2 per famille)
 -- =========================
 INSERT IGNORE INTO articles
-  (nom_article, description, prix_vente_ht, prix_achat_ht, id_famille, taux_tva, suivi_stock, unite, reference_interne)
+  (nom_article, description, prix_vente_ht, prix_achat_ht, id_famille, taux_tva, suivi_stock, unite, reference_interne, quantite, quantite_min, quantite_max)
 VALUES
 -- Informatique (id_famille=1)
-('Ordinateur Portable HP 15',     'HP 15s, Intel i5, 8Go RAM, 512Go SSD',       5500.00, 4200.00, 1, 20.00, 1, 'PCS', 'INFO-001'),
-('PC Bureau Dell OptiPlex',       'Dell OptiPlex 3090, i5, 8Go, 256Go SSD',     4800.00, 3600.00, 1, 20.00, 1, 'PCS', 'INFO-002'),
+('Ordinateur Portable HP 15',     'HP 15s, Intel i5, 8Go RAM, 512Go SSD',       5500.00, 4200.00, 1, 20.00, 'CMUP', 'PCS', 'INFO-001', 2, 5, 50),
+('PC Bureau Dell OptiPlex',       'Dell OptiPlex 3090, i5, 8Go, 256Go SSD',     4800.00, 3600.00, 1, 20.00, 'CMUP', 'PCS', 'INFO-002', 8, 5, 50),
 
 -- Bureautique (id_famille=2)
-('Bureau Directeur 160cm',        'Bureau en bois massif 160x80cm',             2200.00, 1600.00, 2, 20.00, 1, 'PCS', 'BUR-001'),
-('Chaise Ergonomique Pro',        'Chaise de bureau ergonomique avec accoudoirs',980.00,  700.00, 2, 20.00, 1, 'PCS', 'BUR-002'),
+('Bureau Directeur 160cm',        'Bureau en bois massif 160x80cm',             2200.00, 1600.00, 2, 20.00, 'CMUP', 'PCS', 'BUR-001', 1, 3, 20),
+('Chaise Ergonomique Pro',        'Chaise de bureau ergonomique avec accoudoirs',980.00,  700.00, 2, 20.00, 'CMUP', 'PCS', 'BUR-002', 12, 10, 100),
 
 -- Réseau (id_famille=3)
-('Switch 24 ports TP-Link',       'Switch manageable 24 ports Gigabit',         1850.00, 1300.00, 3, 20.00, 1, 'PCS', 'NET-001'),
-('Routeur WiFi 6 Asus',           'Routeur dual-band AX3000 WiFi 6',            1200.00,  850.00, 3, 20.00, 1, 'PCS', 'NET-002'),
+('Switch 24 ports TP-Link',       'Switch manageable 24 ports Gigabit',         1850.00, 1300.00, 3, 20.00, 'CMUP', 'PCS', 'NET-001', 4, 5, 60),
+('Routeur WiFi 6 Asus',           'Routeur dual-band AX3000 WiFi 6',            1200.00,  850.00, 3, 20.00, 'CMUP', 'PCS', 'NET-002', 10, 5, 60),
 
 -- Consommables (id_famille=4)
-('Toner HP LaserJet 85A',         'Cartouche toner noir HP CE285A',              320.00,  210.00, 4, 20.00, 1, 'PCS', 'CONS-001'),
-('Ramette Papier A4 80g',         'Ramette 500 feuilles A4 blanc 80g/m²',        45.00,   28.00, 4, 20.00, 1, 'RAM', 'CONS-002'),
+('Toner HP LaserJet 85A',         'Cartouche toner noir HP CE285A',              320.00,  210.00, 4, 20.00, 'CMUP', 'PCS', 'CONS-001', 25, 10, 200),
+('Ramette Papier A4 80g',         'Ramette 500 feuilles A4 blanc 80g/m²',        45.00,   28.00, 4, 20.00, 'CMUP', 'RAM', 'CONS-002', 5, 20, 500),
 
 -- Mobilier Bureau (id_famille=5)
-('Armoire Métallique 4 tiroirs',  'Armoire de classement 4 tiroirs verrouillable',1450.00,1050.00, 5, 20.00, 1, 'PCS', 'MOB-001'),
-('Table de Réunion 8 places',     'Table ovale de conférence 240x120cm',         3200.00, 2400.00, 5, 20.00, 1, 'PCS', 'MOB-002'),
+('Armoire Métallique 4 tiroirs',  'Armoire de classement 4 tiroirs verrouillable',1450.00,1050.00, 5, 20.00, 'CMUP', 'PCS', 'MOB-001', 3, 2, 20),
+('Table de Réunion 8 places',     'Table ovale de conférence 240x120cm',         3200.00, 2400.00, 5, 20.00, 'CMUP', 'PCS', 'MOB-002', 0, 1, 10),
 
 -- Logiciels (id_famille=6)
-('Microsoft Office 365 Business', 'Licence annuelle Office 365 Business',        1800.00, 1400.00, 6, 20.00, 0, 'LIC', 'LOG-001'),
-('Antivirus Kaspersky 1an',       'Licence Kaspersky Endpoint Security 1 an',     650.00,  480.00, 6, 20.00, 0, 'LIC', 'LOG-002'),
+('Microsoft Office 365 Business', 'Licence annuelle Office 365 Business',        1800.00, 1400.00, 6, 20.00, 'AUCUN', 'LIC', 'LOG-001', 0, NULL, NULL),
+('Antivirus Kaspersky 1an',       'Licence Kaspersky Endpoint Security 1 an',     650.00,  480.00, 6, 20.00, 'AUCUN', 'LIC', 'LOG-002', 0, NULL, NULL),
 
 -- Électroménager Pro (id_famille=7)
-('Climatiseur Gree 18000 BTU',    'Climatiseur split inverter 18000 BTU',        4500.00, 3200.00, 7, 20.00, 1, 'PCS', 'ELEC-001'),
-('Réfrigérateur Professionnel',   'Réfrigérateur inox 350L pour bureau',         3800.00, 2800.00, 7, 20.00, 1, 'PCS', 'ELEC-002'),
+('Climatiseur Gree 18000 BTU',    'Climatiseur split inverter 18000 BTU',        4500.00, 3200.00, 7, 20.00, 'CMUP', 'PCS', 'ELEC-001', 2, 1, 10),
+('Réfrigérateur Professionnel',   'Réfrigérateur inox 350L pour bureau',         3800.00, 2800.00, 7, 20.00, 'CMUP', 'PCS', 'ELEC-002', 0, 1, 10),
 
 -- Sécurité (id_famille=8)
-('Caméra IP Hikvision 4MP',       'Caméra de surveillance IP PoE 4 mégapixels', 1100.00,  780.00, 8, 20.00, 1, 'PCS', 'SEC-001'),
-('Alarme Intrusion GSM',          'Système alarme sans fil GSM avec sirène',      850.00,  600.00, 8, 20.00, 1, 'KIT', 'SEC-002'),
+('Caméra IP Hikvision 4MP',       'Caméra de surveillance IP PoE 4 mégapixels', 1100.00,  780.00, 8, 20.00, 'CMUP', 'PCS', 'SEC-001', 6, 10, 100),
+('Alarme Intrusion GSM',          'Système alarme sans fil GSM avec sirène',      850.00,  600.00, 8, 20.00, 'CMUP', 'KIT', 'SEC-002', 15, 5, 50),
 
 -- Téléphonie (id_famille=9)
-('Téléphone IP Yealink T31P',     'Téléphone IP 2 lignes SIP ecran LCD',          780.00,  550.00, 9, 20.00, 1, 'PCS', 'TEL-001'),
-('Casque Bluetooth Jabra',        'Casque professionnel Bluetooth Jabra Evolve',   920.00,  680.00, 9, 20.00, 1, 'PCS', 'TEL-002'),
+('Téléphone IP Yealink T31P',     'Téléphone IP 2 lignes SIP ecran LCD',          780.00,  550.00, 9, 20.00, 'CMUP', 'PCS', 'TEL-001', 7, 10, 100),
+('Casque Bluetooth Jabra',        'Casque professionnel Bluetooth Jabra Evolve',   920.00,  680.00, 9, 20.00, 'CMUP', 'PCS', 'TEL-002', 30, 10, 200),
 
 -- Imprimerie (id_famille=10)
-('Imprimante Multifonction HP',   'HP LaserJet Pro MFP M428fdw A4',              3200.00, 2300.00,10, 20.00, 1, 'PCS', 'IMP-001'),
-('Photocopieur Ricoh A3',         'Photocopieur Ricoh IM 2702 A3 27ppm',         18500.00,14000.00,10, 20.00, 1, 'PCS', 'IMP-002');
+('Imprimante Multifonction HP',   'HP LaserJet Pro MFP M428fdw A4',              3200.00, 2300.00,10, 20.00, 'CMUP', 'PCS', 'IMP-001', 1, 2, 10),
+('Photocopieur Ricoh A3',         'Photocopieur Ricoh IM 2702 A3 27ppm',         18500.00,14000.00,10, 20.00, 'CMUP', 'PCS', 'IMP-002', 1, 1, 5);
 
 -- =========================
 -- tiers: 10 CLIENTS, 10 FOURNISSEURS, 2 SOCIETE, 2 PARTICULIER, 2 ADMIN

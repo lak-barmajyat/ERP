@@ -109,6 +109,40 @@ class SalesDocumentsWindow(QWidget):
         if hasattr(self, "editcodeclient"):
             self.editcodeclient.setPlaceholderText(f"{self.context.tiers_code_prefix}0012")
 
+        if hasattr(self, "tableDocuments"):
+            tiers_header_item = self.tableDocuments.horizontalHeaderItem(4)
+            if tiers_header_item is not None:
+                tiers_header_item.setText(self.context.tiers_label)
+
+        self._apply_doc_type_filter_items()
+
+    def _apply_doc_type_filter_items(self) -> None:
+        """Show DV for ventes and DA for achats in the type filter."""
+        combo = getattr(self, "comboDocType", None)
+        if not combo:
+            return
+
+        current = (combo.currentText() or "").strip().casefold()
+        if self.context.domain_id == 2 and current == "devis":
+            current = "demande d'achat"
+        elif self.context.domain_id != 2 and current == "demande d'achat":
+            current = "devis"
+
+        combo.blockSignals(True)
+        combo.clear()
+        combo.addItem("Tous les types")
+        combo.addItem("Demande d'achat" if self.context.domain_id == 2 else "Devis")
+        combo.addItem("Bon de commande")
+        combo.addItem("Bon de livraison")
+        combo.addItem("Facture")
+        combo.addItem("Avoir")
+
+        for idx in range(combo.count()):
+            if (combo.itemText(idx) or "").strip().casefold() == current:
+                combo.setCurrentIndex(idx)
+                break
+        combo.blockSignals(False)
+
     # ------------------------------------------------------------------ #
     # UI helpers
     # ------------------------------------------------------------------ #

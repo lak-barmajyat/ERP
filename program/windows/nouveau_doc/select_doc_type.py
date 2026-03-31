@@ -12,40 +12,39 @@ def resource_path(relative_path):
 
 
 class SelectDocTypeDialog(QDialog):
-    def __init__(self):
+    def __init__(self, *, domain_id: int = 1):
         super(SelectDocTypeDialog, self).__init__()
         loadUi(resource_path("select_doc_type.ui"), self)
         apply_global_font_to_window(self)
+
+        try:
+            self.domain_id = int(domain_id or 1)
+        except (TypeError, ValueError):
+            self.domain_id = 1
         
         # Connect buttons
         self.okButton.clicked.connect(self.accept)
         self.cancelButton.clicked.connect(self.reject)
         
-        # Dictionary to map radio buttons to document types
-        self.doc_type_map = {
-            self.radioDevis: "Devis",
-            self.radioBonCommande: "Bon de commande",
-            self.radioBonLivraison: "Bon de livraison",
-            self.radioFacture: "Facture",
-            self.radioFactureAvoir: "Avoir"
-        }
+        # Domain-aware first option: DV (Ventes) vs DA (Achats)
+        self._primary_code = "DA" if self.domain_id == 2 else "DV"
+        primary_label = "Demande d'achat" if self._primary_code == "DA" else "Devis"
+        if hasattr(self, "radioDevis"):
+            self.radioDevis.setText(primary_label)
 
     def get_current_doc_type(self):
         """Returns the selected document type"""
-        for radio, doc_type in self.doc_type_map.items():
-            if radio.isChecked():
-                if doc_type == "Devis":
-                    return "DV"
-                elif doc_type == "Bon de commande":
-                    return "BC"
-                elif doc_type == "Bon de livraison":
-                    return "BL"
-                elif doc_type == "Facture":
-                    return "FA"
-                elif doc_type == "Avoir":
-                    return "AV"
-
-        return None
+        if hasattr(self, "radioDevis") and self.radioDevis.isChecked():
+            return self._primary_code
+        if hasattr(self, "radioBonCommande") and self.radioBonCommande.isChecked():
+            return "BC"
+        if hasattr(self, "radioBonLivraison") and self.radioBonLivraison.isChecked():
+            return "BL"
+        if hasattr(self, "radioFacture") and self.radioFacture.isChecked():
+            return "FA"
+        if hasattr(self, "radioFactureAvoir") and self.radioFactureAvoir.isChecked():
+            return "AV"
+        return self._primary_code
 
 
 def main():

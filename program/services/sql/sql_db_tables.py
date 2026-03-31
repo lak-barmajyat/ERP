@@ -183,7 +183,23 @@ class Article(Base):
         ForeignKey("familles.id_famille", onupdate="CASCADE", ondelete="SET NULL")
     )
     taux_tva: Mapped[Optional[float]] = mapped_column(DECIMAL(5, 2))
-    suivi_stock: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default=text("1"))
+    suivi_stock: Mapped[str] = mapped_column(
+        Enum(
+            "CMUP",
+            "FIFO",
+            "LIFO",
+            "SERIAL_NUMERO",
+            "AUCUN",
+            name="article_suivi_stock_enum",
+        ),
+        nullable=False,
+        server_default=text("'CMUP'"),
+    )
+    quantite: Mapped[float] = mapped_column(
+        DECIMAL(12, 2), nullable=False, server_default=text("0.00")
+    )
+    quantite_min: Mapped[Optional[float]] = mapped_column(DECIMAL(12, 2))
+    quantite_max: Mapped[Optional[float]] = mapped_column(DECIMAL(12, 2))
     unite: Mapped[Optional[str]] = mapped_column(String(20))
     reference_interne: Mapped[Optional[str]] = mapped_column(String(60))
     code_barres: Mapped[Optional[str]] = mapped_column(String(60))

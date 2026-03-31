@@ -31,7 +31,14 @@ class _NumericSortTableWidgetItem(QTableWidgetItem):
 def _create_nouveau_window(self):
     """Create NouveauDocWindow as an owned top-level modal window."""
     parent_window = self.window() if hasattr(self, "window") else None
-    window = NouveauDocWindow(parent=parent_window)
+    context = getattr(self, "context", None)
+    window = NouveauDocWindow(
+        parent=parent_window,
+        doc_domain_id=getattr(self, "doc_domain_id", 1),
+        tiers_type_filter=getattr(self, "tiers_type_filter", "CLIENT"),
+        article_price_field=getattr(self, "article_price_field", "prix_vente_ht"),
+        tiers_label=getattr(context, "tiers_label", None),
+    )
     window.setWindowModality(Qt.WindowModal if parent_window else Qt.ApplicationModal)
     return window
 

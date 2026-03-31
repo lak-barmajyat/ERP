@@ -291,12 +291,18 @@ def _clear_product_fields(self):
 
 @with_db_session
 def _valider(self, session=None):
+    tiers_type = (getattr(self, "tiers_type_filter", None) or "CLIENT").strip() or "CLIENT"
+    tiers_label = (getattr(self, "tiers_label", None) or ("Fournisseur" if tiers_type == "FOURNISSEUR" else "Client")).strip()
+    domain_id = int(getattr(self, "doc_domain_id", 1) or 1)
+
     id_tiers = session.execute(
         select(Tiers.id_tiers)
         .where(
-            (Tiers.nom_tiers == self.clients_lineedit.text().strip()) &
-            (Tiers.code_tiers == self.clientid_lineedit.text().strip()) &
-            (Tiers.type_tiers == "CLIENT")
+            and_(
+                Tiers.nom_tiers == self.clients_lineedit.text().strip(),
+                Tiers.code_tiers == self.clientid_lineedit.text().strip(),
+                Tiers.type_tiers == tiers_type,
+            )
         )
     ).scalar_one_or_none()
 
@@ -307,11 +313,15 @@ def _valider(self, session=None):
 
         lookup_filter = None
         if code_input:
-            lookup_filter = and_(Tiers.type_tiers == "CLIENT",
-                                 Tiers.code_tiers.like(f"%{code_input}%"))
+            lookup_filter = and_(
+                Tiers.type_tiers == tiers_type,
+                Tiers.code_tiers.like(f"%{code_input}%"),
+            )
         elif name_input:
-            lookup_filter = and_(Tiers.type_tiers == "CLIENT",
-                                 Tiers.nom_tiers.like(f"%{name_input}%"))
+            lookup_filter = and_(
+                Tiers.type_tiers == tiers_type,
+                Tiers.nom_tiers.like(f"%{name_input}%"),
+            )
 
         row = session.execute(
             select(Tiers.nom_tiers, Tiers.code_tiers)
@@ -327,15 +337,17 @@ def _valider(self, session=None):
             id_tiers = session.execute(
                 select(Tiers.id_tiers)
                 .where(
-                    (Tiers.nom_tiers == row.nom_tiers) &
-                    (Tiers.code_tiers == row.code_tiers) &
-                    (Tiers.type_tiers == "CLIENT")
+                    and_(
+                        Tiers.nom_tiers == row.nom_tiers,
+                        Tiers.code_tiers == row.code_tiers,
+                        Tiers.type_tiers == tiers_type,
+                    )
                 )
             ).scalar_one_or_none()
         else:
             self.clients_lineedit.clear()
             self.clientid_lineedit.clear()
-            show_error_message("Client introuvable. Veuillez sélectionner un client valide.")
+            show_error_message(f"{tiers_label} introuvable. Veuillez sélectionner un {tiers_label.lower()} valide.")
             return
 
     id_type_document = session.execute(
@@ -359,7 +371,7 @@ def _valider(self, session=None):
     selected_status_id = _get_selected_status_id(self)
 
     document = Document(
-        id_domaine=1,
+        id_domaine=domain_id,
         id_type_document=id_type_document,
         numero_document=numero_document,
         id_tiers=id_tiers,
@@ -787,7 +799,9 @@ def ref_tab_func(self, session=None):
             designation = f"{designation} - {article.description}"
 
         _set_product_fields(self, ref_value, designation)
-        self.puht_editline.setText(f"{float(article.prix_vente_ht or 0):.2f}")
+        price_field = (getattr(self, "article_price_field", None) or "prix_vente_ht").strip() or "prix_vente_ht"
+        price_value = getattr(article, price_field, None)
+        self.puht_editline.setText(f"{float(price_value or 0):.2f}")
         _set_tax_text(self, article.taux_tva)
     else:
         self.puht_editline.clear()
@@ -860,6 +874,13 @@ def ouvrir_old_doc_setup(self, document_id=None, session=None):
         show_error_message("Document introuvable.")
         self.close()
         return
+
+    apply_context = getattr(self, "apply_document_context", None)
+    if callable(apply_context):
+        try:
+            apply_context(int(getattr(document, "id_domaine", 1) or 1))
+        except Exception:
+            pass
     self.current_document_id = document_id
     self.current_doc_type = session.execute(select(RefTypeDocument.libelle_type).where(RefTypeDocument.id_type_document == document.id_type_document)).scalar_one_or_none() or "N/A"
     self.setWindowTitle(f"Document - {self.current_doc_type} - {document.numero_document}")

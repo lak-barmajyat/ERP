@@ -257,6 +257,7 @@ def _get_allowed_target_codes(source_code: str):
     code = (source_code or "").upper().strip()
     rules = {
         "DV": ["BC", "BL", "FA"],
+        "DA": ["BC", "BL", "FA"],
         "BC": ["BL", "FA"],
         "BL": ["FA"],
         "FA": ["AV"],
@@ -264,7 +265,14 @@ def _get_allowed_target_codes(source_code: str):
     return rules.get(code, [])
 
 
-def _all_duplicate_codes():
+def _all_duplicate_codes(domain_id: int | None = None):
+    try:
+        domain_id = int(domain_id) if domain_id is not None else None
+    except (TypeError, ValueError):
+        domain_id = None
+
+    if domain_id == 2:
+        return ["DA", "BC", "BL", "FA", "AV"]
     return ["DV", "BC", "BL", "FA", "AV"]
 
 
@@ -459,9 +467,10 @@ def _refresh_target_types_and_number(self, session=None):
 
     op = _current_operation(self)
     source_code = getattr(self, "_source_type_code", "")
+    source_domain_id = getattr(self, "_source_domain_id", None)
 
     if op == DUPLICATE:
-        allowed_codes = _all_duplicate_codes()
+        allowed_codes = _all_duplicate_codes(source_domain_id)
     elif op == TRANSFER:
         allowed_codes = _get_allowed_target_codes(source_code)
     elif op == REPLACE:
@@ -740,6 +749,10 @@ def _load_source_documents(self, source_doc_ids, source_doc_number=None, session
     self._source_document_id = int(first_doc.id_document)
     self._source_doc_number = (first_doc.numero_document or "").strip()
     self._source_type_code = source_type_code
+    try:
+        self._source_domain_id = int(getattr(first_doc, "id_domaine", 1) or 1)
+    except (TypeError, ValueError):
+        self._source_domain_id = 1
 
     if len(source_rows) > 1:
         numbers = [(row[0].numero_document or "").strip() for row in source_rows]

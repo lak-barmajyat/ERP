@@ -19,8 +19,9 @@ NUM_CLIENTS = 1000
 NUM_SUPPLIERS = 20
 NUM_FAMILIES = 30
 NUM_ARTICLES = 1000
-NUM_DOCUMENTS = 1000
-NUM_PAYMENTS = 50
+NUM_SALES_DOCUMENTS = 1000
+NUM_PURCHASE_DOCUMENTS = 200
+NUM_PAYMENTS = 156
 NUM_AUDIT_LOGS = 200
 
 
@@ -115,27 +116,27 @@ def _seed_large_fake_data(host, port, user, password):
                     """
                 ),
                 {
-                    "nom_societe": "TechMaroc Solutions",
+                    "nom_societe": "LAK Software Solutions",
                     "activite": "Distribution et integration IT",
                     "forme_juridique": "SARL",
                     "patente": "PAT-ERP-2026-01",
                     "cnss": "CNSS-ERP-2026",
                     "telephone_fix": "0522000011",
                     "fax": "0522000012",
-                    "site_web": "www.techmaroc-solutions.ma",
+                    "site_web": "www.laksoftware-solutions.ma",
                     "ice": "001234567890123",
                     "if_fiscal": "IF-ERP-2026",
                     "rc": "RC-CASA-2026-001",
-                    "email": "contact@techmaroc-solutions.ma",
+                    "email": "contact@laksoftware-solutions.ma",
                     "adresse": "25 Bd Zerktouni, Casablanca",
                 },
             )
 
             users = [
-                ("admin", "$2b$12$wXYP3T8npdFM52DqzU2izO2cOZq./F9gVicytcXd6Ei4gBsPggUvS", "ADMIN"),
-                ("admin2", "$2b$12$TH5ytK6Z/AtDFpFkCnnEcuuqHHyyeRUNFfacBamCmlHoHQJYUhk3K", "ADMIN"),
-                ("karim", "$2b$12$T8lg6f.17E.1vvAJg6Z0kut1FBFnH9zFlRX2wmblh9xZ92hmqvEfK", "VENDEUR"),
-                ("sara", "$2b$12$T8lg6f.17E.1vvAJg6Z0kut1FBFnH9zFlRX2wmblh9xZ92hmqvEfK", "VENDEUR"),
+                ("abobaker", "$2b$12$wXYP3T8npdFM52DqzU2izO2cOZq./F9gVicytcXd6Ei4gBsPggUvS", "ADMIN"),
+                ("mossaab", "$2b$12$TH5ytK6Z/AtDFpFkCnnEcuuqHHyyeRUNFfacBamCmlHoHQJYUhk3K", "ADMIN"),
+                ("elhocine", "$2b$12$T8lg6f.17E.1vvAJg6Z0kut1FBFnH9zFlRX2wmblh9xZ92hmqvEfK", "VENDEUR"),
+                ("abdelfattah", "$2b$12$T8lg6f.17E.1vvAJg6Z0kut1FBFnH9zFlRX2wmblh9xZ92hmqvEfK", "VENDEUR"),
                 ("youssef", "$2b$12$T8lg6f.17E.1vvAJg6Z0kut1FBFnH9zFlRX2wmblh9xZ92hmqvEfK", "VENDEUR"),
                 ("fatima", "$2b$12$T8lg6f.17E.1vvAJg6Z0kut1FBFnH9zFlRX2wmblh9xZ92hmqvEfK", "GESTIONNAIRE"),
                 ("hamid", "$2b$12$T8lg6f.17E.1vvAJg6Z0kut1FBFnH9zFlRX2wmblh9xZ92hmqvEfK", "GESTIONNAIRE"),
@@ -181,26 +182,119 @@ def _seed_large_fake_data(host, port, user, password):
 
             product_roots = [
                 "Ordinateur", "Serveur", "Switch", "Routeur", "Bureau", "Chaise", "Ecran",
-                "Imprimante", "Scanner", "Camara", "Casque", "Clavier", "Souris", "Disque SSD",
+                "Imprimante", "Scanner", "Camera", "Casque", "Clavier", "Souris", "Disque SSD",
                 "Toner", "Ramette", "Onduleur", "Telephone IP", "Point d acces", "Baie reseau",
+
+                "Ordinateur Portable", "Unite Centrale", "Station de Travail", "Mini PC", "PC Gamer",
+                "Moniteur", "Ecran LED", "Ecran LCD", "Ecran 24 pouces", "Ecran 27 pouces",
+                "Clavier Sans Fil", "Clavier Mecanique", "Souris Sans Fil", "Souris Optique", "Tapis de Souris",
+                "Webcam", "Microphone", "Haut Parleur", "Enceinte Bluetooth", "Barre de Son",
+                "Projecteur", "Videoprojecteur", "Television", "Tablette", "Smartphone",
+                "Telephone Fixe", "Telephone SIP", "Telephone DECT", "Casque Audio", "Ecouteurs",
+
+                "Disque Dur", "Disque HDD", "Cle USB", "Carte Memoire", "Lecteur DVD",
+                "Graveur DVD", "Dock Station", "Hub USB", "Adaptateur HDMI", "Adaptateur VGA",
+                "Câble HDMI", "Cable VGA", "Cable DisplayPort", "Cable USB", "Cable USB C",
+                "Cable Ethernet", "Cable RJ45", "Cable Fibre Optique", "Rallonge Electrique", "Multiprise",
+                "Chargeur Ordinateur", "Chargeur Telephone", "Batterie Externe", "Batterie CMOS", "Pile AA",
+
+                "Carte Mere", "Processeur", "Memoire RAM", "Carte Graphique", "Ventilateur CPU",
+                "Alimentation PC", "Boitier PC", "Radiateur", "Pate Thermique", "Carte Son",
+                "Carte Reseau", "Lecteur Carte", "Module WiFi", "Module Bluetooth", "Carte Controleur",
+                "Onduleur Line Interactive", "Onduleur Online", "Stabilisateur", "Parafoudre", "Transformateur",
+
+                "Serveur Rack", "Serveur Tour", "NAS", "SAN", "Boitier NAS",
+                "Rack 42U", "Rack Mural", "Panneau de Brassage", "Patch Panel", "Organisateur de Cables",
+                "Prise Reseau", "Connecteur RJ45", "Connecteur Fibre", "Module SFP", "Convertisseur Media",
+                "Pare Feu", "Firewall Materiel", "Routeur WiFi", "Modem", "Modem 4G",
+                "Repeteur WiFi", "Controleur WiFi", "Antenne WiFi", "Point d acces WiFi", "Pont Sans Fil",
+
+                "Imprimante Laser", "Imprimante Jet d encre", "Imprimante Multifonction", "Photocopieur", "Copieur",
+                "Traceur", "Etiqueteuse", "Imprimante Etiquettes", "Massicot", "Destructeur de Documents",
+                "Relieuse", "Plastifieuse", "Perforeuse", "Agrafeuse", "Agrafeuse Electrique",
+                "Calculatrice", "Horodateur", "Caisse Enregistreuse", "Terminal de Paiement", "Lecteur Code Barre",
+
+                "Scanner a Plat", "Scanner Portable", "Scanner de Documents", "Lecteur QR Code", "Douchette Code Barre",
+                "Balance Electronique", "Etiquette Adhesive", "Rouleau Etiquettes", "Ruban Encreur", "Papier Thermique",
+                "Cartouche Encre", "Tambour Imprimante", "Unite de Fusion", "Bac Papier", "Chargeur Automatique",
+
+                "Table de Bureau", "Bureau Direction", "Bureau Operateur", "Chaise de Bureau", "Fauteuil Direction",
+                "Chaise Visiteur", "Table de Reunion", "Armoire Metallique", "Caisson Mobile", "Bibliotheque",
+                "Etagere", "Vestiaire", "Meuble TV", "Comptoir Accueil", "Banque d accueil",
+                "Table Basse", "Porte Documents", "Porte Revues", "Support Ecran", "Support Ordinateur Portable",
+
+                "Tableau Blanc", "Tableau Liege", "Paperboard", "Marqueur", "Effaceur",
+                "Bloc Notes", "Carnet", "Agenda", "Stylo Bleu", "Stylo Noir",
+                "Crayon", "Surligneur", "Correcteur", "Gomme", "Taille Crayon",
+                "Regle", "Ciseaux", "Colle", "Ruban Adhesif", "Devidoir",
+                "Chemise Carton", "Classeur", "Intercalaire", "Pochette Plastique", "Boite Archives",
+                "Corbeille a Papier", "Organiseur Bureau", "Porte Stylos", "Tampon Encreur", "Encre Tampon",
+
+                "Papier A4", "Papier A3", "Papier Photo", "Papier Autocollant", "Papier Continu",
+                "Enveloppe", "Etiquette Adresse", "Formulaire", "Facturier", "Bon de Livraison",
+                "Registre", "Livre Comptable", "Ticket Caisse", "Papier Brouillon", "Papier Recycle",
+
+                "Camera IP", "Camera Dome", "Camera Bullet", "Enregistreur NVR", "Enregistreur DVR",
+                "Disque Surveillance", "Ecran Surveillance", "Moniteur CCTV", "Detecteur Mouvement", "Detecteur Fumee",
+                "Sirene Alarme", "Centrale Alarme", "Clavier Alarme", "Badge RFID", "Lecteur Badge",
+                "Controle d acces", "Serrure Electrique", "Interphone Video", "Visiophone", "Portier Electronique",
+
+                "Climatiseur", "Ventilateur", "Radiateur Electrique", "Purificateur d air", "Humidificateur",
+                "Machine a Cafe", "Bouilloire", "Micro ondes", "Refrigerateur", "Distributeur Eau",
+                "Aspirateur", "Nettoyeur Vapeur", "Chariot Menage", "Balai", "Serpillere",
+                "Poubelle Bureau", "Poubelle Tri", "Sac Poubelle", "Distributeur Savon", "Seche Mains",
+
+                "Lampe Bureau", "Plafonnier LED", "Spot LED", "Ampoule LED", "Projecteur LED",
+                "Horloge Murale", "Prise Electrique", "Interrupteur", "Tableau Electrique", "Disjoncteur",
+                "Goulotte", "Chemin de Cables", "Boite de Derivation", "Connecteur Electrique", "Testeur Tension",
+
+                "Valise Ordinateur", "Sac a Dos PC", "Housse Laptop", "Support Telephone", "Support Tablette",
+                "Bras Articule Ecran", "Pied Microphone", "Treteau", "Escabeau", "Chariot Transport",
+                "Boite Outils", "Tournevis", "Pince", "Perceuse", "Multimetre",
+                "Etiqueteuse Industrielle", "Ruban Etiqueteuse", "Souffleur Air", "Kit Nettoyage Ecran", "Lingettes Nettoyantes"
             ]
+
+            article_suffixes = [
+                "Pro", "Plus", "Max", "Mini", "Slim", "Ultra", "Lite", "Prime", "Smart", "Flex",
+                "Elite", "Office", "Business", "Classic", "Premium", "Compact", "Advanced", "Essential", "Performance", "Express",
+                "Power", "Speed", "Vision", "Connect", "Secure", "Eco", "Air", "Core", "One", "X",
+                "X2", "X3", "S", "M", "L", "XL", "Pro Max", "Plus Max", "Mini Pro", "Ultra Pro",
+                "Series 1", "Series 2", "Series 3", "Series 5", "Series 7", "Series 9", "Edition", "Edition Plus", "Edition Pro", "Edition X",
+                "200", "300", "500", "700", "900", "1000", "2000", "3000", "5000", "7000",
+                "A", "B", "C", "D", "E", "R", "T", "Z", "Neo", "Nova",
+                "Fusion", "Edge", "Pulse", "Wave", "Line", "Flow", "Sync", "Link", "Boost", "Drive",
+                "Hub", "Station", "Desk", "Net", "Cloud", "Data", "Control", "Master", "Focus", "Direct",
+                "Plus Edition", "Business Edition", "Office Edition", "Smart Edition", "Compact Edition", "Premium Edition", "Advanced Edition", "Eco Edition", "Secure Edition", "Industrial"
+            ]
+            
             article_rows = []
             for i in range(1, NUM_ARTICLES + 1):
                 fam_id = family_ids[(i - 1) % len(family_ids)]
-                root = product_roots[(i - 1) % len(product_roots)]
+                root = (f"{product_roots[(i - 1) % len(product_roots)]}"
+                        f" {article_suffixes[(i * 3) % len(article_suffixes)]}")
                 prix_achat = round(80 + (i % 50) * 37 + rng.uniform(5, 150), 2)
                 coef = 1.12 + (i % 9) * 0.03
                 prix_vente = round(prix_achat * coef, 2)
-                ref = f"ART-{i:04d}"
+                ref = f"ART{i:04d}"
+
+                quantite_min = round(rng.uniform(0, 50), 2)
+                quantite_max = round(quantite_min + rng.uniform(50, 500), 2)
+                quantite = round(rng.uniform(0, 250), 2)
+                if quantite_min > 0 and rng.random() < 0.18:
+                    quantite = round(rng.uniform(0, max(0.01, quantite_min)), 2)
+
                 article_rows.append(
                     {
-                        "nom_article": f"{root} Pro {i:04d}",
+                        "nom_article": f"{root}",
                         "description": f"{root} professionnel generation {i:04d}",
                         "prix_vente_ht": prix_vente,
                         "prix_achat_ht": prix_achat,
                         "id_famille": fam_id,
                         "taux_tva": 20.00,
-                        "suivi_stock": 1,
+                        "suivi_stock": "CMUP",
+                        "quantite": quantite,
+                        "quantite_min": quantite_min,
+                        "quantite_max": quantite_max,
                         "unite": "PCS",
                         "reference_interne": ref,
                         "actif": 1,
@@ -212,10 +306,12 @@ def _seed_large_fake_data(host, port, user, password):
                     """
                     INSERT INTO articles (
                         nom_article, description, prix_vente_ht, prix_achat_ht, id_famille,
-                        taux_tva, suivi_stock, unite, reference_interne, actif
+                        taux_tva, suivi_stock, quantite, quantite_min, quantite_max,
+                        unite, reference_interne, actif
                     ) VALUES (
                         :nom_article, :description, :prix_vente_ht, :prix_achat_ht, :id_famille,
-                        :taux_tva, :suivi_stock, :unite, :reference_interne, :actif
+                        :taux_tva, :suivi_stock, :quantite, :quantite_min, :quantite_max,
+                        :unite, :reference_interne, :actif
                     )
                     """
                 ),
@@ -223,13 +319,54 @@ def _seed_large_fake_data(host, port, user, password):
             )
 
             city_list = [
-                "Casablanca", "Rabat", "Marrakech", "Fes", "Tanger", "Agadir", "Meknes", "Oujda", "Kenitra", "Tetouan",
+                "Casablanca", "Rabat", "Marrakech", "Fes", "Tanger", "Agadir",
+                "Meknes", "Oujda", "Kenitra", "Tetouan", "Zagora", "Errachidia",
+                "Nador", "Safi", "Khouribga", "Beni Mellal", "El Jadida", "Taza",
+                "Larache", "Ouarzazate", "Settat", "Ksar El Kebir", "Sidi Kacem",
+                "Guelmim", "Tiznit", "Tamezmoute", "Tan-Tan", "Dakhla", "Laayoune",
+                "Boujdour", "Tamensourt", "Assilah", "Fnideq", "Martil", "Sidi Ifni",
+                "Zouagha Moulay Yaacoub", "Azrou", "Midelt", "Ifrane", "Chefchaouen",
+                "Al Hoceima", "Sidi Slimane", "Ouazzane", "Sidi Bennour", "Youssoufia",
+                "Sidi Qacem", "Berkane",
             ]
             company_stems = [
                 "Atlas", "Maghreb", "Sahara", "Rif", "Nour", "Delta", "Neo", "Prime", "Sigma", "Zenith",
-                "Pulse", "Horizon", "Orion", "Phoenix", "Vertex", "Nova", "Core", "Blue", "Green", "Sun",
+                "Pulse", "Alliance", "Horizon", "Prestige", "Excellence", "Elite", "Select", "Concept", "Vision", "Performance",
+                "Tech", "Services", "Solutions", "Industrie", "Distribution", "Commerce", "Logistique", "Transport", "Express", "International",
+                "Maroc", "Casablanca", "Tanger", "Agadir", "Marrakech", "Fes", "Rabat", "Oriental", "Sud", "Nord",
+                "Centre", "Ouest", "Royal", "Imperial", "Majestic", "Capital", "Patrimoine", "Dynamique", "Moderne", "Evolution",
+                "Innovation", "Digital", "System", "Informatique", "Bureau", "Gestion", "Conseil", "Expert", "Consulting", "Finance",
+                "Invest", "Holding", "Partners", "Group", "Groupe", "Corporation", "Entreprise", "Business", "Trade", "Market",
+                "Pro", "Plus", "Max", "Premium", "Universal", "Global", "General", "Centrale", "Union", "Leader",
+                "Avenir", "Espoir", "Croissance", "Developpement", "Expansion", "Succes", "Confiance", "Qualite", "Fiabilite", "Energie",
+                "Batiment", "Construction", "Immobilier", "Travaux", "Engineering", "Electro", "Meca", "Plast", "Textile", "Agro"
             ]
-            company_suffixes = ["Distribution", "Services", "Tech", "Industrie", "Com", "Solutions", "Trading", "Supply", "Logistique", "Group"]
+            company_suffixes = [
+                "Distribution", "Services", "Tech", "Industrie", "Com", "Solutions", "Trading", "Supply", "Logistique", "Group",
+                "Consulting", "Conseil", "Informatique", "Digital", "System", "Systems", "Express", "Partners", "Holding", "Invest",
+                "Finance", "Capital", "Gestion", "Business", "Corporation", "Entreprise", "Market", "International", "Export", "Import",
+                "Transit", "Transport", "Cargo", "Freight", "Delivery", "Messagerie", "Maintenance", "Engineering", "Electro", "Meca",
+                "Batiment", "Construction", "Travaux", "Immobilier", "Promotion", "Aménagement", "Architecture", "Décoration", "Design", "Renovation",
+                "Textile", "Mode", "Confection", "Cuir", "Agro", "Alimentaire", "Food", "Beverage", "Packaging", "Emballage",
+                "Plastique", "Plast", "Chimie", "Pharma", "Medical", "Santé", "Hygiène", "Cosmetique", "Beauté", "Parfums",
+                "Telecom", "Media", "Communication", "Publicité", "Marketing", "Edition", "Impression", "Papeterie", "Formation", "Education",
+                "Assistance", "Sécurité", "Nettoyage", "Facility", "Equipement", "Fournitures", "Outillage", "Materiaux", "Energie", "Environnement",
+                "Recyclage", "Automobile", "Pieces", "Accessoires", "Marine", "Voyages", "Tourisme", "Event", "Events", "Academy"
+            ]
+
+            supplier_legal_forms = ["SARL", "SA", "SAS", "SARL AU"]
+            supplier_specialties = [
+                "Informatique",
+                "Bureautique",
+                "Reseau",
+                "Consommables",
+                "Mobilier Bureau",
+                "Logiciels",
+                "Securite",
+                "Telephonie",
+                "Cablage",
+                "Stockage",
+            ]
 
             tier_rows = []
             for i in range(1, NUM_CLIENTS + 1):
@@ -252,10 +389,16 @@ def _seed_large_fake_data(host, port, user, password):
                 )
 
             for i in range(1, NUM_SUPPLIERS + 1):
-                name = f"Fournisseur {company_stems[(i * 2) % len(company_stems)]} {i:03d}"
+                specialty = supplier_specialties[(i * 7) % len(supplier_specialties)]
+                legal_form = supplier_legal_forms[(i * 3) % len(supplier_legal_forms)]
+                name = (
+                    f"{company_stems[(i * 2) % len(company_stems)]} "
+                    f"{company_suffixes[(i * 5) % len(company_suffixes)]} "
+                    f"{specialty} {legal_form}"
+                )
                 tier_rows.append(
                     {
-                        "code_tiers": f"FR-{i:03d}",
+                        "code_tiers": f"FR{i:03d}",
                         "type_tiers": "FOURNISSEUR",
                         "nom_tiers": name,
                         "adresse": f"ZI Bloc {i} - {city_list[(i * 2) % len(city_list)]}",
@@ -283,7 +426,7 @@ def _seed_large_fake_data(host, port, user, password):
                 row[0]: row[1]
                 for row in conn.execute(
                     text(
-                        "SELECT code_type, id_type_document FROM ref_types_documents WHERE code_type IN ('DV','BC','BL','FA','AV')"
+                        "SELECT code_type, id_type_document FROM ref_types_documents WHERE code_type IN ('DV','DA','BC','BL','FA','AV')"
                     )
                 ).all()
             }
@@ -308,14 +451,26 @@ def _seed_large_fake_data(host, port, user, password):
                 ).all()
             ]
 
-            doc_cycle = ["DV", "BC", "BL", "FA", "AV"]
-            doc_counts = {"DV": 0, "BC": 0, "BL": 0, "FA": 0, "AV": 0}
+            supplier_ids = [
+                row[0]
+                for row in conn.execute(
+                    text("SELECT id_tiers FROM tiers WHERE type_tiers='FOURNISSEUR' ORDER BY id_tiers")
+                ).all()
+            ]
+
+            doc_cycle_sales = ["DV", "BC", "BL", "FA", "AV"]
+            doc_cycle_purchase = ["DA", "BC", "BL", "FA", "AV"]
+            doc_counts = {"DV": 0, "DA": 0, "BC": 0, "BL": 0, "FA": 0, "AV": 0}
             today = date.today()
             start_date = today - timedelta(days=5 * 365)
             date_span_days = (today - start_date).days
             documents = []
-            for i in range(1, NUM_DOCUMENTS + 1):
-                code = doc_cycle[(i - 1) % len(doc_cycle)]
+
+            # --------------------------
+            # Sales documents (id_domaine = 1)
+            # --------------------------
+            for i in range(1, NUM_SALES_DOCUMENTS + 1):
+                code = doc_cycle_sales[(i - 1) % len(doc_cycle_sales)]
                 doc_counts[code] += 1
                 sequence = doc_counts[code]
                 # Required format example: DV100
@@ -346,11 +501,48 @@ def _seed_large_fake_data(host, port, user, password):
                         "solde": 0.0,
                         "id_vendeur": user_ids[i % len(user_ids)],
                         "id_statut": status_map.get(status_code, status_map.get("VALIDE", 1)),
-                        "commentaire": f"Document {code} genere automatiquement",
+                        "commentaire": f"Document vente {code} genere automatiquement",
                         "id_precedent_doc": None,
                         "doc_actif": 1,
                     }
                 )
+
+            # --------------------------
+            # Purchase documents (id_domaine = 2)
+            # --------------------------
+            if supplier_ids:
+                for i in range(1, NUM_PURCHASE_DOCUMENTS + 1):
+                    code = doc_cycle_purchase[(i - 1) % len(doc_cycle_purchase)]
+                    doc_counts[code] += 1
+                    sequence = doc_counts[code]
+                    numero = f"{code}{sequence:04d}"
+                    d_date = start_date + timedelta(days=rng.randint(0, max(date_span_days, 1)))
+
+                    if code == "FA":
+                        status_code = ["VALIDE", "PARTIEL", "PAYE"][i % 3]
+                    else:
+                        status_code = "VALIDE"
+
+                    documents.append(
+                        {
+                            "id_domaine": 2,
+                            "id_type_document": type_map[code],
+                            "numero_document": numero,
+                            "id_tiers": supplier_ids[(i * 5) % len(supplier_ids)],
+                            "date_document": d_date,
+                            "date_livraison": d_date if code in ("BC", "BL") else None,
+                            "mode_prix": "HT",
+                            "total_ht": 0.0,
+                            "total_tva": 0.0,
+                            "total_ttc": 0.0,
+                            "solde": 0.0,
+                            "id_vendeur": user_ids[(i + 3) % len(user_ids)],
+                            "id_statut": status_map.get(status_code, status_map.get("VALIDE", 1)),
+                            "commentaire": f"Document achat {code} genere automatiquement",
+                            "id_precedent_doc": None,
+                            "doc_actif": 1,
+                        }
+                    )
 
             conn.execute(
                 text(
@@ -370,9 +562,14 @@ def _seed_large_fake_data(host, port, user, password):
             )
 
             article_map = {
-                row[0]: {"nom": row[1], "prix": float(row[2] or 0), "tva": float(row[3] or 20)}
+                row[0]: {
+                    "nom": row[1],
+                    "prix_vente": float(row[2] or 0),
+                    "prix_achat": float(row[3] or 0),
+                    "tva": float(row[4] or 20),
+                }
                 for row in conn.execute(
-                    text("SELECT id_article, nom_article, prix_vente_ht, taux_tva FROM articles ORDER BY id_article")
+                    text("SELECT id_article, nom_article, prix_vente_ht, prix_achat_ht, taux_tva FROM articles ORDER BY id_article")
                 ).all()
             }
             article_ids = list(article_map.keys())
@@ -380,7 +577,7 @@ def _seed_large_fake_data(host, port, user, password):
             doc_rows = conn.execute(
                 text(
                     """
-                    SELECT d.id_document, r.code_type, d.date_document
+                    SELECT d.id_document, d.id_domaine, r.code_type, d.date_document
                     FROM documents d
                     JOIN ref_types_documents r ON r.id_type_document = d.id_type_document
                     ORDER BY d.id_document
@@ -390,7 +587,8 @@ def _seed_large_fake_data(host, port, user, password):
 
             detail_rows = []
             for idx, row in enumerate(doc_rows, start=1):
-                doc_id, code_type, doc_date = row
+                doc_id, domain_id, code_type, doc_date = row
+                domain_id = int(domain_id or 1)
                 line_count = 50 if (idx % 40 == 0) else 3
                 selected_articles = rng.sample(article_ids, line_count)
 
@@ -401,12 +599,20 @@ def _seed_large_fake_data(host, port, user, password):
                     else:
                         qty = round(float(rng.randint(1, 8)), 3)
 
-                    unit_ht = round(art["prix"] * rng.uniform(0.92, 1.15), 2)
+                    base_price = art["prix_achat"] if domain_id == 2 else art["prix_vente"]
+                    if domain_id == 2:
+                        unit_ht = round(base_price * rng.uniform(0.95, 1.08), 2)
+                    else:
+                        unit_ht = round(base_price * rng.uniform(0.92, 1.15), 2)
                     tva = round(art["tva"], 2)
                     unit_ttc = round(unit_ht * (1 + (tva / 100.0)), 2)
                     line_ht = round(unit_ht * qty, 2)
                     line_tva = round(line_ht * (tva / 100.0), 2)
                     line_ttc = round(line_ht + line_tva, 2)
+
+                    margin = 0.0
+                    if domain_id != 2:
+                        margin = round(max(unit_ht - float(art["prix_achat"] or 0), 0), 2)
 
                     detail_rows.append(
                         {
@@ -418,7 +624,7 @@ def _seed_large_fake_data(host, port, user, password):
                             "prix_unitaire_ttc": unit_ttc,
                             "unite_vente": "PCS",
                             "taux_tva": tva,
-                            "marge_beneficiaire": round(max(unit_ht - (art["prix"] * 0.82), 0), 2),
+                            "marge_beneficiaire": margin,
                             "total_ligne_ht": line_ht,
                             "total_ligne_tva": line_tva,
                             "total_ligne_ttc": line_ttc,
@@ -700,7 +906,10 @@ def main():
     if choice == "2":
         print("\n[2/2] Generating structured large fake data...")
         print(f"      → {NUM_CLIENTS} clients uniques, {NUM_SUPPLIERS} fournisseurs, {NUM_FAMILIES} familles, {NUM_ARTICLES} articles")
-        print(f"      → {NUM_DOCUMENTS} documents (format code DV100), >=3 lignes/doc (+ des docs a 50 lignes)")
+        print(
+            f"      → {NUM_SALES_DOCUMENTS} documents ventes + {NUM_PURCHASE_DOCUMENTS} documents achats "
+            f"(format code DV0001), >=3 lignes/doc (+ des docs a 50 lignes)"
+        )
         print(f"      → {NUM_PAYMENTS} paiements, {NUM_AUDIT_LOGS} audit logs, counters mis a jour")
 
         ok = _seed_large_fake_data(host, port, user, password)

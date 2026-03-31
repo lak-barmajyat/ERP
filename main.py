@@ -12,7 +12,7 @@ from PyQt5.QtGui import QFontDatabase
 def main():
     app = QApplication(sys.argv)
     window = DashboardWindow()
-    window.current_username = "karim"
+    window.current_username = "mossaab"
     dashboard_setup(window)
 
     sys.exit(app.exec_())

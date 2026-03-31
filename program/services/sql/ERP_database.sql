@@ -153,7 +153,10 @@ CREATE TABLE IF NOT EXISTS articles (
   prix_achat_ht         DECIMAL(12,2) NOT NULL DEFAULT 0.00,
   id_famille            INT NULL,
   taux_tva              DECIMAL(5,2) NULL,
-  suivi_stock           TINYINT(1) NOT NULL DEFAULT 1,
+  suivi_stock           ENUM('CMUP','FIFO','LIFO','SERIAL_NUMERO','AUCUN') NOT NULL DEFAULT 'CMUP',
+  quantite              DECIMAL(12,2) NOT NULL DEFAULT 0.00,
+  quantite_min          DECIMAL(12,2) NULL,
+  quantite_max          DECIMAL(12,2) NULL,
   unite                 VARCHAR(20) NULL,
   reference_interne     VARCHAR(60) NULL,
   code_barres           VARCHAR(60) NULL,
@@ -231,7 +234,9 @@ SELECT 'BL','Bon de livraison', d.id_domaine, 1,-1, 3 FROM ref_domaines d WHERE 
 UNION ALL
 SELECT 'FA','Facture', d.id_domaine, 1,-1, 4 FROM ref_domaines d WHERE d.code_domaine='VENTE'
 UNION ALL
-SELECT 'AV','Avoir', d.id_domaine, 1,+1, 5 FROM ref_domaines d WHERE d.code_domaine='VENTE';
+SELECT 'AV','Avoir', d.id_domaine, 1,+1, 5 FROM ref_domaines d WHERE d.code_domaine='VENTE'
+UNION ALL
+SELECT 'DA','Demande d''achat', d.id_domaine, 0, 0, 1 FROM ref_domaines d WHERE d.code_domaine='ACHAT';
 
 CREATE TABLE IF NOT EXISTS counters (
   id_counter        BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -262,7 +267,8 @@ VALUES
 ('DOCUMENT', 'BC', YEAR(CURDATE()), 0, 3, 'BC', NULL, 1),
 ('DOCUMENT', 'BL', YEAR(CURDATE()), 0, 3, 'BL', NULL, 1),
 ('DOCUMENT', 'FA', YEAR(CURDATE()), 0, 3, 'FA', NULL, 1),
-('DOCUMENT', 'AV', YEAR(CURDATE()), 0, 3, 'AV', NULL, 1);
+('DOCUMENT', 'AV', YEAR(CURDATE()), 0, 3, 'AV', NULL, 1),
+('DOCUMENT', 'DA', YEAR(CURDATE()), 0, 3, 'DA', NULL, 1);
 
 INSERT IGNORE INTO counters
 (categorie, code, annee, valeur_courante, longueur, prefixe, suffixe, reset_annuel)

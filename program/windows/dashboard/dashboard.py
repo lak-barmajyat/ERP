@@ -6,12 +6,14 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.uic import loadUi
 from PyQt5.QtWidgets import (QApplication, QMainWindow,
                              QDialog, QLabel, QPushButton,
-                             QVBoxLayout, QHBoxLayout,
+                             QVBoxLayout, QHBoxLayout, QWidget,
                              QGraphicsDropShadowEffect)
 
 from ..liste_ventes import SalesDocumentsWindow
+from ..liste_achats import PurchaseDocumentsWindow
+from ..liste_articles import ArticlesWindow
 from .dash_widget import DashboardWidget
-from program.services import LogoutDialog
+from program.services import LogoutDialog, MessageBox
 from program.themes.shared_input_popup_style import apply_global_font_to_window
 
 # Icon configuration constants
@@ -54,7 +56,7 @@ def get_colored_icon(icon_path: str, color_name: str) -> QIcon:
 class DashboardWindow(QMainWindow):
     def __init__(self):
         super(DashboardWindow, self).__init__()
-        loadUi(resource_path("dash.ui"), self)
+        loadUi(resource_path("dashboard.ui"), self)
         apply_global_font_to_window(self)
 
         self._did_apply_default_screen_geometry = False
@@ -107,6 +109,17 @@ class DashboardWindow(QMainWindow):
         # Create liste ventes widget and add to stacked widget
         self.list_ventes = SalesDocumentsWindow()
         self.contentStackedWidget.addWidget(self.list_ventes)
+
+        # Create liste achats widget and add to stacked widget
+        self.list_achats = PurchaseDocumentsWindow()
+        self.contentStackedWidget.addWidget(self.list_achats)
+
+        # Reserve the Articles page slot (lazy instantiate on click).
+        # This prevents the whole dashboard from crashing if the DB schema
+        # hasn't been migrated yet (e.g. missing articles.quantite columns).
+        self._articles_placeholder = QWidget()
+        self.list_articles = None
+        self.contentStackedWidget.addWidget(self._articles_placeholder)
         
         # Set dashboard widget as the default page (index 1, since mainScrollArea is index 0)
         self.contentStackedWidget.setCurrentIndex(1)
@@ -132,6 +145,8 @@ class DashboardWindow(QMainWindow):
         # Connect buttons to pages
         self.btn_dashboard.clicked.connect(lambda: self._show_page(1))
         self.btn_ventes.clicked.connect(lambda: self._show_page(2))
+        self.btn_achats.clicked.connect(lambda: self._show_page(3))
+        self.btn_produits.clicked.connect(self._show_articles_page)
         # Add more connections as needed for other buttons
         
         # Apply icons and set initial state
@@ -143,12 +158,62 @@ class DashboardWindow(QMainWindow):
         self.contentStackedWidget.setCurrentIndex(index)
         self._update_sidebar_state(index)
 
+    def _show_articles_page(self) -> None:
+        """Open Articles page (create it the first time)."""
+        current_index = self.contentStackedWidget.currentIndex()
+        if not self._ensure_articles_page():
+            self._update_sidebar_state(current_index)
+            return
+        self._show_page(4)
+
+    def _ensure_articles_page(self) -> bool:
+        """Ensure the Articles page widget exists in the stack."""
+        if getattr(self, "list_articles", None) is not None:
+            return True
+
+        placeholder = getattr(self, "_articles_placeholder", None)
+        if placeholder is None:
+            return False
+
+        try:
+            widget = ArticlesWindow()
+        except Exception as exc:
+            details = str(exc) if exc is not None else ""
+            message = "Impossible de charger la liste des articles."
+            if "Unknown column" in details:
+                message = (
+                    "Impossible de charger la liste des articles.\n\n"
+                    "La base de données n'est pas à jour (colonnes articles.quantite / quantite_min / quantite_max)."
+                )
+
+            MessageBox(
+                variant="attention",
+                title="Articles",
+                message=message,
+                parent=self,
+            ).exec_()
+            return False
+
+        idx = self.contentStackedWidget.indexOf(placeholder)
+        if idx < 0:
+            idx = 4
+
+        self.contentStackedWidget.removeWidget(placeholder)
+        placeholder.deleteLater()
+        self.contentStackedWidget.insertWidget(idx, widget)
+
+        self._articles_placeholder = None
+        self.list_articles = widget
+        return True
+
     def _update_sidebar_state(self, active_index: int) -> None:
         """Update sidebar button states based on active page."""
         # Map page index to button index
         page_to_button = {
             1: 0,  # Dashboard -> btn_dashboard
             2: 1,  # Liste ventes -> btn_ventes
+            3: 2,  # Liste achats -> btn_achats
+            4: 3,  # Articles -> btn_produits
         }
         
         active_button_index = page_to_button.get(active_index, 0)

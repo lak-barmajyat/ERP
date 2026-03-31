@@ -227,7 +227,7 @@
                     <string notr="true">font-size: 12px; font-weight: bold; color: #1d7ae2;</string>
                    </property>
                    <property name="text">
-                    <string>DV-2023-0012</string>
+                    <string>DOC-2023-0012</string>
                    </property>
                   </widget>
                  </item>
@@ -299,7 +299,7 @@
                     <string>background-color: #f1f5f9; border-radius: 4px; font-size: 9px; font-weight: bold; color: #475569; padding: 2px 6px;</string>
                    </property>
                    <property name="text">
-                    <string> DEVIS </string>
+                    <string> DOCUMENT </string>
                    </property>
                   </widget>
                  </item>
@@ -713,7 +713,7 @@ QComboBox::down-arrow {
             <string notr="true">QLabel#labelFooterInfoText { color: #434655; font: 500 8pt &quot;Overpass&quot;; }</string>
            </property>
            <property name="text">
-            <string>Cette action créera un nouveau document cible. Le devis source restera archivé avec un lien de traçabilité direct.</string>
+            <string>Cette action créera un nouveau document cible. Le document source restera archivé avec un lien de traçabilité direct.</string>
            </property>
            <property name="wordWrap">
             <bool>true</bool>

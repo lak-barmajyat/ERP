@@ -23,7 +23,8 @@ def generate_document_number(code_type: str, session=None) -> str:
     counter = session.execute(
         select(Counter)
         .where(
-            Counter.id_counter == type_obj.id_type_document,  # fixed column
+            Counter.categorie == "DOCUMENT",
+            Counter.code == code_type,
             Counter.annee == current_year,
         )
         .with_for_update()
@@ -31,11 +32,13 @@ def generate_document_number(code_type: str, session=None) -> str:
 
     if not counter:
         counter = Counter(
-            id_counter=type_obj.id_type_document,
+            categorie="DOCUMENT",
+            code=code_type,
             annee=current_year,
             valeur_courante=1,   # first candidate = 001
             longueur=3,
             prefixe=code_type,
+            suffixe=None,
             reset_annuel=True,
         )
         session.add(counter)
@@ -86,7 +89,8 @@ def reset_document_counter(code_type: str = None, year: int = None, session=None
         stmt = (
             update(Counter)
             .where(
-                Counter.id_counter == type_obj.id_type_document,
+                Counter.categorie == "DOCUMENT",
+                Counter.code == code_type,
                 Counter.annee == target_year,
             )
             .values(valeur_courante=0)
