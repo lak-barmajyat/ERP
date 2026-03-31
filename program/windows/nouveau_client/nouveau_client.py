@@ -9,7 +9,23 @@ from PyQt5.QtWidgets import QApplication, QDialog, QWidget
 from PyQt5.uic import loadUi
 
 from program.services import Counter, MessageBox, Tiers, log_audit_event, select, with_db_session
-from program.themes.shared_input_popup_style import apply_global_font_to_window
+from program.themes.shared_input_popup_style import (
+    apply_input_styles_to_window,
+    apply_textedit_style_to_window,
+    BORDER_SIZE,
+    BUTTON_PRIMARY_BG,
+    COLOR_BG,
+    COLOR_BG_SOFT,
+    COLOR_BORDER,
+    COLOR_TEXT_MUTED,
+    RADIUS_ITEM,
+)
+
+
+NOUVEAU_CLIENT_STYLE_MAP = {
+    "btnEnregistrer": ["QPushButton", "primary"],
+    "btnAnnuler": ["QPushButton", "secondary"],
+}
 
 
 def resource_path(relative_path: str) -> str:
@@ -43,7 +59,7 @@ class NouveauClientWindow(QDialog):
         self._tiers_id = int(tiers_id) if tiers_id else None
 
         loadUi(resource_path("nouveau_client.ui"), self)
-        apply_global_font_to_window(self)
+        self._setup_input_styles()
 
         # Frameless window hint for custom title bar design
         self.setWindowFlags(Qt.Dialog | Qt.FramelessWindowHint)
@@ -61,6 +77,119 @@ class NouveauClientWindow(QDialog):
 
         if self._tiers_id:
             self._load_tiers(self._tiers_id)
+
+    def _setup_input_styles(self) -> None:
+        # Drop the .ui-level hardcoded stylesheet so token styles drive the UI.
+        try:
+            self.setStyleSheet("")
+        except Exception:
+            pass
+
+        apply_input_styles_to_window(self, row_height=36, widget_styles_map=NOUVEAU_CLIENT_STYLE_MAP)
+        apply_textedit_style_to_window(self)
+
+        self._apply_container_styles()
+        self._apply_toggle_button_styles()
+
+    def _apply_container_styles(self) -> None:
+        # Keep the window structure (frames + rounded corners) but use token colors.
+        main_frame = getattr(self, "mainFrame", None)
+        if main_frame is not None:
+            main_frame.setStyleSheet(
+                f"""
+#mainFrame {{
+    background-color: {COLOR_BG_SOFT};
+    border-radius: 12px;
+    border: {BORDER_SIZE}px solid {COLOR_BORDER};
+}}
+"""
+            )
+
+        header_frame = getattr(self, "headerFrame", None)
+        if header_frame is not None:
+            header_frame.setStyleSheet(
+                f"""
+#headerFrame {{
+    background-color: {COLOR_BG};
+    border-bottom: {BORDER_SIZE}px solid {COLOR_BORDER};
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+}}
+"""
+            )
+
+        footer_frame = getattr(self, "frameFooter", None)
+        if footer_frame is not None:
+            footer_frame.setStyleSheet(
+                f"""
+#frameFooter {{
+    background-color: {COLOR_BG};
+    border-top: {BORDER_SIZE}px solid {COLOR_BORDER};
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}}
+"""
+            )
+
+        toggle_frame = getattr(self, "frameToggle", None)
+        if toggle_frame is not None:
+            toggle_frame.setStyleSheet(
+                f"""
+#frameToggle {{
+    background-color: {COLOR_BG_SOFT};
+    border-radius: 8px;
+}}
+"""
+            )
+
+        coord_frame = getattr(self, "frameCoord", None)
+        if coord_frame is not None:
+            coord_frame.setStyleSheet(
+                f"""
+#frameCoord {{
+    background-color: {COLOR_BG};
+    border-radius: 12px;
+    border: {BORDER_SIZE}px solid {COLOR_BORDER};
+}}
+"""
+            )
+
+    def _apply_toggle_button_styles(self) -> None:
+        btn_ent = getattr(self, "btnEntreprise", None)
+        btn_part = getattr(self, "btnParticulier", None)
+        if btn_ent is None or btn_part is None:
+            return
+
+        radius = max(2, int(RADIUS_ITEM) - 2)
+        toggle_qss = f"""
+QPushButton {{
+    background-color: transparent;
+    color: {COLOR_TEXT_MUTED};
+    border: {BORDER_SIZE}px solid transparent;
+    border-radius: {radius}px;
+    padding: 8px 24px;
+}}
+
+QPushButton:hover:!checked {{
+    background-color: {COLOR_BG};
+    border-color: {COLOR_BORDER};
+}}
+
+QPushButton:checked {{
+    background-color: {COLOR_BG};
+    color: {BUTTON_PRIMARY_BG};
+    border-color: {COLOR_BORDER};
+}}
+"""
+
+        try:
+            btn_ent.setStyleSheet(toggle_qss)
+        except RuntimeError:
+            pass
+        try:
+            btn_part.setStyleSheet(toggle_qss)
+        except RuntimeError:
+            pass
 
     def _wire_signals(self) -> None:
         if hasattr(self, "btnAnnuler"):
