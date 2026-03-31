@@ -14,46 +14,7 @@
    <string>Ajouter un document</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QDialog {
-    background-color: white;
-}
-
-QLabel {
-    font-size: 11pt;
-    color: #333333;
-}
-
-QRadioButton {
-    font-size: 10pt;
-    color: #333333;
-    spacing: 8px;
-}
-
-QPushButton {
-    font-size: 10pt;
-    padding: 6px 20px;
-    border-radius: 3px;
-}
-
-QPushButton#okButton {
-    background-color: #0078D4;
-    color: white;
-    border: 1px solid #0078D4;
-}
-
-QPushButton#okButton:hover {
-    background-color: #106EBE;
-}
-
-QPushButton#cancelButton {
-    background-color: white;
-    color: #333333;
-    border: 1px solid #CCCCCC;
-}
-
-QPushButton#cancelButton:hover {
-    background-color: #F0F0F0;
-}</string>
+   <string notr="true"/>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="leftMargin">

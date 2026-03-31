@@ -13,7 +13,7 @@ from PyQt5.QtWidgets import (
     QWidget,
 )
 
-from program.services import Article, Famille, LineEditAutoComplete, MessageBox, select, with_db_session
+from program.services import Article, Famille, LineEditAutoComplete, MessageBox, log_audit_event, select, with_db_session
 from program.themes.shared_input_popup_style import apply_input_styles_to_window
 
 
@@ -266,12 +266,26 @@ class NouveauArticleWindow(QDialog):
 
         suivi_stock = self.suiviStockCombo.currentData() or "CMUP"
 
+        is_new = not bool(self._article_id)
+        old_values = None
+
         if self._article_id:
             article = session.execute(
                 select(Article).where(Article.id_article == int(self._article_id))
             ).scalar_one_or_none()
             if article is None:
                 raise ValueError("Article introuvable.")
+
+            old_values = {
+                "reference_interne": (article.reference_interne or "").strip() or None,
+                "nom_article": (article.nom_article or "").strip() or None,
+                "id_famille": int(article.id_famille) if article.id_famille is not None else None,
+                "prix_vente_ht": float(article.prix_vente_ht or 0),
+                "prix_achat_ht": float(article.prix_achat_ht or 0),
+                "taux_tva": float(article.taux_tva or 0) if article.taux_tva is not None else None,
+                "quantite": float(article.quantite or 0),
+                "actif": int(article.actif or 0),
+            }
         else:
             article = Article(nom_article=nom_article, actif=1)
             session.add(article)
@@ -287,6 +301,30 @@ class NouveauArticleWindow(QDialog):
         article.quantite_max = quantite_max
         article.suivi_stock = str(suivi_stock)
         article.actif = 1
+
+        session.flush()
+
+        new_values = {
+            "reference_interne": (article.reference_interne or "").strip() or None,
+            "nom_article": (article.nom_article or "").strip() or None,
+            "id_famille": int(article.id_famille) if article.id_famille is not None else None,
+            "prix_vente_ht": float(article.prix_vente_ht or 0),
+            "prix_achat_ht": float(article.prix_achat_ht or 0),
+            "taux_tva": float(article.taux_tva or 0) if article.taux_tva is not None else None,
+            "quantite": float(article.quantite or 0),
+            "actif": int(article.actif or 0),
+        }
+        action = "INSERT" if is_new else "UPDATE"
+        comment = "Création article" if is_new else "Modification article"
+        log_audit_event(
+            session,
+            table_name=Article.__tablename__,
+            record_id=int(article.id_article),
+            action=action,
+            old_values=old_values,
+            new_values=new_values,
+            comment=f"{comment}: {(article.reference_interne or '').strip()} {(article.nom_article or '').strip()}".strip(),
+        )
 
     def _on_save_clicked(self) -> None:
         try:

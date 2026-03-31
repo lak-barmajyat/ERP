@@ -2,7 +2,14 @@ import sys
 from PyQt5.QtWidgets import QDialog, QApplication
 from PyQt5.uic import loadUi
 import os
-from program.themes.shared_input_popup_style import apply_global_font_to_window
+from program.themes.shared_input_popup_style import (
+    COLOR_BG,
+    COLOR_TEXT,
+    FONT_FAMILY,
+    FONT_SIZE_PT,
+    FONT_WEIGHT,
+    apply_input_styles_to_window,
+)
 
 
 def resource_path(relative_path):
@@ -15,7 +22,34 @@ class SelectDocTypeDialog(QDialog):
     def __init__(self, *, domain_id: int = 1):
         super(SelectDocTypeDialog, self).__init__()
         loadUi(resource_path("select_doc_type.ui"), self)
-        apply_global_font_to_window(self)
+
+        # Base dialog look from the shared token system (colors + typography).
+        self.setStyleSheet(
+            f"""
+QDialog#Dialog {{
+    background-color: {COLOR_BG};
+}}
+
+QLabel, QRadioButton {{
+    color: {COLOR_TEXT};
+    font: {FONT_WEIGHT} {FONT_SIZE_PT}pt \"{FONT_FAMILY}\";
+}}
+
+QRadioButton::indicator {{
+    width: 14px;
+    height: 14px;
+}}
+""".strip()
+        )
+
+        apply_input_styles_to_window(
+            self,
+            row_height=36,
+            widget_styles_map={
+                "okButton": ["QPushButton", "primary"],
+                "cancelButton": ["QPushButton", "secondary"],
+            },
+        )
 
         try:
             self.domain_id = int(domain_id or 1)

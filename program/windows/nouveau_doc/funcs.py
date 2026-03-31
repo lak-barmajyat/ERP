@@ -13,7 +13,8 @@ from program.services import (Tiers,
                             and_,
                             RefTypeDocument,
                             RefStatutDocument,
-                            MessageBox)
+                            MessageBox,
+                            log_audit_event)
 from PyQt5.QtWidgets import (
     QComboBox,
     QDialog,
@@ -388,7 +389,22 @@ def _valider(self, session=None):
     )
 
     session.add(document)
-    session.commit()
+    session.flush()
+
+    log_audit_event(
+        session,
+        table_name=Document.__tablename__,
+        record_id=int(document.id_document),
+        action="INSERT",
+        new_values={
+            "numero_document": (numero_document or "").strip() or None,
+            "id_domaine": int(domain_id),
+            "id_type_document": int(id_type_document),
+            "id_tiers": int(id_tiers),
+            "id_statut": int(selected_status_id),
+        },
+        comment=f"Création document: {(numero_document or '').strip()}".strip(),
+    )
 
 
     self._clients_autocomplete.set_enabled(False)
@@ -446,6 +462,21 @@ def _on_supprimer(self, session=None):
                     (DetailDocument.id_document == self.current_document_id)
                 )
             )
+
+            numero_document = (self.ndocument_lineedit.text() if hasattr(self, "ndocument_lineedit") else "").strip()
+            try:
+                detail_id_int = int(str(id_detail).strip())
+            except Exception:
+                detail_id_int = None
+
+            log_audit_event(
+                session,
+                table_name=DetailDocument.__tablename__,
+                record_id=detail_id_int if detail_id_int is not None else str(id_detail),
+                action="DELETE",
+                comment=f"Suppression d'une ligne du document {numero_document} : détail #{id_detail}".strip(),
+                new_values={"id_document": int(self.current_document_id), "numero_document": numero_document or None},
+            )
             session.commit()
             self.tableWidget.removeRow(row)
             _recalculate_totals(self)
@@ -479,6 +510,12 @@ def _on_enregistrer(self, session=None):
         return
 
     editing_detail_id = getattr(self, "_editing_detail_id", None)
+    qte_display = (
+        str(int(qte))
+        if isinstance(qte, (int, float)) and float(qte).is_integer()
+        else str(qte)
+    )
+
     if editing_detail_id:
         try:
             editing_detail_id = int(editing_detail_id)
@@ -503,18 +540,43 @@ def _on_enregistrer(self, session=None):
             )
         )
     else:
-        query = insert(DetailDocument).values(
-            id_document=self.current_document_id,
-            id_article=id_article,
+        detail = DetailDocument(
+            id_document=int(self.current_document_id),
+            id_article=int(id_article),
             description=desig,
             prix_unitaire_ht=puht,
             prix_unitaire_ttc=pttc,
             quantite=qte,
             taux_tva=taxe,
-            total_ligne_ttc=total
+            total_ligne_ttc=total,
         )
+        session.add(detail)
 
-    session.execute(query)
+    if editing_detail_id:
+        session.execute(query)
+        detail_record_id = int(editing_detail_id)
+        detail_action = "UPDATE"
+        detail_comment = f"Modification d'une ligne du document {{numero}} : {ref} × {qte_display}".strip()
+    else:
+        session.flush()
+        detail_record_id = int(getattr(detail, "id_detail", 0) or 0)
+        detail_action = "INSERT"
+        detail_comment = f"Ajout d'une ligne au document {{numero}} : {ref} × {qte_display}".strip()
+
+    numero_document = (self.ndocument_lineedit.text() if hasattr(self, "ndocument_lineedit") else "").strip()
+    log_audit_event(
+        session,
+        table_name=DetailDocument.__tablename__,
+        record_id=detail_record_id if detail_record_id else str(detail_record_id),
+        action=detail_action,
+        comment=detail_comment.format(numero=numero_document),
+        new_values={
+            "id_document": int(self.current_document_id),
+            "numero_document": numero_document or None,
+            "reference_article": ref,
+            "quantite": qte,
+        },
+    )
     session.commit()
     _reload_table(self)
 
@@ -589,6 +651,7 @@ def _on_nouveau(self):
     _update_table_stats(self)
     self._clients_autocomplete.set_enabled(True)  # Re-enable for next document
     self.clientid_lineedit.setReadOnly(False)
+    self.clients_lineedit.setReadOnly(False)
     self.date_dateedit.setReadOnly(False)
     if hasattr(self, "status_combobox"):
         self.status_combobox.setEnabled(True)
@@ -824,6 +887,10 @@ def nouveau_doc_setup(self,document_id=None, session=None):
         result = self.doc_type_window.exec_()
         if result != QDialog.Accepted:
             return
+        # When the window is reused (e.g. opened from Dashboard multiple times),
+        # ensure we start from a clean form (especially client selection fields).
+        self.current_doc_type = self.doc_type_window.get_current_doc_type()
+        _on_nouveau(self)
     parent_widget = self.parentWidget()
     self.setWindowModality(Qt.WindowModal if parent_widget else Qt.ApplicationModal)
     self.show()
@@ -843,10 +910,7 @@ def nouveau_doc_setup(self,document_id=None, session=None):
     _set_tax_text(self, TAX_OPTIONS[0])
 
     if not is_existing_document:
-        self.current_doc_type = self.doc_type_window.get_current_doc_type()
         self.setWindowTitle(f"Nouveau document - {self.current_doc_type}")
-        self.ndocument_lineedit.setText(generate_document_number(self.current_doc_type))
-        self.ndocument_lineedit.setReadOnly(True)
         try:
             self.valider_button.clicked.disconnect()
         except TypeError:

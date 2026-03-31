@@ -10,7 +10,8 @@ from program.services import (with_db_session,
                               Tiers,
                               RefStatutDocument,
                               LineEditAutoComplete,
-                              MessageBox)
+                              MessageBox,
+                              log_audit_event)
 from program.themes.shared_input_popup_style import apply_menu_style
 from program.windows.nouveau_doc import nouveau_doc_setup, NouveauDocWindow
 from program.windows.transfer_window import TransfertDocumentDialog
@@ -137,6 +138,50 @@ def _get_current_tiers_type(self):
     return str(getattr(self, "tiers_type_filter", "") or "").strip().upper()
 
 
+def _sync_client_code_from_name_cached(self, name_text: str) -> None:
+    """When typing client name, auto-fill matching client code (exact match only)."""
+    if not hasattr(self, "editClient") or not hasattr(self, "editcodeclient"):
+        return
+    if not self.editClient.hasFocus():
+        return
+
+    value = (name_text or "").strip().casefold()
+    if value == "":
+        self.editcodeclient.blockSignals(True)
+        self.editcodeclient.clear()
+        self.editcodeclient.blockSignals(False)
+        return
+
+    mapping = getattr(self, "_filter_tiers_name_to_code", None) or {}
+    code = (mapping.get(value) or "").strip()
+
+    self.editcodeclient.blockSignals(True)
+    self.editcodeclient.setText(code)
+    self.editcodeclient.blockSignals(False)
+
+
+def _sync_client_name_from_code_cached(self, code_text: str) -> None:
+    """When typing client code, auto-fill matching client name (exact match only)."""
+    if not hasattr(self, "editClient") or not hasattr(self, "editcodeclient"):
+        return
+    if not self.editcodeclient.hasFocus():
+        return
+
+    value = (code_text or "").strip().casefold()
+    if value == "":
+        self.editClient.blockSignals(True)
+        self.editClient.clear()
+        self.editClient.blockSignals(False)
+        return
+
+    mapping = getattr(self, "_filter_tiers_code_to_name", None) or {}
+    name = (mapping.get(value) or "").strip()
+
+    self.editClient.blockSignals(True)
+    self.editClient.setText(name)
+    self.editClient.blockSignals(False)
+
+
 @with_db_session
 def _setup_client_filter_autocomplete(self, session=None):
     """Apply nouveau_doc-like autocomplete to client-name filter and sync code/name fields."""
@@ -152,16 +197,42 @@ def _setup_client_filter_autocomplete(self, session=None):
     names = session.execute(names_query.order_by(Tiers.nom_tiers)).scalars().all()
     self._filter_client_autocomplete.set_items([name for name in names if name])
 
-    # Keep client name/code filters independent to isolate code_tiers behavior.
+    # Cache exact maps for fast code<->name sync without DB calls per keystroke.
+    pairs_query = select(Tiers.code_tiers, Tiers.nom_tiers)
+    if tiers_type:
+        pairs_query = pairs_query.where(Tiers.type_tiers == tiers_type)
+    pairs = session.execute(pairs_query.order_by(Tiers.nom_tiers)).all()
+
+    code_to_name = {}
+    name_to_codes = {}
+    for code, name in pairs:
+        code_value = (code or "").strip()
+        name_value = (name or "").strip()
+        if not code_value or not name_value:
+            continue
+
+        code_to_name[code_value.casefold()] = name_value
+        key = name_value.casefold()
+        name_to_codes.setdefault(key, set()).add(code_value)
+
+    self._filter_tiers_code_to_name = code_to_name
+    self._filter_tiers_name_to_code = {
+        key: next(iter(codes)) if len(codes) == 1 else ""
+        for key, codes in name_to_codes.items()
+    }
+
+    # Link code/name fields both ways.
     try:
         self.editClient.textChanged.disconnect()
     except TypeError:
         pass
+    self.editClient.textChanged.connect(lambda text: _sync_client_code_from_name_cached(self, text))
 
     try:
         self.editcodeclient.textChanged.disconnect()
     except TypeError:
         pass
+    self.editcodeclient.textChanged.connect(lambda text: _sync_client_name_from_code_cached(self, text))
 
     if hasattr(self, "editDocNumber"):
         try:
@@ -877,21 +948,8 @@ def _reload_table_total_labels(self, session=None):
     if filters["date_to"]:
         query = query.where(Document.date_document <= filters["date_to"])
     if filters["code_client"]:
-        tier_ids_query = select(Tiers.id_tiers).where(
-            func.lower(Tiers.code_tiers).like(f"%{filters['code_client']}%")
-        )
-
-        matching_tier_ids = session.execute(
-            tier_ids_query.order_by(Tiers.nom_tiers)
-        ).scalars().all()
-
-        if not matching_tier_ids:
-            self.tableDocuments.setRowCount(0)
-            _set_total_labels_from_rows(self, [])
-            _restore_table_scroll_position(self, scroll_position)
-            return
-
-        query = query.where(Document.id_tiers.in_(list(matching_tier_ids)))
+        # Filter directly through the joined Tiers table.
+        query = query.where(func.lower(Tiers.code_tiers).like(f"%{filters['code_client']}%"))
     if filters["client"]:
         query = query.where(func.lower(Tiers.nom_tiers).like(f"%{filters['client']}%"))
     if filters["doc_number"]:
@@ -1077,6 +1135,16 @@ def _on_supprimer_clicked(self, session=None):
             continue
 
         document.doc_actif = 0
+        session.flush()
+        log_audit_event(
+            session,
+            table_name=Document.__tablename__,
+            record_id=int(document.id_document),
+            action="DELETE",
+            old_values={"doc_actif": 1},
+            new_values={"doc_actif": 0},
+            comment=f"Suppression document: {doc_ref}".strip(),
+        )
         archived_count += 1
 
     if archived_count > 0:

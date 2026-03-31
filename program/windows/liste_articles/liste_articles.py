@@ -70,8 +70,6 @@ class ArticlesWindow(QWidget):
             "labelPeriodDash",
             "dateFrom",
             "dateTo",
-            "labelStatus",
-            "comboStatus",
         ):
             w = getattr(self, name, None)
             if w is not None:
@@ -87,6 +85,9 @@ class ArticlesWindow(QWidget):
             self.editClient.setPlaceholderText("Rechercher un article...")
         if hasattr(self, "labelDocType"):
             self.labelDocType.setText("Famille")
+
+        if hasattr(self, "labelStatus"):
+            self.labelStatus.setText("Stock")
 
         if hasattr(self, "labelNbDocumentsTitle"):
             self.labelNbDocumentsTitle.setText("Nb Articles")
@@ -106,8 +107,9 @@ class ArticlesWindow(QWidget):
         if not hasattr(self, "tableDocuments"):
             return
 
-        self.tableDocuments.setColumnCount(8)  # 7 visible + 1 hidden ID
+        self.tableDocuments.setColumnCount(9)  # 8 visible (incl. checkbox) + 1 hidden ID
         headers = [
+            "",
             "Référence",
             "Nom article",
             "Famille",
@@ -119,19 +121,23 @@ class ArticlesWindow(QWidget):
         ]
         for idx, label in enumerate(headers):
             self.tableDocuments.setHorizontalHeaderItem(idx, QTableWidgetItem(label))
-        self.tableDocuments.setColumnHidden(7, True)
+        self.tableDocuments.setColumnHidden(8, True)
 
         header = self.tableDocuments.horizontalHeader()
         header.setStretchLastSection(False)
-        header.setSectionResizeMode(0, QHeaderView.ResizeToContents)
-        header.setSectionResizeMode(1, QHeaderView.Stretch)
-        header.setSectionResizeMode(2, QHeaderView.ResizeToContents)
-        for idx in (3, 4, 5, 6):
+        header.setSectionResizeMode(0, QHeaderView.Fixed)
+        self.tableDocuments.setColumnWidth(0, 34)
+        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.Stretch)
+        header.setSectionResizeMode(3, QHeaderView.ResizeToContents)
+        for idx in (4, 5, 6, 7):
             header.setSectionResizeMode(idx, QHeaderView.ResizeToContents)
 
         self.tableDocuments.verticalHeader().setVisible(False)
+        self.tableDocuments.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.tableDocuments.setSelectionMode(QAbstractItemView.SingleSelection)
         self.tableDocuments.setSortingEnabled(True)
+        self.tableDocuments.setAlternatingRowColors(True)
 
     def _setup_defaults(self) -> None:
         if hasattr(self, "labelNbDocumentsValue"):

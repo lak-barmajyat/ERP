@@ -271,18 +271,18 @@ QFrame#toolbarDivider2 {
        <property name="minimumSize">
         <size>
          <width>0</width>
-         <height>100</height>
+        <height>90</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
          <width>16777215</width>
-         <height>100</height>
+        <height>110</height>
         </size>
        </property>
        <property name="styleSheet">
         <string notr="true">
-QFrame {
+QFrame#filtersFrame {
     background-color: #f6f6f8;
     border-bottom: 1px solid #e2e8f0;
 }
@@ -359,22 +359,25 @@ QPushButton:hover {
        </property>
        <layout class="QHBoxLayout" name="filtersLayout">
         <property name="spacing">
-         <number>16</number>
+                 <number>12</number>
         </property>
         <property name="leftMargin">
          <number>24</number>
         </property>
         <property name="topMargin">
-         <number>16</number>
+                 <number>12</number>
         </property>
         <property name="rightMargin">
          <number>24</number>
         </property>
         <property name="bottomMargin">
-         <number>16</number>
+                 <number>12</number>
         </property>
         <item>
          <layout class="QVBoxLayout" name="_3">
+                    <property name="spacing">
+                     <number>4</number>
+                    </property>
           <item>
            <widget class="QLabel" name="lblFilter1">
             <property name="text">
@@ -387,6 +390,18 @@ QPushButton:hover {
           </item>
           <item>
            <widget class="QLineEdit" name="editSearch">
+                        <property name="minimumSize">
+                         <size>
+                            <width>0</width>
+                            <height>40</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                            <width>16777215</width>
+                            <height>40</height>
+                         </size>
+                        </property>
             <property name="placeholderText">
              <string>Nom, ICE, ou Code...</string>
             </property>
@@ -396,6 +411,9 @@ QPushButton:hover {
         </item>
         <item>
          <layout class="QVBoxLayout" name="_4">
+                    <property name="spacing">
+                     <number>4</number>
+                    </property>
           <item>
            <widget class="QLabel" name="lblFilter2">
             <property name="text">
@@ -411,9 +429,15 @@ QPushButton:hover {
             <property name="minimumSize">
              <size>
               <width>90</width>
-              <height>0</height>
+                            <height>40</height>
              </size>
             </property>
+                        <property name="maximumSize">
+                         <size>
+                            <width>16777215</width>
+                            <height>40</height>
+                         </size>
+                        </property>
             <item>
              <property name="text">
               <string>Tous</string>
@@ -435,6 +459,9 @@ QPushButton:hover {
         </item>
         <item>
          <layout class="QVBoxLayout" name="_5">
+          <property name="spacing">
+           <number>4</number>
+          </property>
           <item>
            <widget class="QLabel" name="lblFilter3">
             <property name="text">
@@ -450,9 +477,15 @@ QPushButton:hover {
             <property name="minimumSize">
              <size>
               <width>90</width>
-              <height>0</height>
+                            <height>40</height>
              </size>
             </property>
+                        <property name="maximumSize">
+                         <size>
+                            <width>16777215</width>
+                            <height>40</height>
+                         </size>
+                        </property>
             <item>
              <property name="text">
               <string>Tous</string>
@@ -474,6 +507,9 @@ QPushButton:hover {
         </item>
         <item>
          <layout class="QVBoxLayout" name="_6">
+          <property name="spacing">
+           <number>4</number>
+          </property>
           <item>
            <widget class="QLabel" name="lblFilter4">
             <property name="text">
@@ -486,14 +522,23 @@ QPushButton:hover {
           </item>
           <item>
            <layout class="QHBoxLayout" name="_7">
+                        <property name="spacing">
+                         <number>6</number>
+                        </property>
             <item>
              <widget class="QDateEdit" name="dateStart">
               <property name="minimumSize">
                <size>
                 <width>115</width>
-                <height>0</height>
+                                <height>40</height>
                </size>
               </property>
+                            <property name="maximumSize">
+                             <size>
+                                <width>16777215</width>
+                                <height>40</height>
+                             </size>
+                            </property>
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
@@ -511,9 +556,15 @@ QPushButton:hover {
               <property name="minimumSize">
                <size>
                 <width>115</width>
-                <height>0</height>
+                                <height>40</height>
                </size>
               </property>
+                            <property name="maximumSize">
+                             <size>
+                                <width>16777215</width>
+                                <height>40</height>
+                             </size>
+                            </property>
               <property name="calendarPopup">
                <bool>true</bool>
               </property>
@@ -525,21 +576,48 @@ QPushButton:hover {
         </item>
         <item>
          <layout class="QVBoxLayout" name="_8">
+                    <property name="spacing">
+                     <number>0</number>
+                    </property>
           <item>
            <spacer>
             <property name="orientation">
              <enum>Qt::Vertical</enum>
             </property>
+                        <property name="sizeType">
+                         <enum>QSizePolicy::Fixed</enum>
+                        </property>
             <property name="sizeHint" stdset="0">
              <size>
-              <width>0</width>
-              <height>0</height>
+                            <width>11</width>
+                            <height>25</height>
              </size>
             </property>
            </spacer>
           </item>
           <item>
            <widget class="QPushButton" name="btnFilter">
+                        <property name="minimumSize">
+                         <size>
+                            <width>160</width>
+                            <height>36</height>
+                         </size>
+                        </property>
+                        <property name="sizePolicy">
+                         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                            <horstretch>1</horstretch>
+                            <verstretch>0</verstretch>
+                         </sizepolicy>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                            <width>16777215</width>
+                            <height>40</height>
+                         </size>
+                        </property>
+                        <property name="cursor">
+                         <cursorShape>PointingHandCursor</cursorShape>
+                        </property>
             <property name="text">
              <string>FILTRER</string>
             </property>
@@ -699,7 +777,7 @@ QHeaderView::section:last {
             <property name="font">
              <font>
               <family>Overpass</family>
-              <pointsize>-1</pointsize>
+                            <pointsize>10</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -717,7 +795,7 @@ QHeaderView::section:last {
             <property name="font">
              <font>
               <family>Overpass</family>
-              <pointsize>-1</pointsize>
+                            <pointsize>10</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -749,7 +827,7 @@ QHeaderView::section:last {
             <property name="font">
              <font>
               <family>Overpass</family>
-              <pointsize>-1</pointsize>
+                            <pointsize>10</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -770,7 +848,7 @@ QHeaderView::section:last {
             <property name="font">
              <font>
               <family>Overpass</family>
-              <pointsize>-1</pointsize>
+                            <pointsize>10</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>
@@ -802,7 +880,7 @@ QHeaderView::section:last {
             <property name="font">
              <font>
               <family>Overpass</family>
-              <pointsize>-1</pointsize>
+                            <pointsize>10</pointsize>
               <weight>75</weight>
               <bold>true</bold>
              </font>

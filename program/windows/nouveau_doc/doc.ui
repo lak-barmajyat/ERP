@@ -1085,22 +1085,22 @@ QPushButton#enrgistrer:disabled {
 QTableWidget#tableWidget {
     background-color: #ffffff;
     border: none;
-    gridline-color: #e5e7eb;
-    font: 400 10pt &quot;Overpass&quot;;
+    gridline-color: #e2e8f0;
+    font: 400 9pt &quot;Overpass&quot;;
     color: #374151;
-    selection-background-color: rgba(29,122,226,0.08);
+    selection-background-color: rgba(19,91,236,0.08);
     selection-color: #111827;
     outline: 0;
 }
 QTableWidget#tableWidget::item {
-    padding: 6px 12px;
+    padding: 6px 10px;
     border-bottom: 1px solid #f3f4f6;
 }
 QTableWidget#tableWidget::item:alternate {
     background-color: #f9fafb;
 }
 QTableWidget#tableWidget::item:selected {
-    background-color: rgba(29,122,226,0.08);
+    background-color: rgba(19,91,236,0.08);
     color: #111827;
 }
 QTableWidget#tableWidget::item:hover {
@@ -1109,11 +1109,11 @@ QTableWidget#tableWidget::item:hover {
 QHeaderView::section {
     background-color: #f9fafb;
     color: #374151;
-    font: 600 10pt &quot;Overpass&quot;;
-    padding: 10px 12px;
+    font: 600 9pt &quot;Overpass&quot;;
+    padding: 8px 10px;
     border: none;
-    border-right: 1px solid #e5e7eb;
-    border-bottom: 2px solid #e5e7eb;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 2px solid #e2e8f0;
 }
 QHeaderView::section:last {
     border-right: none;

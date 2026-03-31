@@ -1,67 +1,118 @@
-import sys
 import os
-from PyQt5 import QtWidgets, uic
-from PyQt5.QtCore import Qt
-from program.themes.shared_input_popup_style import apply_global_font_to_window
+import sys
 
-class ListeClientsWindow(QtWidgets.QMainWindow):
-    def __init__(self):
-        super(ListeClientsWindow, self).__init__()
-        
-        # Load the UI file
-        ui_path = os.path.join(os.path.dirname(__file__), "liste_clients.ui")
-        uic.loadUi(ui_path, self)
-        apply_global_font_to_window(self)
-        
-        # We can populate the table with some dummy data to match the screenshot
-        self.populate_dummy_data()
-        
-        # Ensure the table expands properly
-        header = self.tableClients.horizontalHeader()
-        header.setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
-        header.setSectionResizeMode(0, QtWidgets.QHeaderView.ResizeToContents) # Checkbox column
-        
-    def populate_dummy_data(self):
-        self.tableClients.setRowCount(2)
-        
-        # Row 1
-        item_check = QtWidgets.QTableWidgetItem()
-        item_check.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-        item_check.setCheckState(Qt.Checked)
-        self.tableClients.setItem(0, 0, item_check)
-        self.tableClients.setItem(0, 1, QtWidgets.QTableWidgetItem("CLT-04291"))
-        self.tableClients.setItem(0, 2, QtWidgets.QTableWidgetItem("Atlas Technologies SARL"))
-        self.tableClients.setItem(0, 3, QtWidgets.QTableWidgetItem("001524873000091"))
-        self.tableClients.setItem(0, 4, QtWidgets.QTableWidgetItem("+212 522-458900"))
-        self.tableClients.setItem(0, 5, QtWidgets.QTableWidgetItem("contact@atlastech.ma"))
-        self.tableClients.setItem(0, 6, QtWidgets.QTableWidgetItem("Casablanca"))
-        self.tableClients.setItem(0, 7, QtWidgets.QTableWidgetItem("150 000,00"))
-        self.tableClients.setItem(0, 8, QtWidgets.QTableWidgetItem("42 350,50"))
-        self.tableClients.setItem(0, 9, QtWidgets.QTableWidgetItem("ACTIF"))
-        
-        # Row 2
-        item_check2 = QtWidgets.QTableWidgetItem()
-        item_check2.setFlags(Qt.ItemIsUserCheckable | Qt.ItemIsEnabled)
-        item_check2.setCheckState(Qt.Unchecked)
-        self.tableClients.setItem(1, 0, item_check2)
-        self.tableClients.setItem(1, 1, QtWidgets.QTableWidgetItem("CLT-04292"))
-        self.tableClients.setItem(1, 2, QtWidgets.QTableWidgetItem("M. Yassine Bennani"))
-        self.tableClients.setItem(1, 3, QtWidgets.QTableWidgetItem("--"))
-        self.tableClients.setItem(1, 4, QtWidgets.QTableWidgetItem("+212 661-123456"))
-        self.tableClients.setItem(1, 5, QtWidgets.QTableWidgetItem("y.bennani@gmail.com"))
-        self.tableClients.setItem(1, 6, QtWidgets.QTableWidgetItem("Rabat"))
-        self.tableClients.setItem(1, 7, QtWidgets.QTableWidgetItem("10 000,00"))
-        self.tableClients.setItem(1, 8, QtWidgets.QTableWidgetItem("0,00"))
-        self.tableClients.setItem(1, 9, QtWidgets.QTableWidgetItem("ACTIF"))
+from PyQt5.QtCore import QDate
+from PyQt5.QtWidgets import QApplication, QAbstractItemView, QHeaderView, QTableWidgetItem, QWidget
+from PyQt5.uic import loadUi
+
+from program.themes.shared_input_popup_style import apply_input_styles_to_window
+
+from .funcs import liste_clients_setup
+
+
+LISTE_CLIENTS_STYLE_MAP = {
+    "__window__": ["QWidget", "global_font"],
+    "__all_lineedits__": ["QLineEdit", "entry"],
+    "__all_comboboxes__": ["QComboBox", "combobox"],
+    "__all_dateedits__": ["QDateEdit", "dateedit"],
+    "__all_combobox_popups__": ["QComboBox", "popup_list", {"row_height": 36}],
+    "__all_completer_popups__": ["QLineEdit", "completer_popup", {"row_height": 36}],
+    "btnFilter": ["QPushButton", "primary"],
+    "tbNew": ["QToolButton", "toolbar"],
+    "tbEdit": ["QToolButton", "toolbar"],
+    "tbDelete": ["QToolButton", "toolbar"],
+    "tbDuplicate": ["QToolButton", "toolbar"],
+    "tbExportExcel": ["QToolButton", "toolbar"],
+    "tbPrint": ["QToolButton", "toolbar"],
+    "tbTransform": ["QToolButton", "toolbar"],
+    "tbFermer": ["QToolButton", "toolbar"],
+}
+
+
+def resource_path(relative_path: str) -> str:
+    base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
+
+
+class ClientsWindow(QWidget):
+    def __init__(self) -> None:
+        super().__init__()
+        loadUi(resource_path("liste_clients.ui"), self)
+
+        self._apply_ui_overrides()
+        self._setup_table()
+        self._setup_defaults()
+        liste_clients_setup(self)
+        apply_input_styles_to_window(self, row_height=36, widget_styles_map=LISTE_CLIENTS_STYLE_MAP)
+
+    def _apply_ui_overrides(self) -> None:
+        self.setWindowTitle("Clients")
+
+        # Optional toolbar buttons not implemented yet
+        for name in ("tbPrint", "tbTransform", "tbFermer"):
+            w = getattr(self, name, None)
+            if w is not None:
+                w.hide()
+
+    def _setup_table(self) -> None:
+        table = getattr(self, "tableClients", None)
+        if table is None:
+            return
+
+        table.setColumnCount(11)  # 10 visible + 1 hidden ID
+        headers = [
+            "",
+            "Code",
+            "Nom / Raison Sociale",
+            "ICE",
+            "Téléphone",
+            "Email",
+            "Ville",
+            "Plafond Crédit",
+            "Solde",
+            "Statut",
+            "ID",
+        ]
+        for idx, label in enumerate(headers):
+            table.setHorizontalHeaderItem(idx, QTableWidgetItem(label))
+        table.setColumnHidden(10, True)
+
+        header = table.horizontalHeader()
+        header.setStretchLastSection(False)
+        header.setSectionResizeMode(0, QHeaderView.Fixed)
+        table.setColumnWidth(0, 34)
+        header.setSectionResizeMode(1, QHeaderView.ResizeToContents)
+        header.setSectionResizeMode(2, QHeaderView.Stretch)
+        for idx in (3, 4, 5, 6, 7, 8, 9):
+            header.setSectionResizeMode(idx, QHeaderView.ResizeToContents)
+
+        table.verticalHeader().setVisible(False)
+        table.setSelectionBehavior(QAbstractItemView.SelectRows)
+        table.setSelectionMode(QAbstractItemView.SingleSelection)
+        table.setSortingEnabled(True)
+        table.setAlternatingRowColors(True)
+
+    def _setup_defaults(self) -> None:
+        today = QDate.currentDate()
+        if hasattr(self, "dateStart") and self.dateStart is not None:
+            self.dateStart.setDate(today.addYears(-50))
+        if hasattr(self, "dateEnd") and self.dateEnd is not None:
+            self.dateEnd.setDate(today)
+
+        if hasattr(self, "lblSelection"):
+            self.lblSelection.setText("0 client sélectionné")
+        if hasattr(self, "lblTotalClients"):
+            self.lblTotalClients.setText("0")
+        if hasattr(self, "lblTotalSolde"):
+            self.lblTotalSolde.setText("0,00 MAD")
+
+
+def main() -> None:
+    app = QApplication(sys.argv)
+    window = ClientsWindow()
+    window.show()
+    sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    
-    window = ListeClientsWindow()
-    window.show()
-    
-    # Just close automatically after 1 second if in automated test mode
-    if os.environ.get("AUTO_TEST") == "1":
-        QtCore.QTimer.singleShot(1000, app.quit)
-        
-    sys.exit(app.exec_())
+    main()

@@ -41,6 +41,7 @@ from sqlalchemy import (
 from .sql.db_connection import with_db_session
 from .ndoc_generator import generate_document_number, reset_document_counter
 from .tools import get_colored_icon
+from .audit import get_current_user_id, log_audit_event
 from .widgetstyles.lineedit_combo_style import LineEditAutoComplete, replace_combobox_with_lineedit
 from .messagebox import LogoutDialog, MessageBox
 
@@ -82,6 +83,8 @@ __all__ = [
     "with_db_session",
     "generate_document_number",
     "reset_document_counter",
+    "get_current_user_id",
+    "log_audit_event",
     "LogoutDialog",
     "MessageBox"
 ]

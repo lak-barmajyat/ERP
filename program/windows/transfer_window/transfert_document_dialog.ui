@@ -602,7 +602,44 @@ QComboBox::down-arrow {
              <item>
               <widget class="QTableWidget" name="tableTransferDetails">
                <property name="styleSheet">
-                <string notr="true">QTableWidget#tableTransferDetails { background-color: #ffffff; border: 1px solid rgba(196,197,215,0.35); border-radius: 6px; gridline-color: #e7eaec; color: #191c1e; font: 400 9pt &quot;Overpass&quot;; outline: none; } QTableWidget#tableTransferDetails::item { padding: 8px; border-bottom: 1px solid #f0f2f4; } QTableWidget#tableTransferDetails::item:selected { background-color: rgba(0,55,176,0.08); color: #191c1e; } QHeaderView::section { background-color: #e0e3e5; color: #434655; font: 700 8pt &quot;Overpass&quot;; border: none; border-bottom: 1px solid rgba(196,197,215,0.35); padding: 8px 10px; }</string>
+                <string notr="true">
+QTableWidget#tableTransferDetails {
+    background-color: #ffffff;
+    border: none;
+    gridline-color: #e2e8f0;
+    font: 400 9pt &quot;Overpass&quot;;
+    color: #374151;
+    selection-background-color: rgba(19,91,236,0.08);
+    selection-color: #111827;
+    outline: 0;
+}
+QTableWidget#tableTransferDetails::item {
+    padding: 6px 10px;
+    border-bottom: 1px solid #f3f4f6;
+}
+QTableWidget#tableTransferDetails::item:alternate {
+    background-color: #f9fafb;
+}
+QTableWidget#tableTransferDetails::item:selected {
+    background-color: rgba(19,91,236,0.08);
+    color: #111827;
+}
+QTableWidget#tableTransferDetails::item:hover {
+    background-color: #f9fafb;
+}
+QHeaderView::section {
+    background-color: #f9fafb;
+    color: #374151;
+    font: 600 9pt &quot;Overpass&quot;;
+    padding: 8px 10px;
+    border: none;
+    border-right: 1px solid #e2e8f0;
+    border-bottom: 2px solid #e2e8f0;
+}
+QHeaderView::section:last {
+    border-right: none;
+}
+                </string>
                </property>
                <property name="editTriggers">
                 <set>QAbstractItemView::NoEditTriggers</set>

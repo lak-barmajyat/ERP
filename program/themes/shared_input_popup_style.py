@@ -491,10 +491,63 @@ def apply_global_font_to_window(window) -> None:
     if window is None:
         return
 
+    def _qt_weight_from_css_weight(weight: int) -> int:
+        # Map CSS-like weights (100..900) to Qt weights (0..99).
+        w = int(weight or 0)
+        if w >= 900:
+            return int(getattr(QFont, "Black", QFont.Bold))
+        if w >= 800:
+            return int(getattr(QFont, "ExtraBold", QFont.Bold))
+        if w >= 700:
+            return int(getattr(QFont, "Bold", QFont.Bold))
+        if w >= 600:
+            return int(getattr(QFont, "DemiBold", QFont.Bold))
+        if w >= 500:
+            return int(getattr(QFont, "Medium", QFont.Normal))
+        if w >= 400:
+            return int(getattr(QFont, "Normal", QFont.Normal))
+        if w >= 300:
+            return int(getattr(QFont, "Light", QFont.Normal))
+        if w >= 200:
+            return int(getattr(QFont, "ExtraLight", QFont.Normal))
+        return int(getattr(QFont, "Thin", QFont.Normal))
+
+    def _same_font(a: QFont, b: QFont) -> bool:
+        try:
+            if (a.family() or "") != (b.family() or ""):
+                return False
+            # Compare point sizes loosely (Qt can use floats internally).
+            a_size = float(a.pointSizeF() or a.pointSize() or 0)
+            b_size = float(b.pointSizeF() or b.pointSize() or 0)
+            if abs(a_size - b_size) > 0.01:
+                return False
+            if int(a.weight()) != int(b.weight()):
+                return False
+            return True
+        except Exception:
+            return False
+
     app = QtWidgets.QApplication.instance()
+    old_app_font = None
     if app is not None:
-        app_font = app.font()
+        try:
+            old_app_font = QFont(app.font())
+        except Exception:
+            old_app_font = None
+
+        app_font = QFont(app.font())
         app_font.setFamily(FONT_FAMILY)
+        try:
+            app_font.setPointSizeF(float(FONT_SIZE_PT))
+        except Exception:
+            try:
+                app_font.setPointSize(int(FONT_SIZE_PT))
+            except Exception:
+                pass
+        try:
+            app_font.setWeight(_qt_weight_from_css_weight(FONT_WEIGHT))
+        except Exception:
+            pass
         app.setFont(app_font)
 
     try:
@@ -503,12 +556,26 @@ def apply_global_font_to_window(window) -> None:
     except RuntimeError:
         return
 
+    target_app_font = None
+    if app is not None:
+        try:
+            target_app_font = QFont(app.font())
+        except Exception:
+            target_app_font = None
+
     for widget in [window, *window.findChildren(QtWidgets.QWidget)]:
         try:
             current_font = widget.font() or QFont()
-            if current_font.family() != FONT_FAMILY:
-                current_font.setFamily(FONT_FAMILY)
-                widget.setFont(current_font)
+
+            # If the widget still uses the old application default font, migrate it fully
+            # (family + size + weight) to the token-driven app font.
+            if old_app_font is not None and target_app_font is not None and _same_font(current_font, old_app_font):
+                widget.setFont(QFont(target_app_font))
+            else:
+                # Otherwise, only ensure the family is correct (do not clobber custom sizes/weights).
+                if current_font.family() != FONT_FAMILY:
+                    current_font.setFamily(FONT_FAMILY)
+                    widget.setFont(current_font)
 
             qss = widget.styleSheet()
             if qss:
@@ -706,16 +773,20 @@ def _iter_target_widgets(window, widget_name: str, widget_cls):
     if window is None or widget_cls is None:
         return []
 
-    if widget_name.startswith("__all"):
+    name = (widget_name or "").strip()
+    if name == "__window__":
+        return [window] if isinstance(window, widget_cls) else []
+
+    if name.startswith("__all"):
         widgets = []
         if isinstance(window, widget_cls):
             widgets.append(window)
         widgets.extend(window.findChildren(widget_cls))
         return widgets
 
-    widget = window.findChild(widget_cls, widget_name)
+    widget = window.findChild(widget_cls, name)
     if widget is None:
-        widget = getattr(window, widget_name, None)
+        widget = getattr(window, name, None)
 
     if widget is None:
         return []
