@@ -651,7 +651,6 @@ def _on_nouveau(self):
     _update_table_stats(self)
     self._clients_autocomplete.set_enabled(True)  # Re-enable for next document
     self.clientid_lineedit.setReadOnly(False)
-    self.clients_lineedit.setReadOnly(False)
     self.date_dateedit.setReadOnly(False)
     if hasattr(self, "status_combobox"):
         self.status_combobox.setEnabled(True)
@@ -887,10 +886,6 @@ def nouveau_doc_setup(self,document_id=None, session=None):
         result = self.doc_type_window.exec_()
         if result != QDialog.Accepted:
             return
-        # When the window is reused (e.g. opened from Dashboard multiple times),
-        # ensure we start from a clean form (especially client selection fields).
-        self.current_doc_type = self.doc_type_window.get_current_doc_type()
-        _on_nouveau(self)
     parent_widget = self.parentWidget()
     self.setWindowModality(Qt.WindowModal if parent_widget else Qt.ApplicationModal)
     self.show()
@@ -910,7 +905,10 @@ def nouveau_doc_setup(self,document_id=None, session=None):
     _set_tax_text(self, TAX_OPTIONS[0])
 
     if not is_existing_document:
+        self.current_doc_type = self.doc_type_window.get_current_doc_type()
         self.setWindowTitle(f"Nouveau document - {self.current_doc_type}")
+        self.ndocument_lineedit.setText(generate_document_number(self.current_doc_type))
+        self.ndocument_lineedit.setReadOnly(True)
         try:
             self.valider_button.clicked.disconnect()
         except TypeError:

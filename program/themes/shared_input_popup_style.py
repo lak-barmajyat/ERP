@@ -262,42 +262,6 @@ QLineEdit:disabled {{
 """
 
 
-TEXTEDIT_QSS = f"""
-QTextEdit,
-QPlainTextEdit {{
-    background-color: {COLOR_BG};
-    border: {BORDER_SIZE}px solid {COLOR_BORDER};
-    border-radius: {RADIUS_INPUT}px;
-    padding: {INPUT_PADDING_Y}px {INPUT_PADDING_X}px;
-    font: {FONT_WEIGHT} {FONT_SIZE_PT}pt \"{FONT_FAMILY}\";
-    color: {COLOR_TEXT};
-}}
-
-QTextEdit:hover,
-QPlainTextEdit:hover {{
-    border-color: {COLOR_BORDER_HOVER};
-}}
-
-QTextEdit:focus,
-QPlainTextEdit:focus {{
-    border-color: {COLOR_FOCUS};
-}}
-
-QTextEdit:read-only,
-QPlainTextEdit:read-only {{
-    background-color: {COLOR_BG_SOFT};
-    color: {COLOR_TEXT_MUTED};
-}}
-
-QTextEdit:disabled,
-QPlainTextEdit:disabled {{
-    color: {COLOR_TEXT_DISABLED};
-    background: {COLOR_DISABLED_BG};
-    border-color: {COLOR_BORDER};
-}}
-"""
-
-
 COMBOBOX_QSS = f"""
 QComboBox {{
     background-color: {COLOR_BG};
@@ -627,29 +591,6 @@ def apply_lineedit_style(line_edit: QLineEdit) -> None:
         return
     line_edit.setClearButtonEnabled(False)
     line_edit.setStyleSheet(ENTRY_QSS)
-
-
-def apply_textedit_style(text_edit) -> None:
-    if text_edit is None:
-        return
-    text_edit.setStyleSheet(TEXTEDIT_QSS)
-
-
-def apply_textedit_style_to_window(window) -> None:
-    if window is None:
-        return
-
-    for text_edit in window.findChildren(QtWidgets.QTextEdit):
-        try:
-            apply_textedit_style(text_edit)
-        except RuntimeError:
-            continue
-
-    for plain_edit in window.findChildren(QtWidgets.QPlainTextEdit):
-        try:
-            apply_textedit_style(plain_edit)
-        except RuntimeError:
-            continue
 
 
 def apply_popup_list_style(view, row_height: int = 36) -> None:
